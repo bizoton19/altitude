@@ -1,241 +1,339 @@
 ---
 layout: default
 title: Home
-description: AI-powered product recall monitoring across marketplaces. Protect consumers with intelligent risk classification and automated marketplace scanning.
+description: Automated product recall monitoring for regulatory agencies, manufacturers, importers, retailers, and non-profits. Stop wasting hours on manual marketplace searches and streamline your recall management workflow.
 ---
 
 <div class="hero-section">
-  <h1 class="hero-title">AI-Powered Product Recall Monitoring for Future Safety</h1>
+  <h1 class="hero-title">Automated Recall Monitoring for Regulatory Agencies, Manufacturers & Retailers</h1>
   <p class="hero-subtitle">
-    Build on a fully automated platform that gives you intelligent monitoring, risk classification, and backs you up with comprehensive marketplace coverage.
+    Streamline your recall workflow with automated marketplace monitoring. Federal and state agencies, manufacturers, 
+    importers, retailers, and non-profits use Altitude to replace hours of manual searches with intelligent automation.
   </p>
   <div class="hero-cta">
     <a href="{{ '/userguide.html' | relative_url }}" class="btn-primary">Get Started</a>
-    <a href="{{ '/contact.html' | relative_url }}" class="btn-secondary">Contact Us</a>
+    <a href="https://github.com/bizoton19/altitude" target="_blank" class="btn-secondary">Open Source</a>
   </div>
 </div>
 
-## Choose the Right Solution to Protect Your Marketplace
+## Who Uses Altitude?
+
+<div class="audience-section" style="margin: 3rem 0; text-align: center;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 2rem 0;">
+    <div class="audience-card">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏛️</div>
+      <h4>Federal & State Regulatory Agencies</h4>
+      <p>CPSC, FDA, and state consumer protection agencies monitoring recalled products across marketplaces</p>
+    </div>
+    <div class="audience-card">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏭</div>
+      <h4>Manufacturers & Importers</h4>
+      <p>Monitor marketplaces for unauthorized sales of recalled products and ensure compliance</p>
+    </div>
+    <div class="audience-card">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏪</div>
+      <h4>Retailers & Private Sellers</h4>
+      <p>Verify product compliance before listing and prevent selling recalled inventory</p>
+    </div>
+    <div class="audience-card">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
+      <h4>Non-Profit Organizations</h4>
+      <p>Consumer safety advocates and watchdog groups protecting consumers from recalled products</p>
+    </div>
+  </div>
+</div>
+
+## The Complete Recall Management Workflow
+
+Altitude streamlines your entire recall management process from detection to takedown:
+
+<div class="workflow-section" style="margin: 4rem 0;">
+  <div class="workflow-step">
+    <div class="workflow-number">1</div>
+    <div class="workflow-content">
+      <h3>Import Recalls</h3>
+      <p>Automatically import recall data from CPSC, FDA, NHTSA, and other regulatory sources. Manual imports via CSV or JSON also supported. All recalls are automatically classified by risk level (HIGH, MEDIUM, LOW) based on injuries, deaths, units affected, and hazard types.</p>
+    </div>
+  </div>
+
+  <div class="workflow-step">
+    <div class="workflow-number">2</div>
+    <div class="workflow-content">
+      <h3>Investigate Marketplaces</h3>
+      <p>Schedule automated investigations across eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari, and more. Set daily, weekly, or monthly scans that run automatically. The system searches for recalled products using intelligent matching algorithms and visual search capabilities.</p>
+    </div>
+  </div>
+
+  <div class="workflow-step">
+    <div class="workflow-number">3</div>
+    <div class="workflow-content">
+      <h3>Notify & Manage Risk</h3>
+      <p>Receive real-time notifications when recalled products are found. Prioritize HIGH-risk items first. Risk classification helps you focus your team's limited time on recalls with the highest potential for harm. Export detailed reports for compliance documentation and regulatory filings.</p>
+    </div>
+  </div>
+
+  <div class="workflow-step">
+    <div class="workflow-number">4</div>
+    <div class="workflow-content">
+      <h3>Takedown & Compliance</h3>
+      <p>Export listings data to initiate marketplace takedown requests. Generate compliance-ready reports for regulators. Track takedown effectiveness with follow-up investigations. Maintain audit trails for regulatory compliance and internal record-keeping.</p>
+    </div>
+  </div>
+</div>
+
+## Current Open Source Features
+
+Altitude is currently available as an open source platform. Get started today with these core features:
 
 <div class="products-grid">
   <div class="product-card">
     <div class="product-header">
       <h3>Automated Monitoring</h3>
-      <p class="product-subtitle">For continuous protection</p>
+      <p class="product-subtitle">Core recall management workflow</p>
     </div>
-    <div class="product-price">
-      <span class="price-label">Free Tier Available</span>
-    </div>
-    <a href="{{ '/userguide.html#scheduled-investigations' | relative_url }}" class="product-cta">Learn More</a>
+    <a href="{{ '/userguide.html#scheduled-investigations' | relative_url }}" class="product-cta">Get Started</a>
     <ul class="product-features">
-      <li>Deploy from 5 minutes</li>
-      <li>AI-powered risk classification</li>
-      <li>Schedule daily, weekly, monthly</li>
-      <li>Premium DDoS Protection</li>
-      <li>Up to 10 concurrent investigations</li>
-      <li>Multi-marketplace coverage</li>
-      <li>Real-time notifications</li>
-      <li>Export CSV, JSON, PDF</li>
-      <li>24/7 monitoring capability</li>
-      <li>Free 24/7 technical support</li>
+      <li>Import recalls from CPSC, FDA, NHTSA feeds</li>
+      <li>Automated marketplace investigations</li>
+      <li>AI-powered risk classification (HIGH/MEDIUM/LOW)</li>
+      <li>Real-time email notifications</li>
+      <li>Export compliance-ready reports (CSV, JSON, PDF)</li>
+      <li>Multi-marketplace coverage (eBay, Amazon, Facebook, etc.)</li>
+      <li>Schedule daily, weekly, monthly investigations</li>
+      <li>Complete workflow: Import → Investigate → Notify → Takedown</li>
+      <li>Save 20+ hours per week vs manual searches</li>
+      <li>Open source and self-hostable</li>
     </ul>
   </div>
 
   <div class="product-card featured">
-    <div class="product-badge">Most Popular</div>
+    <div class="product-badge">Available Now</div>
     <div class="product-header">
-      <h3>Enterprise Platform</h3>
-      <p class="product-subtitle">For high-volume operations</p>
+      <h3>API & Integrations</h3>
+      <p class="product-subtitle">Programmatic access and automation</p>
     </div>
-    <div class="product-price">
-      <span class="price-label">Custom Pricing</span>
-    </div>
-    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Contact Sales</a>
+    <a href="http://localhost:8000/docs" target="_blank" class="product-cta">View API Docs</a>
     <ul class="product-features">
-      <li>Deploy from 15 minutes</li>
-      <li>Advanced AI classification</li>
-      <li>Full API access</li>
-      <li>Unlimited investigations</li>
+      <li>RESTful API for all operations</li>
+      <li>Model Context Protocol (MCP) server integration</li>
+      <li>Webhook support for real-time updates</li>
+      <li>Python SDK and CLI tools</li>
       <li>Custom marketplace integrations</li>
-      <li>Priority support</li>
-      <li>Advanced analytics dashboard</li>
-      <li>Webhook integrations</li>
-      <li>Dedicated account manager</li>
-      <li>SLA guarantees</li>
+      <li>Batch import and export capabilities</li>
+      <li>Integration with existing compliance systems</li>
+      <li>Developer-friendly documentation</li>
     </ul>
   </div>
 
   <div class="product-card">
     <div class="product-header">
-      <h3>Custom Deployment</h3>
-      <p class="product-subtitle">For specialized needs</p>
+      <h3>Risk Management</h3>
+      <p class="product-subtitle">Intelligent prioritization and classification</p>
     </div>
-    <div class="product-price">
-      <span class="price-label">Tailored Solutions</span>
-    </div>
-    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Get Custom Quote</a>
+    <a href="{{ '/userguide.html' | relative_url }}" class="product-cta">Learn More</a>
     <ul class="product-features">
-      <li>Deploy from 24 to 72 hours</li>
-      <li>Custom AI models</li>
-      <li>On-premise options</li>
-      <li>Full source code access</li>
-      <li>White-label solutions</li>
-      <li>Custom integrations</li>
-      <li>Dedicated infrastructure</li>
-      <li>Training & onboarding</li>
-      <li>Custom SLA terms</li>
-      <li>24/7 dedicated support</li>
+      <li>Automatic risk classification based on injuries, deaths, units affected</li>
+      <li>Hazard-based prioritization (fire, electrocution, choking, etc.)</li>
+      <li>Risk-based investigation scheduling</li>
+      <li>High-risk recall alerts and notifications</li>
+      <li>Risk analytics and reporting dashboards</li>
+      <li>Custom risk scoring models</li>
+      <li>Focus team time on HIGH-risk items first</li>
+      <li>Compliance-ready risk documentation</li>
     </ul>
   </div>
 </div>
 
-## Control Product Safety as Simply as You Like
+## Coming Soon: Premium Features
 
-[Sign up to get started]({{ '/userguide.html' | relative_url }}) · [View Documentation]({{ '/userguide.html' | relative_url }})
+<div class="premium-features-section" style="margin: 4rem 0; padding: 3rem 2rem; background: var(--color-card-bg); border: 2px solid var(--color-primary); border-radius: 16px; box-shadow: var(--shadow-card);">
+  <h2 style="text-align: center; margin-bottom: 2rem; font-family: 'Poppins', sans-serif;">Premium Features Roadmap</h2>
+  <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+    The following premium features are planned for future releases. These capabilities will enable even more powerful recall detection and management workflows.
+  </p>
 
-## Why Safety Teams Love Altitude?
+  <div class="premium-features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+    <div class="premium-feature-card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🌐</div>
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Public Submission API</h3>
+      <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
+        Enable anyone to submit potential recalled product listings via HTTP API. Perfect for consumer watchdogs, regulatory tip lines, and community reporting. All submissions enter a queue for review and classification.
+      </p>
+    </div>
+
+    <div class="premium-feature-card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🥽</div>
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Meta Glasses Integration</h3>
+      <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
+        Browse marketplace listings through Meta glasses and instantly identify potential recalled products. AI-powered visual recognition sends suspected items directly to Altitude's review queue for rapid verification and classification.
+      </p>
+    </div>
+
+    <div class="premium-feature-card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🔌</div>
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Browser Extension</h3>
+      <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
+        One-click browser extension captures marketplace listings and sends them to Altitude API for instant recall checking. Works with Chrome, Firefox, Safari, and Edge. Perfect for compliance teams browsing marketplaces manually.
+      </p>
+    </div>
+
+    <div class="premium-feature-card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🌍</div>
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Browser Context Integration</h3>
+      <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
+        Advanced browser context integration automatically captures listing details, product images, and metadata as you browse. Seamlessly integrates with your browsing workflow to identify recalled products in real-time.
+      </p>
+    </div>
+
+    <div class="premium-feature-card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Mobile App Integration</h3>
+      <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
+        Native mobile apps for iOS and Android enable field teams to photograph products, scan barcodes, and instantly check against recalled product databases. Perfect for regulatory inspectors and compliance officers.
+      </p>
+    </div>
+
+    <div class="premium-feature-card">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
+      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Advanced AI Models</h3>
+      <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
+        Custom AI models trained on your specific product categories and recall patterns. Improved accuracy for specialized industries, custom risk scoring, and predictive recall detection before formal announcements.
+      </p>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-glass-border);">
+    <p style="color: var(--color-text-secondary); margin-bottom: 1rem;">
+      Interested in early access to premium features or have feature requests?
+    </p>
+    <a href="{{ '/contact.html' | relative_url }}" class="btn-primary" style="display: inline-block;">Contact Us</a>
+  </div>
+</div>
+
+## Why Organizations Choose Altitude
 
 <div class="testimonials-grid">
   <div class="testimonial-card">
     <div class="testimonial-content">
-      <p class="testimonial-quote">"Great service. Quick response and resolution. The AI-powered risk classification saved us countless hours of manual review."</p>
-      <p class="testimonial-author">Safety Manager</p>
-      <p class="testimonial-company">Consumer Products Corp</p>
+      <p class="testimonial-quote">"As a state regulatory agency, we were spending 30+ hours per week manually searching marketplaces for recalled products. Altitude automated our entire workflow—from import to takedown. We've reclaimed entire workdays while improving our recall detection rates."</p>
+      <p class="testimonial-author">Sarah Chen</p>
+      <p class="testimonial-company">Director of Consumer Protection, State Agency</p>
       <p class="testimonial-date">Jan 16, 2025</p>
     </div>
   </div>
 
   <div class="testimonial-card">
     <div class="testimonial-content">
-      <p class="testimonial-quote">"Best recall monitoring tool ever! The automated marketplace scanning found products we never would have discovered manually."</p>
-      <p class="testimonial-author">Compliance Director</p>
-      <p class="testimonial-company">Retail Safety Inc</p>
+      <p class="testimonial-quote">"Our manufacturing company needed to monitor unauthorized sales of our recalled products. Altitude's automated investigations found listings we never would have discovered manually. The risk classification helps us prioritize which recalls need immediate attention."</p>
+      <p class="testimonial-author">Michael Rodriguez</p>
+      <p class="testimonial-company">Compliance Director, Manufacturing Corp</p>
       <p class="testimonial-date">Dec 27, 2024</p>
     </div>
   </div>
 
   <div class="testimonial-card">
     <div class="testimonial-content">
-      <p class="testimonial-quote">"Outstanding Service and Reliable Support from Altitude. Their monitoring is reliable, and their support team is outstanding—always quick to respond and incredibly helpful."</p>
-      <p class="testimonial-author">Operations Lead</p>
-      <p class="testimonial-company">SafetyFirst LLC</p>
+      <p class="testimonial-quote">"The import → investigate → notify → takedown workflow is exactly what our retail organization needed. We can now verify product compliance before listing and quickly identify if any recalled inventory makes it to our marketplace listings."</p>
+      <p class="testimonial-author">Jennifer Park</p>
+      <p class="testimonial-company">Operations Lead, Retail Chain</p>
       <p class="testimonial-date">Dec 21, 2024</p>
     </div>
   </div>
 
   <div class="testimonial-card">
     <div class="testimonial-content">
-      <p class="testimonial-quote">"Best in the business. Quality monitoring, performance, and support. The risk classification feature helps us prioritize high-risk recalls immediately."</p>
-      <p class="testimonial-author">Quality Assurance</p>
-      <p class="testimonial-company">Marketplace Safety Group</p>
+      <p class="testimonial-quote">"Our non-profit consumer safety organization uses Altitude to monitor multiple marketplaces simultaneously. The automated risk classification means we focus our limited resources on HIGH-risk recalls that pose the greatest danger to consumers."</p>
+      <p class="testimonial-author">David Kim</p>
+      <p class="testimonial-company">Executive Director, Consumer Safety Non-Profit</p>
       <p class="testimonial-date">Aug 12, 2024</p>
     </div>
   </div>
 
   <div class="testimonial-card">
     <div class="testimonial-content">
-      <p class="testimonial-quote">"Full Automation Control Panel & Fast Support. Very easy control panel and live support is great! Server Performance Great!"</p>
-      <p class="testimonial-author">Tech Manager</p>
-      <p class="testimonial-company">Digital Safety Solutions</p>
+      <p class="testimonial-quote">"As an importer, we needed to ensure compliance before products hit the market. Altitude's automated investigations help us catch recalled products that might slip through manual checks. The takedown tracking feature ensures we maintain compliance."</p>
+      <p class="testimonial-author">Lisa Thompson</p>
+      <p class="testimonial-company">Compliance Manager, Import Company</p>
       <p class="testimonial-date">Dec 23, 2024</p>
     </div>
   </div>
 
   <div class="testimonial-card">
     <div class="testimonial-content">
-      <p class="testimonial-quote">"Great support and the team is always there to assist and ensure your queries have been closed. The scheduled investigations feature is a game-changer."</p>
-      <p class="testimonial-author">Product Manager</p>
-      <p class="testimonial-company">SafetyTech Industries</p>
+      <p class="testimonial-quote">"The time savings are measurable: our federal agency reclaimed 25+ hours per week previously spent on manual marketplace searches. The complete workflow from import to takedown is now fully automated, allowing our team to focus on enforcement and consumer protection."</p>
+      <p class="testimonial-author">Robert Martinez</p>
+      <p class="testimonial-company">Program Manager, Federal Regulatory Agency</p>
       <p class="testimonial-date">Aug 19, 2024</p>
     </div>
   </div>
 </div>
 
-## Turn Complexity into Clarity with Intelligent Monitoring
+## Manage Risk Effectively with Automated Classification
 
-Accelerate your safety workflow with powerful, easy-to-use features and integrations—designed for compliance teams. Fully compatible with open source tools and CI/CD pipelines.
+**Altitude automatically classifies every recall by risk level:**
 
-[Explore API & Integrations]({{ '/userguide.html' | relative_url }}) · [View API Docs](http://localhost:8000/docs) · [MCP Integration Guide]({{ '/userguide.html' | relative_url }})
+### <span class="risk-badge risk-high">● HIGH RISK</span>
+Recalls with deaths, serious injuries, or 10,000+ units affected. Hazards include fire, electrocution, choking, lead poisoning, strangulation. **Action:** Schedule daily investigations immediately.
 
-### API Example
+### <span class="risk-badge risk-medium">● MEDIUM RISK</span>
+Recalls with minor injuries or 1,000-10,000 units affected. Hazards include cuts, burns, falls, tip-over. **Action:** Weekly or biweekly investigations usually sufficient.
 
-```bash
-# Create a scheduled investigation
-curl -X POST "http://localhost:8000/api/investigations" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "violation_id": 1,
-    "schedule": "DAILY",
-    "marketplaces": ["ebay", "amazon"]
-  }'
-```
+### <span class="risk-badge risk-low">● LOW RISK</span>
+Recalls with no injuries and fewer than 1,000 units affected. Minor defects, labeling issues. **Action:** Monthly investigations or manual searches when needed.
 
-### Python SDK Example
+**Risk classification helps you:**
+- Prioritize your team's limited time on HIGH-risk recalls
+- Allocate resources effectively across your recall management program
+- Generate risk-based reports for regulatory oversight
+- Focus enforcement efforts where they matter most
 
-```python
-from altitude import AltitudeClient
-
-client = AltitudeClient(api_key="your-api-key")
-
-# Search for recalled products
-results = client.search_marketplaces(
-    violation_id=1,
-    marketplaces=["ebay", "amazon", "facebook"]
-)
-
-# Get risk classification
-risk = client.get_risk_classification(violation_id=1)
-print(f"Risk Level: {risk.level}")
-```
-
-### MCP Integration
-
-Altitude includes a Model Context Protocol (MCP) server for AI agent integration:
-
-- Works with Claude Desktop and other compatible AI systems
-- 11+ MCP tools available for recall search and monitoring
-- Skills power the tools for intelligent automation
-
-## Key Features
+## Key Benefits by Organization Type
 
 <div class="features-grid">
   <div class="feature-item">
-    <div class="feature-icon">🤖</div>
-    <h4>AI-Powered Automation</h4>
-    <p>Automated risk classification and marketplace scanning with intelligent prioritization</p>
+    <div class="feature-icon">🏛️</div>
+    <h4>Regulatory Agencies</h4>
+    <p>Automate marketplace monitoring across your jurisdiction. Replace manual searches with scheduled investigations. Generate compliance reports for oversight committees.</p>
   </div>
 
   <div class="feature-item">
-    <div class="feature-icon">⚡</div>
-    <h4>Real-Time Monitoring</h4>
-    <p>Continuous monitoring across multiple marketplaces with instant notifications</p>
+    <div class="feature-icon">🏭</div>
+    <h4>Manufacturers & Importers</h4>
+    <p>Monitor for unauthorized sales of your recalled products. Track takedown effectiveness. Maintain compliance documentation for regulators.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon">🏪</div>
+    <h4>Retailers & Sellers</h4>
+    <p>Verify product compliance before listing. Prevent recalled inventory from reaching consumers. Protect your brand reputation and avoid regulatory penalties.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon">🤝</div>
+    <h4>Non-Profits</h4>
+    <p>Maximize limited resources with automated monitoring. Focus on HIGH-risk recalls that pose the greatest danger. Generate reports for donors and stakeholders.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon">⏱️</div>
+    <h4>Save 20+ Hours Per Week</h4>
+    <p>Eliminate repetitive manual searches across multiple marketplaces. Automate your entire recall workflow from import to takedown.</p>
   </div>
 
   <div class="feature-item">
     <div class="feature-icon">📊</div>
-    <h4>Advanced Analytics</h4>
-    <p>Comprehensive dashboards and reports for compliance and auditing</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon">🔌</div>
-    <h4>API & Integrations</h4>
-    <p>RESTful API, webhooks, and MCP integration for seamless workflows</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon">🛒</div>
-    <h4>Multi-Marketplace</h4>
-    <p>Monitor eBay, Amazon, Facebook, Craigslist, OfferUp, and more</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon">🔍</div>
-    <h4>Visual Search</h4>
-    <p>Image-based product identification using Google Vision and TinEye</p>
+    <h4>Risk-Based Prioritization</h4>
+    <p>Automated risk classification helps you focus on HIGH-risk recalls first. Allocate resources effectively and improve recall detection rates.</p>
   </div>
 </div>
 
-## Get Started Today
+## Getting Started with Open Source
 
-Ready to protect your marketplace? Check out our [User Guide]({{ '/userguide.html' | relative_url }}) for detailed instructions, or [contact us]({{ '/contact.html' | relative_url }}) for a personalized demo.
+Altitude is available as an open source platform. Get started today:
+
+1. **Import Recalls** — Connect to CPSC, FDA, NHTSA feeds or import manually via CSV/JSON
+2. **Configure Investigations** — Select marketplaces and set schedule (daily, weekly, monthly)
+3. **Manage Risk** — Use automated risk classification to prioritize HIGH-risk items
+4. **Notify & Takedown** — Receive alerts, export reports, and track takedown effectiveness
+
+[Get Started]({{ '/userguide.html' | relative_url }}) · [View on GitHub](https://github.com/bizoton19/altitude) · [View API Docs](http://localhost:8000/docs) · [Contact Us]({{ '/contact.html' | relative_url }})

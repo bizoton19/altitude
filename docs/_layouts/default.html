@@ -7,84 +7,96 @@
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
   
-  <!-- Fonts -->
+  <!-- Fonts - Marketing Site Brand -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     /* ============================================
        THEME VARIABLES
        ============================================ */
     
-    /* Dark Theme (default) */
+    /* Marketing Site Theme - Different from App */
     :root, [data-theme="dark"] {
-      --color-bg-primary: #0a0a0f;
-      --color-bg-gradient-start: #0a0a0f;
-      --color-bg-gradient-end: #1a0a2a;
-      --color-glass-bg: rgba(255, 255, 255, 0.06);
-      --color-glass-border: rgba(255, 255, 255, 0.1);
-      --color-text-primary: #e8e8e8;
-      --color-text-secondary: #a0a0a0;
-      --color-accent-cyan: #00f0ff;
-      --color-accent-purple: #bf00ff;
-      --color-accent-pink: #ff0080;
-      --color-risk-high: #ff3366;
-      --color-risk-medium: #ffaa00;
-      --color-risk-low: #00ff88;
-      --color-code-bg: rgba(0, 0, 0, 0.3);
-      --color-pre-bg: rgba(0, 0, 0, 0.4);
-      --color-card-bg: rgba(0, 0, 0, 0.2);
-      --color-kbd-bg: rgba(255, 255, 255, 0.1);
-      --grid-color: rgba(0, 240, 255, 0.03);
-      --shadow-glow: rgba(0, 240, 255, 0.3);
+      --color-bg-primary: #ffffff;
+      --color-bg-gradient-start: #f8fafc;
+      --color-bg-gradient-end: #f1f5f9;
+      --color-glass-bg: rgba(255, 255, 255, 0.9);
+      --color-glass-border: rgba(0, 0, 0, 0.08);
+      --color-text-primary: #1e293b;
+      --color-text-secondary: #64748b;
+      --color-accent-cyan: #0ea5e9;
+      --color-accent-purple: #8b5cf6;
+      --color-accent-pink: #ec4899;
+      --color-primary: #2563eb;
+      --color-primary-hover: #1d4ed8;
+      --color-risk-high: #ef4444;
+      --color-risk-medium: #f59e0b;
+      --color-risk-low: #10b981;
+      --color-code-bg: rgba(241, 245, 249, 0.8);
+      --color-pre-bg: #f8fafc;
+      --color-card-bg: rgba(255, 255, 255, 0.95);
+      --color-kbd-bg: rgba(241, 245, 249, 0.8);
+      --grid-color: rgba(15, 23, 42, 0.03);
+      --shadow-glow: rgba(37, 99, 235, 0.15);
+      --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
-    /* Light Theme */
+    /* Light Theme (same as default for marketing site) */
     [data-theme="light"] {
-      --color-bg-primary: #f5f7fa;
-      --color-bg-gradient-start: #f5f7fa;
-      --color-bg-gradient-end: #e8eef5;
-      --color-glass-bg: rgba(255, 255, 255, 0.7);
+      --color-bg-primary: #ffffff;
+      --color-bg-gradient-start: #f8fafc;
+      --color-bg-gradient-end: #f1f5f9;
+      --color-glass-bg: rgba(255, 255, 255, 0.9);
       --color-glass-border: rgba(0, 0, 0, 0.08);
-      --color-text-primary: #1a1a2e;
-      --color-text-secondary: #5a5a7a;
-      --color-accent-cyan: #0088aa;
-      --color-accent-purple: #8800cc;
-      --color-accent-pink: #cc0066;
-      --color-risk-high: #cc2244;
-      --color-risk-medium: #cc8800;
-      --color-risk-low: #00aa55;
-      --color-code-bg: rgba(0, 136, 170, 0.1);
-      --color-pre-bg: rgba(0, 0, 0, 0.04);
-      --color-card-bg: rgba(255, 255, 255, 0.5);
-      --color-kbd-bg: rgba(0, 0, 0, 0.06);
-      --grid-color: rgba(0, 136, 170, 0.05);
-      --shadow-glow: rgba(0, 136, 170, 0.2);
+      --color-text-primary: #1e293b;
+      --color-text-secondary: #64748b;
+      --color-accent-cyan: #0ea5e9;
+      --color-accent-purple: #8b5cf6;
+      --color-accent-pink: #ec4899;
+      --color-primary: #2563eb;
+      --color-primary-hover: #1d4ed8;
+      --color-risk-high: #ef4444;
+      --color-risk-medium: #f59e0b;
+      --color-risk-low: #10b981;
+      --color-code-bg: rgba(241, 245, 249, 0.8);
+      --color-pre-bg: #f8fafc;
+      --color-card-bg: rgba(255, 255, 255, 0.95);
+      --color-kbd-bg: rgba(241, 245, 249, 0.8);
+      --grid-color: rgba(15, 23, 42, 0.03);
+      --shadow-glow: rgba(37, 99, 235, 0.15);
+      --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
     /* Auto theme - follows system preference */
-    @media (prefers-color-scheme: light) {
+    @media (prefers-color-scheme: dark) {
       [data-theme="auto"] {
-        --color-bg-primary: #f5f7fa;
-        --color-bg-gradient-start: #f5f7fa;
-        --color-bg-gradient-end: #e8eef5;
-        --color-glass-bg: rgba(255, 255, 255, 0.7);
-        --color-glass-border: rgba(0, 0, 0, 0.08);
-        --color-text-primary: #1a1a2e;
-        --color-text-secondary: #5a5a7a;
-        --color-accent-cyan: #0088aa;
-        --color-accent-purple: #8800cc;
-        --color-accent-pink: #cc0066;
-        --color-risk-high: #cc2244;
-        --color-risk-medium: #cc8800;
-        --color-risk-low: #00aa55;
-        --color-code-bg: rgba(0, 136, 170, 0.1);
-        --color-pre-bg: rgba(0, 0, 0, 0.04);
-        --color-card-bg: rgba(255, 255, 255, 0.5);
-        --color-kbd-bg: rgba(0, 0, 0, 0.06);
-        --grid-color: rgba(0, 136, 170, 0.05);
-        --shadow-glow: rgba(0, 136, 170, 0.2);
+        --color-bg-primary: #0f172a;
+        --color-bg-gradient-start: #0f172a;
+        --color-bg-gradient-end: #1e293b;
+        --color-glass-bg: rgba(30, 41, 59, 0.8);
+        --color-glass-border: rgba(255, 255, 255, 0.1);
+        --color-text-primary: #f1f5f9;
+        --color-text-secondary: #94a3b8;
+        --color-accent-cyan: #38bdf8;
+        --color-accent-purple: #a78bfa;
+        --color-accent-pink: #f472b6;
+        --color-primary: #3b82f6;
+        --color-primary-hover: #2563eb;
+        --color-risk-high: #f87171;
+        --color-risk-medium: #fbbf24;
+        --color-risk-low: #34d399;
+        --color-code-bg: rgba(15, 23, 42, 0.6);
+        --color-pre-bg: #1e293b;
+        --color-card-bg: rgba(30, 41, 59, 0.6);
+        --color-kbd-bg: rgba(255, 255, 255, 0.1);
+        --grid-color: rgba(148, 163, 184, 0.05);
+        --shadow-glow: rgba(59, 130, 246, 0.3);
+        --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
       }
     }
 
@@ -99,16 +111,18 @@
     }
 
     body {
-      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, var(--color-bg-gradient-start) 0%, var(--color-bg-gradient-end) 100%);
       background-attachment: fixed;
       color: var(--color-text-primary);
       min-height: 100vh;
-      line-height: 1.6;
+      line-height: 1.7;
       transition: background 0.3s ease, color 0.3s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Animated background grid */
+    /* Subtle background pattern - cleaner marketing look */
     body::before {
       content: '';
       position: fixed;
@@ -117,11 +131,11 @@
       right: 0;
       bottom: 0;
       background-image: 
-        linear-gradient(var(--grid-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-      background-size: 50px 50px;
+        radial-gradient(circle at 1px 1px, var(--grid-color) 1px, transparent 0);
+      background-size: 40px 40px;
       pointer-events: none;
       z-index: -1;
+      opacity: 0.5;
     }
 
     .container {
@@ -184,20 +198,22 @@
     }
 
     .logo {
+      font-family: 'Poppins', sans-serif;
       font-size: 2.5rem;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent-purple));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 0.5rem;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.02em;
     }
 
     .tagline {
       color: var(--color-text-secondary);
       font-size: 1rem;
       font-weight: 400;
+      font-family: 'Inter', sans-serif;
     }
 
     /* Navigation - Cherry Servers Style */
@@ -223,7 +239,7 @@
 
     nav a:hover {
       background: var(--color-glass-bg);
-      color: var(--color-accent-cyan);
+      color: var(--color-primary);
     }
 
     /* ============================================
@@ -249,6 +265,7 @@
     }
 
     .hero-title {
+      font-family: 'Poppins', sans-serif;
       font-size: 3.5rem;
       font-weight: 700;
       margin-bottom: 1.5rem;
@@ -257,6 +274,7 @@
       max-width: 900px;
       margin-left: auto;
       margin-right: auto;
+      letter-spacing: -0.02em;
     }
 
     @media (max-width: 768px) {
@@ -266,6 +284,7 @@
     }
 
     .hero-subtitle {
+      font-family: 'Inter', sans-serif;
       font-size: 1.25rem;
       color: var(--color-text-secondary);
       max-width: 700px;
@@ -295,16 +314,17 @@
     }
 
     .btn-primary {
-      background: var(--color-accent-cyan);
+      background: var(--color-primary);
       color: #fff;
-      border-color: var(--color-accent-cyan);
+      border-color: var(--color-primary);
+      font-weight: 600;
     }
 
     .btn-primary:hover {
-      background: transparent;
-      color: var(--color-accent-cyan);
+      background: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px var(--shadow-glow);
+      box-shadow: var(--shadow-card-hover);
     }
 
     .btn-secondary {
@@ -412,22 +432,14 @@
        ============================================ */
 
     h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
       margin-bottom: 1.5rem;
-      margin-top: 2rem;
-      color: var(--color-accent-cyan);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    h2::before {
-      content: '';
-      width: 4px;
-      height: 1.5rem;
-      background: linear-gradient(180deg, var(--color-accent-cyan), var(--color-accent-purple));
-      border-radius: 2px;
+      margin-top: 3rem;
+      color: var(--color-text-primary);
+      letter-spacing: -0.02em;
+      line-height: 1.3;
     }
 
     h3 {
@@ -557,45 +569,47 @@
     }
 
     .product-card {
-      background: var(--color-glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: var(--color-card-bg);
       border: 1px solid var(--color-glass-border);
       border-radius: 16px;
       padding: 2.5rem;
       transition: all 0.3s ease;
       position: relative;
+      box-shadow: var(--shadow-card);
     }
 
     .product-card:hover {
-      border-color: var(--color-accent-cyan);
+      border-color: var(--color-primary);
       transform: translateY(-4px);
-      box-shadow: 0 12px 40px var(--shadow-glow);
+      box-shadow: var(--shadow-card-hover);
     }
 
     .product-card.featured {
-      border-color: var(--color-accent-purple);
-      box-shadow: 0 0 30px rgba(191, 0, 255, 0.2);
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1), var(--shadow-card);
     }
 
     .product-badge {
       position: absolute;
       top: -12px;
       right: 2rem;
-      background: linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-cyan));
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent-purple));
       color: #fff;
       padding: 0.4rem 1rem;
       border-radius: 20px;
       font-size: 0.75rem;
       font-weight: 600;
       text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
     }
 
     .product-header h3 {
+      font-family: 'Poppins', sans-serif;
       font-size: 1.5rem;
       font-weight: 600;
       margin: 0 0 0.5rem 0;
       color: var(--color-text-primary);
+      letter-spacing: -0.01em;
     }
 
     .product-subtitle {
@@ -611,14 +625,14 @@
     .price-label {
       font-size: 1.1rem;
       font-weight: 600;
-      color: var(--color-accent-cyan);
+      color: var(--color-primary);
     }
 
     .product-cta {
       display: inline-block;
       width: 100%;
       padding: 0.875rem;
-      background: var(--color-accent-cyan);
+      background: var(--color-primary);
       color: #fff;
       text-align: center;
       text-decoration: none;
@@ -629,10 +643,9 @@
     }
 
     .product-cta:hover {
-      background: transparent;
-      color: var(--color-accent-cyan);
-      border: 2px solid var(--color-accent-cyan);
+      background: var(--color-primary-hover);
       transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
     }
 
     .product-features {
@@ -671,19 +684,18 @@
     }
 
     .testimonial-card {
-      background: var(--color-glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: var(--color-card-bg);
       border: 1px solid var(--color-glass-border);
       border-radius: 12px;
       padding: 2rem;
       transition: all 0.3s ease;
+      box-shadow: var(--shadow-card);
     }
 
     .testimonial-card:hover {
-      border-color: var(--color-accent-cyan);
+      border-color: var(--color-primary);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px var(--shadow-glow);
+      box-shadow: var(--shadow-card-hover);
     }
 
     .testimonial-quote {
@@ -701,7 +713,7 @@
     }
 
     .testimonial-company {
-      color: var(--color-accent-cyan);
+      color: var(--color-primary);
       font-size: 0.9rem;
       margin-bottom: 0.25rem;
     }
@@ -725,16 +737,17 @@
     .feature-item {
       text-align: center;
       padding: 2rem;
-      background: var(--color-glass-bg);
+      background: var(--color-card-bg);
       border: 1px solid var(--color-glass-border);
       border-radius: 12px;
       transition: all 0.3s ease;
+      box-shadow: var(--shadow-card);
     }
 
     .feature-item:hover {
-      border-color: var(--color-accent-cyan);
+      border-color: var(--color-primary);
       transform: translateY(-4px);
-      box-shadow: 0 8px 30px var(--shadow-glow);
+      box-shadow: var(--shadow-card-hover);
     }
 
     .feature-icon {
@@ -755,15 +768,147 @@
     }
 
     /* ============================================
+       AUDIENCE CARDS
+       ============================================ */
+
+    .audience-card {
+      padding: 2rem;
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-card);
+    }
+
+    .audience-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .audience-card h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1rem 0 0.75rem;
+      color: var(--color-text-primary);
+    }
+
+    .audience-card p {
+      font-size: 0.95rem;
+      color: var(--color-text-secondary);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* ============================================
+       WORKFLOW STEPS
+       ============================================ */
+
+    .workflow-section {
+      max-width: 900px;
+      margin: 4rem auto;
+    }
+
+    .workflow-step {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      align-items: flex-start;
+      padding: 2rem;
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s ease;
+    }
+
+    .workflow-step:hover {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-card-hover);
+      transform: translateX(4px);
+    }
+
+    .workflow-number {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent-purple));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-card);
+    }
+
+    .workflow-content {
+      flex: 1;
+    }
+
+    .workflow-content h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 1rem;
+      color: var(--color-text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .workflow-content p {
+      color: var(--color-text-secondary);
+      line-height: 1.8;
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .workflow-step {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+      }
+
+      .workflow-number {
+        margin: 0 auto;
+      }
+
+      .premium-features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ============================================
+       PREMIUM FEATURES
+       ============================================ */
+
+    .premium-feature-card {
+      padding: 2rem;
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-card);
+      text-align: center;
+    }
+
+    .premium-feature-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    /* ============================================
        FOOTER - Cherry Servers Style
        ============================================ */
 
     footer {
       margin-top: 6rem;
       padding: 4rem 2rem 2rem;
-      background: var(--color-glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: var(--color-card-bg);
       border-top: 1px solid var(--color-glass-border);
     }
 
@@ -803,7 +948,7 @@
     }
 
     .footer-section a:hover {
-      color: var(--color-accent-cyan);
+      color: var(--color-primary);
       padding-left: 0.25rem;
     }
 
@@ -812,6 +957,7 @@
     }
 
     .footer-brand .logo {
+      font-family: 'Poppins', sans-serif;
       font-size: 1.75rem;
       margin-bottom: 1rem;
     }
@@ -838,7 +984,7 @@
     }
 
     .footer-contact a {
-      color: var(--color-accent-cyan);
+      color: var(--color-primary);
     }
 
     .footer-bottom {
@@ -873,7 +1019,7 @@
     }
 
     .footer-bottom-links a:hover {
-      color: var(--color-accent-cyan);
+      color: var(--color-primary);
     }
 
     /* ============================================
@@ -914,6 +1060,20 @@
         grid-template-columns: 1fr;
       }
 
+      .audience-section > div {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-step {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+      }
+
+      .workflow-number {
+        margin: 0 auto;
+      }
+
       .footer-content {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -942,7 +1102,7 @@
   <div class="container">
     <header>
       <h1 class="logo">⚡ ALTITUDE</h1>
-      <p class="tagline">AI-Powered Product Recall Monitoring</p>
+      <p class="tagline">Automated Product Recall Monitoring—Save Hours Every Week</p>
       <nav>
         <a href="{{ site.baseurl }}/#features">Features</a>
         <a href="{{ site.baseurl }}/#benefits">Benefits</a>
