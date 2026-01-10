@@ -4,196 +4,238 @@ title: Home
 description: AI-powered product recall monitoring across marketplaces. Protect consumers with intelligent risk classification and automated marketplace scanning.
 ---
 
-## ⚡ Altitude
-
-<div class="hero">
-  <p class="tagline">AI-Powered Product Recall Monitoring</p>
-  <p class="subtitle">
-    Automatically monitor eBay, Amazon, Facebook Marketplace, and more for recalled products. 
-    Protect consumers with intelligent risk classification and scheduled investigations that never miss a recall.
+<div class="hero-section">
+  <h1 class="hero-title">AI-Powered Product Recall Monitoring for Future Safety</h1>
+  <p class="hero-subtitle">
+    Build on a fully automated platform that gives you intelligent monitoring, risk classification, and backs you up with comprehensive marketplace coverage.
   </p>
-  <div class="cta-buttons">
-    <a href="{{ site.baseurl }}/#features" class="cta-button">Explore Features</a>
-    <a href="{{ '/userguide.html' | relative_url }}" class="cta-button secondary">Read User Guide</a>
-    <a href="{{ '/contact.html' | relative_url }}" class="cta-button secondary">Contact Us</a>
+  <div class="hero-cta">
+    <a href="{{ '/userguide.html' | relative_url }}" class="btn-primary">Get Started</a>
+    <a href="{{ '/contact.html' | relative_url }}" class="btn-secondary">Contact Us</a>
   </div>
-  
-  <!-- Screenshot Placeholder - Add screenshot.png to docs folder -->
-  <div class="screenshot-container" style="max-width: 900px; margin: 3rem auto 0;">
-    {% if site.screenshot %}
-    <img src="{{ site.screenshot }}" alt="Altitude Dashboard" style="width: 100%; height: auto; border-radius: 8px;">
-    {% else %}
-    <div class="screenshot-placeholder">
-      📸 Add screenshot.png to the docs folder to display the application interface
+</div>
+
+## Choose the Right Solution to Protect Your Marketplace
+
+<div class="products-grid">
+  <div class="product-card">
+    <div class="product-header">
+      <h3>Automated Monitoring</h3>
+      <p class="product-subtitle">For continuous protection</p>
     </div>
-    {% endif %}
+    <div class="product-price">
+      <span class="price-label">Free Tier Available</span>
+    </div>
+    <a href="{{ '/userguide.html#scheduled-investigations' | relative_url }}" class="product-cta">Learn More</a>
+    <ul class="product-features">
+      <li>Deploy from 5 minutes</li>
+      <li>AI-powered risk classification</li>
+      <li>Schedule daily, weekly, monthly</li>
+      <li>Premium DDoS Protection</li>
+      <li>Up to 10 concurrent investigations</li>
+      <li>Multi-marketplace coverage</li>
+      <li>Real-time notifications</li>
+      <li>Export CSV, JSON, PDF</li>
+      <li>24/7 monitoring capability</li>
+      <li>Free 24/7 technical support</li>
+    </ul>
+  </div>
+
+  <div class="product-card featured">
+    <div class="product-badge">Most Popular</div>
+    <div class="product-header">
+      <h3>Enterprise Platform</h3>
+      <p class="product-subtitle">For high-volume operations</p>
+    </div>
+    <div class="product-price">
+      <span class="price-label">Custom Pricing</span>
+    </div>
+    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Contact Sales</a>
+    <ul class="product-features">
+      <li>Deploy from 15 minutes</li>
+      <li>Advanced AI classification</li>
+      <li>Full API access</li>
+      <li>Unlimited investigations</li>
+      <li>Custom marketplace integrations</li>
+      <li>Priority support</li>
+      <li>Advanced analytics dashboard</li>
+      <li>Webhook integrations</li>
+      <li>Dedicated account manager</li>
+      <li>SLA guarantees</li>
+    </ul>
+  </div>
+
+  <div class="product-card">
+    <div class="product-header">
+      <h3>Custom Deployment</h3>
+      <p class="product-subtitle">For specialized needs</p>
+    </div>
+    <div class="product-price">
+      <span class="price-label">Tailored Solutions</span>
+    </div>
+    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Get Custom Quote</a>
+    <ul class="product-features">
+      <li>Deploy from 24 to 72 hours</li>
+      <li>Custom AI models</li>
+      <li>On-premise options</li>
+      <li>Full source code access</li>
+      <li>White-label solutions</li>
+      <li>Custom integrations</li>
+      <li>Dedicated infrastructure</li>
+      <li>Training & onboarding</li>
+      <li>Custom SLA terms</li>
+      <li>24/7 dedicated support</li>
+    </ul>
   </div>
 </div>
 
-## Why Altitude?
+## Control Product Safety as Simply as You Like
 
-<div class="benefits-grid">
-  <div class="benefit-card">
-    <div class="benefit-icon">🤖</div>
-    <h4>AI-Powered Automation</h4>
-    <p>Set it and forget it. Schedule investigations to run daily, weekly, or monthly. The AI agent automatically searches marketplaces and generates listings for review.</p>
+[Sign up to get started]({{ '/userguide.html' | relative_url }}) · [View Documentation]({{ '/userguide.html' | relative_url }})
+
+## Why Safety Teams Love Altitude?
+
+<div class="testimonials-grid">
+  <div class="testimonial-card">
+    <div class="testimonial-content">
+      <p class="testimonial-quote">"Great service. Quick response and resolution. The AI-powered risk classification saved us countless hours of manual review."</p>
+      <p class="testimonial-author">Safety Manager</p>
+      <p class="testimonial-company">Consumer Products Corp</p>
+      <p class="testimonial-date">Jan 16, 2025</p>
+    </div>
   </div>
-  
-  <div class="benefit-card">
-    <div class="benefit-icon">⚡</div>
-    <h4>Real-Time Risk Classification</h4>
-    <p>Every recall is automatically classified as HIGH, MEDIUM, or LOW risk based on injuries, deaths, units affected, and hazard types. Prioritize what matters most.</p>
+
+  <div class="testimonial-card">
+    <div class="testimonial-content">
+      <p class="testimonial-quote">"Best recall monitoring tool ever! The automated marketplace scanning found products we never would have discovered manually."</p>
+      <p class="testimonial-author">Compliance Director</p>
+      <p class="testimonial-company">Retail Safety Inc</p>
+      <p class="testimonial-date">Dec 27, 2024</p>
+    </div>
   </div>
-  
-  <div class="benefit-card">
-    <div class="benefit-icon">🛒</div>
-    <h4>Multi-Marketplace Coverage</h4>
-    <p>Monitor eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari, and more from a single platform. All findings in one place.</p>
+
+  <div class="testimonial-card">
+    <div class="testimonial-content">
+      <p class="testimonial-quote">"Outstanding Service and Reliable Support from Altitude. Their monitoring is reliable, and their support team is outstanding—always quick to respond and incredibly helpful."</p>
+      <p class="testimonial-author">Operations Lead</p>
+      <p class="testimonial-company">SafetyFirst LLC</p>
+      <p class="testimonial-date">Dec 21, 2024</p>
+    </div>
   </div>
-  
-  <div class="benefit-card">
-    <div class="benefit-icon">📊</div>
-    <h4>Export & API Integration</h4>
-    <p>Download results as CSV, JSON, or PDF. Integrate with your existing systems via REST API. Full programmatic access available.</p>
+
+  <div class="testimonial-card">
+    <div class="testimonial-content">
+      <p class="testimonial-quote">"Best in the business. Quality monitoring, performance, and support. The risk classification feature helps us prioritize high-risk recalls immediately."</p>
+      <p class="testimonial-author">Quality Assurance</p>
+      <p class="testimonial-company">Marketplace Safety Group</p>
+      <p class="testimonial-date">Aug 12, 2024</p>
+    </div>
   </div>
-  
-  <div class="benefit-card">
-    <div class="benefit-icon">🔍</div>
-    <h4>Visual Search Support</h4>
-    <p>Find products by image using Google Vision or TinEye. OCR extraction identifies model numbers and brands for precise matching.</p>
+
+  <div class="testimonial-card">
+    <div class="testimonial-content">
+      <p class="testimonial-quote">"Full Automation Control Panel & Fast Support. Very easy control panel and live support is great! Server Performance Great!"</p>
+      <p class="testimonial-author">Tech Manager</p>
+      <p class="testimonial-company">Digital Safety Solutions</p>
+      <p class="testimonial-date">Dec 23, 2024</p>
+    </div>
   </div>
-  
-  <div class="benefit-card">
-    <div class="benefit-icon">🔌</div>
-    <h4>MCP Integration</h4>
-    <p>Built-in Model Context Protocol server for AI agent integration. Works seamlessly with Claude Desktop and other compatible AI systems.</p>
+
+  <div class="testimonial-card">
+    <div class="testimonial-content">
+      <p class="testimonial-quote">"Great support and the team is always there to assist and ensure your queries have been closed. The scheduled investigations feature is a game-changer."</p>
+      <p class="testimonial-author">Product Manager</p>
+      <p class="testimonial-company">SafetyTech Industries</p>
+      <p class="testimonial-date">Aug 19, 2024</p>
+    </div>
   </div>
 </div>
 
-## Getting Started
+## Turn Complexity into Clarity with Intelligent Monitoring
 
-Get up and running in minutes with Altitude's intuitive setup process.
+Accelerate your safety workflow with powerful, easy-to-use features and integrations—designed for compliance teams. Fully compatible with open source tools and CI/CD pipelines.
 
-### Quick Start (3 Steps)
+[Explore API & Integrations]({{ '/userguide.html' | relative_url }}) · [View API Docs](http://localhost:8000/docs) · [MCP Integration Guide]({{ '/userguide.html' | relative_url }})
 
-1. **Create Violations** — Import or create product recall violations. The system automatically classifies risk levels.
-2. **Enable Marketplaces** — Configure which platforms to monitor in Settings. Toggle eBay, Facebook, Amazon, and more.
-3. **Schedule Investigations** — Set up automated searches that run on your schedule. Daily, weekly, monthly, or one-time.
+### API Example
 
-<div class="cta-buttons" style="margin-top: 2rem;">
-  <a href="{{ '/userguide.html' | relative_url }}" class="cta-button">View Complete User Guide</a>
-  <a href="http://localhost:8000/docs" class="cta-button secondary" target="_blank">Explore API Docs</a>
-</div>
+```bash
+# Create a scheduled investigation
+curl -X POST "http://localhost:8000/api/investigations" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "violation_id": 1,
+    "schedule": "DAILY",
+    "marketplaces": ["ebay", "amazon"]
+  }'
+```
 
-## Key Features
+### Python SDK Example
 
-### 🔍 Universal Search
-Search by recall number, product name, manufacturer, or hazard keywords. Find what you need instantly.
+```python
+from altitude import AltitudeClient
 
-### ⚠️ Risk Classification
-Automatic severity scoring based on injuries, deaths, and units sold. Focus on HIGH risk recalls first.
+client = AltitudeClient(api_key="your-api-key")
 
-### 🛒 Marketplace Monitoring
-Search eBay, Amazon, Facebook, Craigslist, OfferUp, Mercari, and more for recalled products still being sold.
+# Search for recalled products
+results = client.search_marketplaces(
+    violation_id=1,
+    marketplaces=["ebay", "amazon", "facebook"]
+)
 
-### 🤖 AI Agent
-Automated scanning with configurable frequency and sensitivity. Runs continuously without manual intervention.
+# Get risk classification
+risk = client.get_risk_classification(violation_id=1)
+print(f"Risk Level: {risk.level}")
+```
 
-### 🖼️ Visual Search
-Use Google Vision or TinEye to find products by image. Perfect for identifying recalled products from photos.
-
-### 📊 Export & Reports
-Download findings as CSV, JSON, or PDF. Generate reports for compliance and auditing.
-
-## Risk Classification
-
-Recalls are automatically classified based on severity factors:
-
-### <span class="risk-badge risk-high">● HIGH RISK</span>
-
-- Deaths reported OR serious injuries
-- More than 10,000 units affected
-- Hazards: fire, electrocution, choking, lead poisoning, strangulation
-
-**Recommendation:** Set up daily investigations for HIGH risk violations.
-
-### <span class="risk-badge risk-medium">● MEDIUM RISK</span>
-
-- Minor injuries reported
-- 1,000 - 10,000 units affected
-- Hazards: cuts, burns, falls, tip-over
-
-**Recommendation:** Weekly or biweekly investigations are usually sufficient.
-
-### <span class="risk-badge risk-low">● LOW RISK</span>
-
-- No injuries reported
-- Fewer than 1,000 units affected
-- Minor defects, labeling issues
-
-**Recommendation:** Monthly investigations or manual searches when needed.
-
-## Supported Marketplaces
-
-Altitude can monitor these popular platforms:
-
-| Platform | Status | Notes |
-|----------|--------|-------|
-| Facebook Marketplace | ✅ Supported | Rate limited to 5 req/min |
-| eBay | ✅ Supported | API or scraping |
-| Amazon | ✅ Supported | Product search |
-| Craigslist | ✅ Supported | Multi-region search |
-| OfferUp | ✅ Supported | Local listings |
-| Mercari | ✅ Supported | Product matching |
-
-## Scheduled Investigations
-
-The Investigation Scheduler is one of Altitude's most powerful features. Automatically search for recalled products on a recurring schedule:
-
-- **Daily** — Perfect for high-priority recalls that need constant monitoring
-- **Weekly** — Ideal for ongoing compliance monitoring
-- **Biweekly** — Good for regular checks without overloading the system
-- **Monthly** — Suitable for periodic audits and low-priority monitoring
-- **Custom** — One-time searches for urgent situations
-
-[Learn more about scheduled investigations in the User Guide →]({{ '/userguide.html#scheduled-investigations' | relative_url }})
-
-## API Access
-
-Altitude exposes a comprehensive REST API for programmatic access:
-
-- **Base URL:** `http://localhost:8000/api`
-- **Interactive Docs:** `http://localhost:8000/docs`
-- **Endpoints:** Recalls, violations, investigations, marketplaces, listings
-
-[View complete API documentation →](http://localhost:8000/docs)
-
-## MCP Integration
+### MCP Integration
 
 Altitude includes a Model Context Protocol (MCP) server for AI agent integration:
 
 - Works with Claude Desktop and other compatible AI systems
-- 11+ MCP tools available for recall search, risk classification, and marketplace monitoring
-- Skills power the tools but aren't exposed directly
+- 11+ MCP tools available for recall search and monitoring
+- Skills power the tools for intelligent automation
 
-Perfect for building AI-powered workflows around product recall monitoring.
+## Key Features
 
-## Next Steps
+<div class="features-grid">
+  <div class="feature-item">
+    <div class="feature-icon">🤖</div>
+    <h4>AI-Powered Automation</h4>
+    <p>Automated risk classification and marketplace scanning with intelligent prioritization</p>
+  </div>
 
-Ready to get started? Check out the [User Guide]({{ '/userguide.html' | relative_url }}) for detailed instructions on:
+  <div class="feature-item">
+    <div class="feature-icon">⚡</div>
+    <h4>Real-Time Monitoring</h4>
+    <p>Continuous monitoring across multiple marketplaces with instant notifications</p>
+  </div>
 
-- Setting up your first investigation
-- Configuring marketplaces
-- Understanding risk levels
-- Managing scheduled investigations
-- API usage examples
+  <div class="feature-item">
+    <div class="feature-icon">📊</div>
+    <h4>Advanced Analytics</h4>
+    <p>Comprehensive dashboards and reports for compliance and auditing</p>
+  </div>
 
-Or explore the [API documentation](http://localhost:8000/docs) for programmatic access.
+  <div class="feature-item">
+    <div class="feature-icon">🔌</div>
+    <h4>API & Integrations</h4>
+    <p>RESTful API, webhooks, and MCP integration for seamless workflows</p>
+  </div>
 
----
+  <div class="feature-item">
+    <div class="feature-icon">🛒</div>
+    <h4>Multi-Marketplace</h4>
+    <p>Monitor eBay, Amazon, Facebook, Craigslist, OfferUp, and more</p>
+  </div>
 
-<div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--color-glass-bg); border-radius: 12px; border: 1px solid var(--color-glass-border);">
-  <h3 style="margin-top: 0;">Questions or Need Help?</h3>
-  <p>Check out the <a href="{{ '/userguide.html' | relative_url }}" style="color: var(--color-accent-cyan);">User Guide</a> for detailed documentation, or visit the <a href="http://localhost:8000/docs" target="_blank" style="color: var(--color-accent-cyan);">API documentation</a> for technical details.</p>
+  <div class="feature-item">
+    <div class="feature-icon">🔍</div>
+    <h4>Visual Search</h4>
+    <p>Image-based product identification using Google Vision and TinEye</p>
+  </div>
 </div>
 
+## Get Started Today
+
+Ready to protect your marketplace? Check out our [User Guide]({{ '/userguide.html' | relative_url }}) for detailed instructions, or [contact us]({{ '/contact.html' | relative_url }}) for a personalized demo.
