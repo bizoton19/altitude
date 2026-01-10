@@ -1,0 +1,4 @@
+# Git LFS tracking (optional - for large files)
+# If you want to use Git LFS for large files in the future, uncomment:
+# *.json filter=lfs diff=lfs merge=lfs -text
+

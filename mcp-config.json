@@ -1,0 +1,59 @@
+{
+  "mcpServers": {
+    "altitude-recall-monitor": {
+      "command": "python",
+      "args": ["backend/run_mcp.py"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/backend"
+      }
+    }
+  }
+}
+
+
+
+  "mcpServers": {
+    "altitude-recall-monitor": {
+      "command": "python",
+      "args": ["backend/run_mcp.py"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/backend"
+      }
+    }
+  }
+}
+
+
+
+
+  "mcpServers": {
+    "altitude-recall-monitor": {
+      "command": "python",
+      "args": ["backend/run_mcp.py"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/backend"
+      }
+    }
+  }
+}
+
+
+
+  "mcpServers": {
+    "altitude-recall-monitor": {
+      "command": "python",
+      "args": ["backend/run_mcp.py"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/backend"
+      }
+    }
+  }
+}
+
+
+
+

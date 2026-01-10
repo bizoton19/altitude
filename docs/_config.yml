@@ -1,0 +1,28 @@
+# GitHub Pages / Jekyll Configuration
+title: Altitude - Product Recall Monitor
+description: AI-powered product recall monitoring across marketplaces with risk classification and MCP integration
+url: "https://your-username.github.io"  # Update with your GitHub Pages URL
+baseurl: "/altitude"  # Update if your repo name is different
+
+# Jekyll settings
+markdown: kramdown
+highlighter: rouge
+permalink: /:title.html
+
+# Theme (we're using custom HTML/CSS, not a theme)
+theme: null
+plugins: []
+
+# Build settings
+sass:
+  style: compressed
+
+# Exclude files
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle
+  - vendor/cache
+  - vendor/gem
+  - vendor/ruby

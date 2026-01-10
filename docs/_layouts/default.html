@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ============================================
+       THEME VARIABLES
+       ============================================ */
+    
+    /* Dark Theme (default) */
+    :root, [data-theme="dark"] {
+      --color-bg-primary: #0a0a0f;
+      --color-bg-gradient-start: #0a0a0f;
+      --color-bg-gradient-end: #1a0a2a;
+      --color-glass-bg: rgba(255, 255, 255, 0.06);
+      --color-glass-border: rgba(255, 255, 255, 0.1);
+      --color-text-primary: #e8e8e8;
+      --color-text-secondary: #a0a0a0;
+      --color-accent-cyan: #00f0ff;
+      --color-accent-purple: #bf00ff;
+      --color-accent-pink: #ff0080;
+      --color-risk-high: #ff3366;
+      --color-risk-medium: #ffaa00;
+      --color-risk-low: #00ff88;
+      --color-code-bg: rgba(0, 0, 0, 0.3);
+      --color-pre-bg: rgba(0, 0, 0, 0.4);
+      --color-card-bg: rgba(0, 0, 0, 0.2);
+      --color-kbd-bg: rgba(255, 255, 255, 0.1);
+      --grid-color: rgba(0, 240, 255, 0.03);
+      --shadow-glow: rgba(0, 240, 255, 0.3);
+    }
+
+    /* Light Theme */
+    [data-theme="light"] {
+      --color-bg-primary: #f5f7fa;
+      --color-bg-gradient-start: #f5f7fa;
+      --color-bg-gradient-end: #e8eef5;
+      --color-glass-bg: rgba(255, 255, 255, 0.7);
+      --color-glass-border: rgba(0, 0, 0, 0.08);
+      --color-text-primary: #1a1a2e;
+      --color-text-secondary: #5a5a7a;
+      --color-accent-cyan: #0088aa;
+      --color-accent-purple: #8800cc;
+      --color-accent-pink: #cc0066;
+      --color-risk-high: #cc2244;
+      --color-risk-medium: #cc8800;
+      --color-risk-low: #00aa55;
+      --color-code-bg: rgba(0, 136, 170, 0.1);
+      --color-pre-bg: rgba(0, 0, 0, 0.04);
+      --color-card-bg: rgba(255, 255, 255, 0.5);
+      --color-kbd-bg: rgba(0, 0, 0, 0.06);
+      --grid-color: rgba(0, 136, 170, 0.05);
+      --shadow-glow: rgba(0, 136, 170, 0.2);
+    }
+
+    /* Auto theme - follows system preference */
+    @media (prefers-color-scheme: light) {
+      [data-theme="auto"] {
+        --color-bg-primary: #f5f7fa;
+        --color-bg-gradient-start: #f5f7fa;
+        --color-bg-gradient-end: #e8eef5;
+        --color-glass-bg: rgba(255, 255, 255, 0.7);
+        --color-glass-border: rgba(0, 0, 0, 0.08);
+        --color-text-primary: #1a1a2e;
+        --color-text-secondary: #5a5a7a;
+        --color-accent-cyan: #0088aa;
+        --color-accent-purple: #8800cc;
+        --color-accent-pink: #cc0066;
+        --color-risk-high: #cc2244;
+        --color-risk-medium: #cc8800;
+        --color-risk-low: #00aa55;
+        --color-code-bg: rgba(0, 136, 170, 0.1);
+        --color-pre-bg: rgba(0, 0, 0, 0.04);
+        --color-card-bg: rgba(255, 255, 255, 0.5);
+        --color-kbd-bg: rgba(0, 0, 0, 0.06);
+        --grid-color: rgba(0, 136, 170, 0.05);
+        --shadow-glow: rgba(0, 136, 170, 0.2);
+      }
+    }
+
+    /* ============================================
+       BASE STYLES
+       ============================================ */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, var(--color-bg-gradient-start) 0%, var(--color-bg-gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--color-text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* ============================================
+       THEME TOGGLE
+       ============================================ */
+
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1000;
+      display: flex;
+      gap: 0.25rem;
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 8px;
+      padding: 0.25rem;
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      color: var(--color-text-secondary);
+    }
+
+    .theme-btn:hover {
+      background: var(--color-glass-border);
+    }
+
+    .theme-btn.active {
+      background: var(--color-accent-cyan);
+      color: #fff;
+      box-shadow: 0 0 10px var(--shadow-glow);
+    }
+
+    [data-theme="light"] .theme-btn.active {
+      color: #fff;
+    }
+
+    /* ============================================
+       HEADER
+       ============================================ */
+
+    header {
+      text-align: center;
+      padding: 4rem 0 3rem;
+    }
+
+    .logo {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      color: var(--color-text-secondary);
+      font-size: 1.1rem;
+      font-weight: 300;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      padding: 0.6rem 1.2rem;
+      background: var(--color-glass-bg);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 8px;
+      color: var(--color-text-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      background: rgba(0, 136, 170, 0.15);
+      border-color: var(--color-accent-cyan);
+      box-shadow: 0 0 15px var(--shadow-glow);
+    }
+
+    /* ============================================
+       GLASS PANEL
+       ============================================ */
+
+    .glass-panel {
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .hero .tagline {
+      font-size: 1.5rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+      font-weight: 300;
+    }
+
+    .hero .subtitle {
+      font-size: 1.1rem;
+      color: var(--color-text-secondary);
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.8;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .cta-button {
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px var(--shadow-glow);
+    }
+
+    .cta-button.secondary {
+      background: var(--color-glass-bg);
+      border: 1px solid var(--color-glass-border);
+      color: var(--color-text-primary);
+    }
+
+    .cta-button.secondary:hover {
+      border-color: var(--color-accent-cyan);
+      box-shadow: 0 4px 20px var(--shadow-glow);
+    }
+
+    /* Screenshot/Demo Section */
+    .screenshot-container {
+      margin: 2rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--color-glass-border);
+      background: var(--color-glass-bg);
+      padding: 1rem;
+    }
+
+    .screenshot-placeholder {
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(135deg, var(--color-accent-cyan)20, var(--color-accent-purple)20);
+      border: 2px dashed var(--color-glass-border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-secondary);
+      font-size: 1.1rem;
+    }
+
+    /* Benefits Section */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .benefit-card {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .benefit-card:hover {
+      border-color: var(--color-accent-cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px var(--shadow-glow);
+    }
+
+    .benefit-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      margin-top: 2rem;
+      color: var(--color-accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    h2::before {
+      content: '';
+      width: 4px;
+      height: 1.5rem;
+      background: linear-gradient(180deg, var(--color-accent-cyan), var(--color-accent-purple));
+      border-radius: 2px;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--color-text-primary);
+    }
+
+    p {
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    /* Lists */
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    li strong {
+      color: var(--color-text-primary);
+    }
+
+    /* ============================================
+       RISK BADGES
+       ============================================ */
+
+    .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .risk-high {
+      background: rgba(255, 51, 102, 0.15);
+      color: var(--color-risk-high);
+      border: 1px solid rgba(255, 51, 102, 0.3);
+    }
+
+    .risk-medium {
+      background: rgba(255, 170, 0, 0.15);
+      color: var(--color-risk-medium);
+      border: 1px solid rgba(255, 170, 0, 0.3);
+    }
+
+    .risk-low {
+      background: rgba(0, 255, 136, 0.15);
+      color: var(--color-risk-low);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+
+    /* ============================================
+       CODE
+       ============================================ */
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--color-code-bg);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--color-accent-cyan);
+    }
+
+    pre {
+      background: var(--color-pre-bg);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* ============================================
+       TABLES
+       ============================================ */
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-glass-border);
+    }
+
+    th {
+      color: var(--color-accent-cyan);
+      font-weight: 500;
+    }
+
+    td {
+      color: var(--color-text-secondary);
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--color-accent-cyan);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .logo, .hero h1 {
+        font-size: 2rem;
+      }
+
+      .glass-panel {
+        padding: 1.5rem;
+      }
+
+      .theme-toggle {
+        top: 0.5rem;
+        right: 0.5rem;
+      }
+
+      .hero {
+        padding: 2rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle -->
+  <div class="theme-toggle" role="group" aria-label="Theme selector">
+    <button class="theme-btn" data-theme-value="light" title="Light theme" aria-label="Light theme">☀️</button>
+    <button class="theme-btn" data-theme-value="auto" title="System theme" aria-label="System theme">🔄</button>
+    <button class="theme-btn" data-theme-value="dark" title="Dark theme" aria-label="Dark theme">🌙</button>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1 class="logo">⚡ ALTITUDE</h1>
+      <p class="tagline">AI-Powered Product Recall Monitoring</p>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#benefits">Benefits</a>
+        <a href="#getting-started">Getting Started</a>
+        <a href="/userguide.html">User Guide</a>
+        <a href="http://localhost:8000/docs" target="_blank">API Docs</a>
+      </nav>
+    </header>
+
+    <main>
+      {{ content }}
+    </main>
+
+    <footer>
+      <p>
+        <strong>{{ site.title }}</strong> — 
+        <a href="https://github.com/{{ site.github.repository }}" target="_blank">GitHub</a> · 
+        <a href="https://www.cpsc.gov/Recalls" target="_blank">CPSC Recalls</a>
+      </p>
+      <p style="margin-top: 0.5rem;">Built with ⚡ for product safety</p>
+    </footer>
+  </div>
+
+  <script>
+    // Theme management
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    const html = document.documentElement;
+
+    function getStoredTheme() {
+      return localStorage.getItem('altitude-docs-theme') || 'auto';
+    }
+
+    function setTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('altitude-docs-theme', theme);
+      
+      themeButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.themeValue === theme);
+      });
+    }
+
+    setTheme(getStoredTheme());
+
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        setTheme(btn.dataset.themeValue);
+      });
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (getStoredTheme() === 'auto') {
+        html.setAttribute('data-theme', 'auto');
+      }
+    });
+  </script>
+</body>
+</html>
+
