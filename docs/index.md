@@ -15,6 +15,7 @@ description: AI-powered product recall monitoring across marketplaces. Protect c
   <div class="cta-buttons">
     <a href="{{ site.baseurl }}/#features" class="cta-button">Explore Features</a>
     <a href="{{ '/userguide.html' | relative_url }}" class="cta-button secondary">Read User Guide</a>
+    <a href="{{ '/contact.html' | relative_url }}" class="cta-button secondary">Contact Us</a>
   </div>
   
   <!-- Screenshot Placeholder - Add screenshot.png to docs folder -->
