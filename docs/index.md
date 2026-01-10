@@ -13,8 +13,8 @@ description: AI-powered product recall monitoring across marketplaces. Protect c
     Protect consumers with intelligent risk classification and scheduled investigations that never miss a recall.
   </p>
   <div class="cta-buttons">
-    <a href="#features" class="cta-button">Explore Features</a>
-    <a href="/userguide.html" class="cta-button secondary">Read User Guide</a>
+    <a href="{{ site.baseurl }}/#features" class="cta-button">Explore Features</a>
+    <a href="{{ '/userguide.html' | relative_url }}" class="cta-button secondary">Read User Guide</a>
   </div>
   
   <!-- Screenshot Placeholder - Add screenshot.png to docs folder -->
@@ -80,7 +80,7 @@ Get up and running in minutes with Altitude's intuitive setup process.
 3. **Schedule Investigations** — Set up automated searches that run on your schedule. Daily, weekly, monthly, or one-time.
 
 <div class="cta-buttons" style="margin-top: 2rem;">
-  <a href="/userguide.html" class="cta-button">View Complete User Guide</a>
+  <a href="{{ '/userguide.html' | relative_url }}" class="cta-button">View Complete User Guide</a>
   <a href="http://localhost:8000/docs" class="cta-button secondary" target="_blank">Explore API Docs</a>
 </div>
 
@@ -155,7 +155,7 @@ The Investigation Scheduler is one of Altitude's most powerful features. Automat
 - **Monthly** — Suitable for periodic audits and low-priority monitoring
 - **Custom** — One-time searches for urgent situations
 
-[Learn more about scheduled investigations in the User Guide →](/userguide.html#scheduled-investigations)
+[Learn more about scheduled investigations in the User Guide →]({{ '/userguide.html#scheduled-investigations' | relative_url }})
 
 ## API Access
 
@@ -179,7 +179,7 @@ Perfect for building AI-powered workflows around product recall monitoring.
 
 ## Next Steps
 
-Ready to get started? Check out the [User Guide](/userguide.html) for detailed instructions on:
+Ready to get started? Check out the [User Guide]({{ '/userguide.html' | relative_url }}) for detailed instructions on:
 
 - Setting up your first investigation
 - Configuring marketplaces
@@ -193,6 +193,6 @@ Or explore the [API documentation](http://localhost:8000/docs) for programmatic 
 
 <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--color-glass-bg); border-radius: 12px; border: 1px solid var(--color-glass-border);">
   <h3 style="margin-top: 0;">Questions or Need Help?</h3>
-  <p>Check out the <a href="/userguide.html" style="color: var(--color-accent-cyan);">User Guide</a> for detailed documentation, or visit the <a href="http://localhost:8000/docs" target="_blank" style="color: var(--color-accent-cyan);">API documentation</a> for technical details.</p>
+  <p>Check out the <a href="{{ '/userguide.html' | relative_url }}" style="color: var(--color-accent-cyan);">User Guide</a> for detailed documentation, or visit the <a href="http://localhost:8000/docs" target="_blank" style="color: var(--color-accent-cyan);">API documentation</a> for technical details.</p>
 </div>
 
