@@ -29,4 +29,3 @@
      - Follow existing component patterns for buttons, cards, forms, and navigation
    - **Theme Support**: The styling system supports both dark (default) and light themes via `[data-theme="dark"]` and `[data-theme="light"]` - CSS variables automatically adjust.
    - **Reference**: Check `src/styles/glass-theme.css` for all available CSS variables and `src/components/` for styling examples.
-

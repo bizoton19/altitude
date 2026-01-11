@@ -1,297 +1,556 @@
 ---
 layout: default
 title: User Guide
-description: Complete user guide for Altitude - AI-powered product recall monitoring. Learn how to create investigations, manage schedules, and monitor marketplaces.
+description: Complete user guide for Altitude - Learn how to manage listings, banned products, investigations, users, and settings.
 ---
 
 # Altitude User Guide
 
-Welcome to Altitude! This guide will help you get started with AI-powered product recall monitoring.
-
----
+Welcome to Altitude! This guide will walk you through all the features of the application for managing banned products across online marketplaces.
 
 ## Table of Contents
 
-1. [Getting Started](#getting-started)
-2. [Core Concepts](#core-concepts)
-3. [Scheduled Investigations](#scheduled-investigations)
-4. [Managing Investigations](#managing-investigations)
-5. [Marketplace Monitoring](#marketplace-monitoring)
-6. [Understanding Risk Levels](#understanding-risk-levels)
-7. [Best Practices](#best-practices)
-8. [Troubleshooting](#troubleshooting)
+1. [Listings](#listings)
+   - [Adding Listings](#adding-listings)
+     - [Manual](#manual-adding-listings)
+2. [Banned Products](#banned-products)
+   - [Import Banned Products](#import-banned-products)
+     - [Manual](#manual-import)
+     - [Schedule/Automated](#scheduleautomated-import)
+   - [Schedule Investigation](#schedule-investigation)
+3. [Investigations](#investigations)
+   - [History](#investigation-history)
+   - [Create Investigation](#create-investigation)
+4. [Users](#users)
+   - [Manage Users](#manage-users-admins-only)
+5. [Settings](#settings)
 
 ---
 
-## Getting Started
+## Listings
 
-### What is Altitude?
+The Listings section allows you to view, manage, and add marketplace listings that may contain banned products.
 
-Altitude is an AI-powered platform that helps you monitor product recalls across online marketplaces. It automatically searches platforms like eBay, Facebook Marketplace, Amazon, and Craigslist to find recalled products that are still being sold.
+### Adding Listings
 
-### First Steps
+You can add listings to Altitude in two ways: manually or through automated investigations. Manual addition is useful when you discover a listing during browsing or when someone reports a potential banned product.
 
-1. **Launch the Application**
-   - Frontend: `http://localhost:5173`
-   - Backend API: `http://localhost:8000`
-   - API Documentation: `http://localhost:8000/docs`
+#### Manual Adding Listings
 
-2. **Create Your First Violation**
-   - Start by importing or creating a product recall violation
-   - The system will automatically classify the risk level
+**When to Add Listings Manually:**
 
-3. **Set Up Marketplaces**
-   - Go to Settings → Marketplaces
-   - Enable the platforms you want to monitor
-   - Configure any API keys if needed
+- You found a listing during manual browsing
+- Someone reported a potential banned product listing
+- You want to track a specific listing before creating an investigation
+- Quick verification of a suspected banned product
 
-4. **Create Your First Investigation**
-   - Set up a scheduled investigation to automatically search for violations
-   - Choose your schedule: daily, weekly, biweekly, monthly, or one-time
+**How to Add a Listing Manually:**
 
----
+1. Navigate to **Listings → Add Listing**
+2. Fill in listing details:
+   - **Marketplace** - Select which marketplace (eBay, Amazon, Facebook Marketplace, etc.)
+   - **Listing URL** - Paste the listing URL
+   - **Product Name** - Enter the product name from the listing
+   - **Seller Information** - Add seller details if available
+   - **Price** - Enter listing price
+   - **Location** - Add geographic location if relevant
+   - **Images** - Upload or link product images
+   - **Description** - Copy listing description
+3. **Link to Banned Product** - Select which banned product this listing matches (optional)
+4. **Risk Level** - System will show the risk level of the linked banned product
+5. Click **Save** to add the listing
 
-## Core Concepts
+**Managing Manual Listings:**
 
-### Violations
+- View all manually added listings in the Listings section
+- Edit listing details after creation
+- Mark listings as verified or false positive
+- Export listing data for reports
+- Generate takedown requests from listings
 
-A **violation** represents a product recall. Each violation contains:
-- Product information (name, manufacturer, model numbers)
-- Recall details (date, number, description)
-- Hazard information
-- Risk classification (HIGH, MEDIUM, or LOW)
+**Reviewing Flagged Listings:**
 
-### Investigations
+When automated investigations find potential matches, listings are automatically flagged for review:
 
-An **investigation** is a scheduled search that automatically monitors marketplaces for specific violations. Investigations can:
-- Search multiple violations at once
-- Monitor multiple marketplaces simultaneously
-- Run on a recurring schedule
-- Generate listings when matches are found
+1. Navigate to **Listings → Flagged for Review**
+2. **View Flagged Listings** - See all listings that were automatically flagged
+   - Filter by risk level, marketplace, or date
+   - Sort by priority or match confidence
+3. **Review Listing Details** - Click on any listing to see full details
+   - View original listing URL and images
+   - See which banned product it matches
+   - Review match confidence score
+4. **Verify the Match** - Compare listing details with banned product information
+5. **Take Action:**
+   - **If Match is Verified:** Mark as Verified Match, export for takedown, generate compliance report
+   - **If Not a Match:** Mark as False Positive (system learns from this)
+   - **If Needs More Review:** Add notes for later review
 
-### Listings
+**Bulk Actions:**
 
-**Listings** are marketplace posts that potentially match recalled products. When an investigation finds matches, they appear as listings that you can review, verify, and take action on.
-
----
-
-## Scheduled Investigations
-
-The Investigation Scheduler is one of Altitude's most powerful features. It allows you to automate your monitoring workflow so you don't have to manually search marketplaces every day.
-
-### What are Scheduled Investigations?
-
-Scheduled investigations run automatically at specified times to search marketplaces for recalled products. When configured, they will:
-
-1. **Search automatically** - Run at the scheduled time without manual intervention
-2. **Generate findings** - Create listings when potential matches are discovered
-3. **Track results** - Record how many listings were found
-4. **Reschedule automatically** - Set up the next run for recurring schedules
-
-### Creating Your First Investigation
-
-#### Using the API
-
-Create an investigation by sending a POST request to `/api/investigations/`:
-
-```bash
-curl -X POST "http://localhost:8000/api/investigations/" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Daily High-Risk Monitor",
-    "description": "Monitor for HIGH risk recalls daily at 8 AM",
-    "schedule": "daily",
-    "scheduled_start_time": "2024-01-15T08:00:00Z",
-    "violation_ids": ["violation-123", "violation-456"],
-    "marketplace_ids": ["ebay", "facebook", "amazon"],
-    "region_ids": {
-      "facebook": ["dc", "seattle"],
-      "ebay": []
-    }
-  }'
-```
-
-#### Investigation Configuration
-
-**Required Fields:**
-- **name**: A clear, descriptive name (e.g., "Daily CPSC Monitor")
-- **schedule**: One of: `daily`, `weekly`, `biweekly`, `monthly`, or `custom`
-- **scheduled_start_time**: When to run (ISO 8601 format)
-- **violation_ids**: Array of violation IDs to search for
-- **marketplace_ids**: Array of marketplace IDs to monitor
-
-**Optional Fields:**
-- **description**: Additional context or notes
-- **region_ids**: Specific regions to focus on (empty array = all regions)
-- **agent_id**: Assign a specific AI agent to perform the investigation
-
-### Schedule Types
-
-Choose the frequency that works best for your needs:
-
-#### Daily
-Perfect for high-priority recalls that need constant monitoring. Runs every day at the same time.
-
-**Example:** Monitor for dangerous toys every morning at 9 AM.
-
-#### Weekly
-Ideal for ongoing compliance monitoring. Runs once per week on the same day.
-
-**Example:** Weekly audit of all active recalls every Monday.
-
-#### Biweekly
-Good for regular checks without overloading the system. Runs every 2 weeks.
-
-**Example:** Check for recalled electronics twice per month.
-
-#### Monthly
-Suitable for periodic audits and low-priority monitoring. Runs monthly on the same date.
-
-**Example:** Monthly compliance review of all violations.
-
-#### Custom (One-Time)
-For one-off searches or testing. Runs once at the specified time and doesn't reschedule.
-
-**Example:** Search for a specific product immediately after a recall is announced.
+For efficiency, you can perform bulk actions on listings:
+- **Bulk Verify** - Mark multiple listings as verified matches
+- **Bulk Export** - Export multiple listings for takedown requests
+- **Bulk Mark False Positive** - Clear false positives in bulk
+- **Bulk Assign** - Assign listings to team members for review
 
 ---
 
-## Managing Investigations
+## Banned Products
 
-### Viewing Your Investigations
+The Banned Products section is where you manage all products that have been banned or recalled. This includes importing products, scheduling investigations, and viewing product details.
 
-List all investigations:
-```
-GET /api/investigations/
-```
+### Import Banned Products
 
-Filter by status:
-```
-GET /api/investigations/?status=scheduled
-GET /api/investigations/?status=completed
-GET /api/investigations/?status=running
-```
+You can import banned products from regulatory feeds or upload files manually. The system automatically classifies each product by risk level (HIGH, MEDIUM, LOW) based on injuries, deaths, units affected, and hazard types.
 
-Filter by creator:
-```
-GET /api/investigations/?created_by=user-123
-```
+#### Manual Import
 
-### Viewing Investigation Details
+**Import from File:**
 
-Get information about a specific investigation:
-```
-GET /api/investigations/{investigation_id}
-```
+1. Navigate to **Banned Products → Import**
+2. Select **Upload File**
+3. Choose file format (CSV or JSON)
+4. Upload your file or paste data
+5. **Map Fields** to Altitude's banned product structure:
+   - Product name
+   - Manufacturer
+   - Model numbers
+   - Ban reason/description
+   - Dates
+   - Hazard information
+   - Units affected
+   - Injury/death counts
+6. **Preview the Import** to verify data before importing
+7. Click **Import** to complete
 
-You'll see:
-- Current status
-- Next scheduled run time
-- Number of listings found
-- History of previous runs
+**File Format Requirements:**
 
-### Updating an Investigation
+**CSV Format:**
+- Column headers should include: Name, Manufacturer, Model, Reason, Date, Risk Level, etc.
+- First row must contain headers
+- Data rows follow below
 
-Need to change your investigation? Update it with a PATCH request:
+**JSON Format:**
+- Array of banned product objects
+- Each object should contain product details
+- Follow Altitude's banned product schema
 
-```bash
-PATCH /api/investigations/{investigation_id}
-```
+**After Manual Import:**
 
-You can update:
-- Name and description
-- Schedule frequency
-- Next run time
-- Target violations
-- Marketplace selection
-- Status
+- Banned products are automatically classified by risk level
+- Review imported products in the Banned Products list
+- Edit products to add missing information
+- Use imported products in investigations
 
-**Important:** When you update an investigation, it automatically reschedules with the new settings.
+#### Schedule/Automated Import
 
-### Cancelling an Investigation
+**Import from Regulatory Feeds:**
 
-To stop an investigation permanently:
+1. Navigate to **Banned Products → Import**
+2. Select **Import from Feed**
+3. Choose the regulatory source:
+   - FDA feed
+   - NHTSA feed
+   - Other supported regulatory feeds
+4. **Configure Import Settings:**
+   - Date range for imports
+   - Auto-classify risk levels
+   - Update existing products or create new ones
+   - Schedule automatic imports (daily, weekly, monthly)
+5. **Set Schedule:**
+   - Choose frequency: Daily, Weekly, Monthly
+   - Select time of day for imports
+   - Enable/disable automatic imports
+6. Click **Save Schedule** to activate automated imports
 
-```bash
-PATCH /api/investigations/{investigation_id}
-{
-  "status": "cancelled"
-}
-```
+**Automated Import Features:**
 
-Cancelled investigations will not run again and their scheduled jobs are removed from the system.
+- Runs automatically at scheduled times
+- Imports new banned products from regulatory feeds
+- Updates existing products with new information
+- Sends notifications when imports complete
+- Logs import history for audit purposes
 
-### Investigation Status
+**Managing Scheduled Imports:**
 
-Investigations progress through these statuses:
+- View all scheduled import configurations
+- Edit schedule frequency and timing
+- Pause or resume scheduled imports
+- View import history and logs
+- Manually trigger imports outside of schedule
 
-- **`scheduled`** - Waiting to run at the scheduled time
-- **`running`** - Currently executing the search
-- **`completed`** - Finished successfully with results
-- **`failed`** - Encountered an error during execution
-- **`cancelled`** - Stopped and will not run again
+### Schedule Investigation
+
+Schedule investigations to automatically monitor marketplaces for specific banned products. This is one of Altitude's most powerful features for automating your monitoring workflow.
+
+**Creating a Scheduled Investigation:**
+
+1. Navigate to **Banned Products → Schedule Investigation**
+2. **Select Banned Products** - Choose which banned products to monitor
+   - You can select multiple products
+   - Filter by risk level if desired
+3. **Choose Marketplaces** - Select which marketplaces to monitor:
+   - eBay
+   - Facebook Marketplace
+   - Amazon
+   - Craigslist
+   - OfferUp
+   - Mercari
+4. **Set Schedule:**
+   - **Daily** - Runs every day at the same time (recommended for HIGH-risk products)
+   - **Weekly** - Runs once per week on the same day
+   - **Biweekly** - Runs every 2 weeks
+   - **Monthly** - Runs monthly on the same date
+   - **One-Time** - Runs once at the specified time
+5. **Configure Start Time** - Choose when to start the investigation
+6. **Regional Settings** (optional):
+   - For Facebook Marketplace and Craigslist, select specific regions
+   - Leave empty to monitor all regions
+7. **Name and Description** - Give your investigation a clear, descriptive name
+8. Click **Create Investigation** to schedule
+
+**Investigation Schedule Recommendations:**
+
+- **HIGH Risk Products:** Daily investigations
+- **MEDIUM Risk Products:** Weekly or biweekly investigations
+- **LOW Risk Products:** Monthly investigations
+- **Urgent Searches:** One-time investigations
+
+**Managing Scheduled Investigations:**
+
+- View all scheduled investigations
+- Edit investigation settings (products, marketplaces, schedule)
+- Pause or cancel investigations
+- View investigation history and results
+- Manually trigger investigations outside of schedule
+
+**Investigation Results:**
+
+When investigations complete:
+- Listings that match banned products are automatically flagged
+- Review flagged listings in the Listings section
+- Export results for compliance reports
+- Track investigation effectiveness over time
 
 ---
 
-## Marketplace Monitoring
+## Investigations
 
-### Supported Marketplaces
+The Investigations section provides a complete view of all investigation activity, including history, results, and the ability to create new investigations.
 
-Altitude can monitor these popular platforms:
+### Investigation History
 
-- **eBay** - Product listings and auctions
-- **Facebook Marketplace** - Local and regional listings
-- **Amazon** - Product search and listings
-- **Craigslist** - Multi-region classifieds
-- **OfferUp** - Local marketplace
-- **Mercari** - Online marketplace
+**Viewing Investigation History:**
 
-### Configuring Marketplaces
+1. Navigate to **Investigations → History**
+2. **Filter Investigations:**
+   - By status (Scheduled, Running, Completed, Failed, Cancelled)
+   - By date range
+   - By banned products monitored
+   - By marketplace
+   - By creator
+3. **View Investigation Details:**
+   - Click on any investigation to see full details
+   - Current status and next scheduled run time
+   - Number of listings found
+   - History of previous runs
+   - Error messages if investigation failed
+
+**Investigation Status Types:**
+
+- **Scheduled** - Waiting to run at the scheduled time
+- **Running** - Currently executing the search
+- **Completed** - Finished successfully with results
+- **Failed** - Encountered an error during execution
+   - Check error details for troubleshooting
+   - Review server logs if needed
+- **Cancelled** - Stopped and will not run again
+
+**Investigation Results:**
+
+- View all listings found by each investigation
+- See match confidence scores
+- Export results as CSV, JSON, or PDF
+- Generate compliance reports
+- Track investigation effectiveness
+
+**Troubleshooting Failed Investigations:**
+
+1. Check investigation details for error information
+2. Review server logs for detailed error messages
+3. Verify all required data exists:
+   - Banned products must exist and be valid
+   - Marketplaces must be enabled
+   - Network connectivity to marketplaces
+4. Try updating the investigation and running it again
+
+### Create Investigation
+
+**Creating a New Investigation:**
+
+1. Navigate to **Investigations → Create Investigation**
+2. **Basic Information:**
+   - **Name** - Give your investigation a clear, descriptive name
+   - **Description** - Add notes about what this investigation monitors
+3. **Select Banned Products:**
+   - Choose which banned products to search for
+   - You can select multiple products
+   - Filter by risk level if desired
+4. **Choose Marketplaces:**
+   - Select which marketplaces to monitor
+   - Enable/disable specific platforms
+   - Configure regional settings if needed
+5. **Set Schedule:**
+   - Choose frequency: Daily, Weekly, Biweekly, Monthly, or One-Time
+   - Select start time
+   - Configure timezone if needed
+6. **Advanced Options (optional):**
+   - Regional targeting for specific marketplaces
+   - Custom search parameters
+   - Notification preferences
+7. Click **Create Investigation** to save
+
+**Investigation Best Practices:**
+
+- **Start Small** - Begin with a few high-priority banned products
+- **Choose Appropriate Schedules** - Match frequency to risk level
+- **Be Specific** - Don't investigate too many products at once
+- **Use Descriptive Names** - Makes it easier to find and manage investigations
+- **Review Results Regularly** - Check completed investigations for new listings
+
+**Editing Investigations:**
+
+- Update name, description, schedule, or target banned products
+- Modify marketplace selection or start time
+- Changes automatically reschedule the investigation
+- Pause investigations temporarily without cancelling
+
+**Cancelling Investigations:**
+
+- Stop an investigation permanently
+- Cancelled investigations will not run again
+- Scheduled jobs are removed from the system
+- Historical data is preserved
+
+---
+
+## Users
+
+The Users section allows administrators to manage user accounts, permissions, and access levels.
+
+### Manage Users (Admins Only)
+
+**Accessing User Management:**
+
+1. Navigate to **Users → Manage Users**
+2. Only administrators can access this section
+3. View all user accounts in the system
+
+**User Management Features:**
+
+**View Users:**
+- See all registered users
+- Filter by role (Admin, User, Viewer)
+- Search by name or email
+- View user activity and last login
+
+**Add New Users:**
+1. Click **Add User**
+2. Enter user information:
+   - Name
+   - Email address
+   - Role (Admin, User, Viewer)
+   - Initial password (user can change later)
+3. Set permissions:
+   - Can create investigations
+   - Can import banned products
+   - Can manage listings
+   - Can access API
+4. Click **Create User**
+
+**Edit Users:**
+- Update user information (name, email)
+- Change user role
+- Modify permissions
+- Reset passwords
+- Enable/disable accounts
+
+**User Roles:**
+
+- **Admin** - Full access to all features including user management
+- **User** - Can create investigations, import products, manage listings
+- **Viewer** - Read-only access to view data and reports
+
+**User Permissions:**
+
+- **Create Investigations** - Allow user to schedule investigations
+- **Import Banned Products** - Allow user to import products
+- **Manage Listings** - Allow user to add/edit listings
+- **API Access** - Allow user to use API endpoints
+- **Export Data** - Allow user to export reports and data
+
+**Deactivate Users:**
+- Temporarily disable user accounts
+- Deactivated users cannot log in
+- Historical data is preserved
+- Can be reactivated later
+
+**Delete Users:**
+- Permanently remove user accounts
+- Requires confirmation
+- Historical data may be preserved or removed based on settings
+- Use with caution
+
+---
+
+## Settings
+
+The Settings section allows you to configure application preferences, notifications, marketplace settings, and system behavior.
+
+**Accessing Settings:**
+
+Navigate to **Settings** from the main menu.
+
+### Marketplace Settings
+
+**Configure Marketplaces:**
 
 1. Navigate to **Settings → Marketplaces**
-2. Toggle platforms on/off as needed
-3. Configure regional settings if you want to focus on specific areas
-4. Add API keys for enhanced access (optional)
+2. **Enable/Disable Platforms:**
+   - Toggle marketplaces on or off
+   - Disabled marketplaces won't be included in investigations
+3. **Marketplace Agreements:**
+   - View and manage agreements with each marketplace
+   - Add agreement details, terms, and expiration dates
+   - Track agreement status and compliance requirements
+4. **Contact Information:**
+   - Add marketplace contact details for takedown requests
+   - Store contact names, email addresses, and phone numbers
+   - Organize contacts by department or function
+5. **Regional Settings:**
+   - Configure regional targeting for marketplaces that support it
+   - For Facebook Marketplace and Craigslist, select specific regions
+   - Leave empty to monitor all regions
+6. **API Keys (Optional):**
+   - Add API keys for enhanced marketplace access
+   - Some marketplaces offer better search capabilities with API access
+   - API keys are stored securely
 
-### Regional Targeting
+**Supported Marketplaces:**
 
-For marketplaces like Facebook and Craigslist, you can target specific regions:
+- eBay - Product listings and auctions
+- Facebook Marketplace - Local and regional listings
+- Amazon - Product search and listings
+- Craigslist - Multi-region classifieds
+- OfferUp - Local marketplace
+- Mercari - Online marketplace
 
-```json
-{
-  "region_ids": {
-    "facebook": ["dc", "seattle", "nyc"],
-    "craigslist": ["seattle", "portland"],
-    "ebay": []  // Empty array = all regions
-  }
-}
-```
+### Notification Settings
 
-This helps you focus your searches on areas where you have jurisdiction or where products are commonly sold.
+**Configure Notifications:**
+
+1. Navigate to **Settings → Notifications**
+2. **Email Notifications:**
+   - Enable/disable email alerts
+   - Set notification frequency
+   - Choose which events trigger notifications
+3. **Notification Types:**
+   - Investigation completed
+   - HIGH-risk findings
+   - Scheduled import completed
+   - System alerts
+   - Weekly summary reports
+4. **Notification Preferences:**
+   - Real-time alerts for HIGH-risk findings
+   - Daily digest emails
+   - Weekly summary reports
+   - Custom notification rules
+
+### Risk Classification Settings
+
+**Configure Risk Classification:**
+
+1. Navigate to **Settings → Risk Classification**
+2. **View Risk Calculation Methodology:**
+   - See how risk levels are calculated
+   - Understand risk scoring factors
+3. **Risk Thresholds (if applicable):**
+   - Adjust risk level thresholds
+   - Customize risk classification rules
+4. **Review Risk Classification Rules:**
+   - HIGH risk criteria
+   - MEDIUM risk criteria
+   - LOW risk criteria
+
+### User Preferences
+
+**Personalize Your Experience:**
+
+1. Navigate to **Settings → User Preferences**
+2. **Display Preferences:**
+   - Theme (Light, Dark, Auto)
+   - Font size
+   - Layout preferences
+3. **Language Settings:**
+   - Interface language
+   - Date and time format
+   - Number format
+4. **Export Format Defaults:**
+   - Default export format (CSV, JSON, PDF)
+   - Export preferences
+
+### System Settings
+
+**Administrative Settings:**
+
+1. Navigate to **Settings → System Settings**
+2. **User Management:**
+   - Manage user accounts (admins only)
+   - Configure user roles and permissions
+3. **API Configuration:**
+   - API key management
+   - Rate limiting settings
+   - Webhook configuration
+4. **Data Retention Policies:**
+   - Configure data retention periods
+   - Archive old investigations
+   - Data cleanup settings
+5. **Backup and Restore:**
+   - Schedule automatic backups
+   - Manual backup and restore
+   - Export system data
+
+### Best Practices for Settings
+
+- **Keep Marketplace Agreements Current** - Update expiration dates and renewals
+- **Organize Contacts** - Maintain up-to-date contact information for faster takedown requests
+- **Test API Keys** - Verify API keys are working before running large investigations
+- **Review Regional Settings** - Ensure regional targeting matches your jurisdiction
+- **Configure Notifications** - Set up alerts that match your workflow needs
+- **Regular Backups** - Schedule automatic backups for important data
 
 ---
 
 ## Understanding Risk Levels
 
-Altitude automatically classifies each violation with a risk level to help you prioritize your monitoring efforts.
+Altitude automatically classifies each banned product by risk level to help you prioritize your monitoring efforts.
 
 ### HIGH RISK 🔴
 
 **Priority: Immediate Action**
 
-Indicators:
 - Deaths reported
 - Serious injuries
 - More than 10,000 units affected
 - Hazards: fire, electrocution, choking, lead poisoning, strangulation
 
-**Recommendation:** Set up daily investigations for HIGH risk violations.
+**Recommendation:** Set up daily investigations for HIGH-risk banned products.
 
 ### MEDIUM RISK 🟡
 
 **Priority: Monitor Regularly**
 
-Indicators:
 - Minor injuries reported
 - 1,000 - 10,000 units affected
 - Hazards: cuts, burns, falls, tip-over
@@ -302,188 +561,22 @@ Indicators:
 
 **Priority: Periodic Checks**
 
-Indicators:
 - No injuries reported
 - Fewer than 1,000 units affected
 - Minor defects, labeling issues
 
 **Recommendation:** Monthly investigations or manual searches when needed.
 
-### How Risk is Calculated
+---
 
-The risk score (0.0 - 1.0) is calculated using:
+## Need Help?
 
-- **Deaths:** +0.4 base, +0.15 per death
-- **Injuries:** +0.05 per injury (max 0.4)
-- **Incidents:** +0.01 per incident (max 0.2)
-- **Units Sold:** +0.02 to +0.15 based on volume
-- **Hazard Keywords:** +0.1 per high-severity term
+For additional support:
+
+- **API Documentation** - See [API Documentation]({{ '/api.html' | relative_url }}) for programmatic access
+- **Contact Support** - Use the [Contact Form]({{ '/contact.html' | relative_url }}) for questions
+- **GitHub Repository** - Check the repository for technical details
 
 ---
 
-## Best Practices
-
-### Investigation Setup
-
-1. **Start Small**
-   - Begin with a few high-priority violations
-   - Use weekly or biweekly schedules initially
-   - Monitor 2-3 marketplaces to start
-
-2. **Choose Appropriate Schedules**
-   - Daily for HIGH risk violations
-   - Weekly for MEDIUM risk
-   - Monthly for LOW risk
-   - One-time (custom) for urgent searches
-
-3. **Be Specific with Scope**
-   - Don't investigate too many violations at once
-   - Use regional targeting when relevant
-   - Select marketplaces where products are actually sold
-
-### Resource Management
-
-1. **Schedule Strategically**
-   - Spread investigations across different times
-   - Avoid running everything at once
-   - Consider off-peak hours for large investigations
-
-2. **Monitor System Performance**
-   - Check investigation status regularly
-   - Review completion times
-   - Adjust schedules if investigations take too long
-
-3. **Keep Investigations Current**
-   - Update or cancel investigations that are no longer needed
-   - Review and adjust schedules based on results
-   - Remove completed one-time investigations
-
-### Workflow Tips
-
-1. **Review Findings Regularly**
-   - Check completed investigations for new listings
-   - Verify matches before taking action
-   - Export results for reporting
-
-2. **Use Descriptive Names**
-   - Name investigations clearly (e.g., "Daily Toy Recalls - High Risk")
-   - Include date ranges or product types in names
-   - Makes it easier to find and manage investigations
-
-3. **Document Your Process**
-   - Add descriptions to investigations explaining why they exist
-   - Note any special configurations
-   - Track which investigations are most effective
-
----
-
-## Troubleshooting
-
-### My Investigation Isn't Running
-
-**Check these things:**
-
-1. **Status Check**
-   - Verify the investigation status is `scheduled`
-   - Status must be `scheduled` for it to run automatically
-
-2. **Time Check**
-   - Ensure `scheduled_start_time` is in the future
-   - Check timezone settings
-
-3. **System Check**
-   - Verify the scheduler is running (it starts with the app)
-   - Check server logs for errors
-   - Ensure the backend is running and accessible
-
-4. **Dependencies**
-   - Verify all referenced violations exist
-   - Check that marketplaces are enabled
-   - Ensure the investigation wasn't cancelled
-
-### Investigation Failed
-
-**If an investigation fails:**
-
-1. Check the investigation details for error information
-2. Review server logs for detailed error messages
-3. Verify all required data exists:
-   - Violations must exist and be valid
-   - Marketplaces must be enabled
-   - Network connectivity to marketplaces
-4. Try updating the investigation and running it again
-
-### Too Many Results (or Too Few)
-
-**Adjust your scope:**
-
-- **Too many results:** Narrow your focus
-  - Fewer violations per investigation
-  - Specific regional targeting
-  - Focus on high-priority marketplaces
-
-- **Too few results:** Expand your search
-  - Include more marketplaces
-  - Add more regions
-  - Check that violations match marketplace products
-
-### Investigation Running Too Often
-
-**If investigations seem to run more frequently than expected:**
-
-1. Verify the `schedule` type is correct
-2. Check that you haven't accidentally created duplicate investigations
-3. Review the `calculate_next_run_time` logic for your schedule type
-4. Check server logs to see actual run times
-
-### Performance Issues
-
-**If investigations are slow or timing out:**
-
-1. Reduce the scope:
-   - Fewer violations per investigation
-   - Fewer marketplaces
-   - Smaller regional areas
-
-2. Split large investigations:
-   - Create separate investigations for different violations
-   - Separate by marketplace
-   - Separate by region
-
-3. Adjust schedules:
-   - Spread investigations across different times
-   - Avoid peak usage times
-   - Consider off-peak hours for large searches
-
----
-
-## Next Steps
-
-Now that you understand the basics, you can:
-
-- **Set up your first scheduled investigation** using the examples above
-- **Explore the API** at `http://localhost:8000/docs` for more advanced features
-- **Configure marketplaces** in Settings to match your monitoring needs
-- **Review investigation results** to see what the system finds
-
-### Additional Resources
-
-- **API Documentation:** `http://localhost:8000/docs` - Full API reference with interactive testing
-- **Main Documentation:** [Back to main docs](./index.html) - Overview and features
-- **Code Repository:** Check the repository for examples and code samples
-
----
-
-## Support
-
-If you encounter issues or have questions:
-
-1. Check this guide first
-2. Review the API documentation
-3. Check server logs for error details
-4. Review the investigation scheduler documentation in the codebase
-
----
-
-*Last updated: January 2024*
-
+*Last updated: January 2025*
