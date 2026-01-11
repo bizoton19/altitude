@@ -5,7 +5,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 ---
 
 <div class="hero-section">
-  <h1 class="hero-title">Automated Banned Product Monitoring for Regulatory Agencies, Manufacturers & Retailers</h1>
+  <h1 class="hero-title">AI powered Banned Product Monitoring</h1>
   <p class="hero-subtitle">
     Streamline your banned product workflow with automated marketplace monitoring. Federal and state agencies, manufacturers, 
     importers, retailers, and non-profits use Altitude to replace hours of manual searches with intelligent automation.
@@ -43,7 +43,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
 </div>
 
-## The Complete Banned Product Management Workflow
+## The Complete Monitoring Workflow
 
 Altitude streamlines your entire banned product management process from detection to takedown:
 
