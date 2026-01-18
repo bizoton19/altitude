@@ -166,7 +166,6 @@
     }
 
     main > h1,
-    main > h2,
     main > h3,
     main > p:not(.hero-subtitle):not(.tagline),
     main > ul,
@@ -176,6 +175,16 @@
       margin-right: auto;
       padding-left: 2rem;
       padding-right: 2rem;
+    }
+
+    /* h2 tags align with content sections - match wider sections first */
+    main > h2 {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      text-align: left;
     }
 
     /* Full-width hero sections */
