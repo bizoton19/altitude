@@ -124,7 +124,7 @@ function InvestigationList({
             fontSize: '14px',
             margin: 0
           }}>
-            Schedule automated searches for violations on marketplaces
+            Schedule automated searches for product bans on marketplaces
           </p>
         </div>
         <button
@@ -189,7 +189,7 @@ function InvestigationList({
             color: 'var(--text-secondary)',
             marginBottom: 'var(--space-lg)'
           }}>
-            Create an investigation to start monitoring marketplaces for violations
+            Create an investigation to start monitoring marketplaces for product bans
           </div>
         </div>
       ) : (
@@ -322,13 +322,13 @@ function InvestigationList({
                     letterSpacing: '0.5px',
                     marginBottom: 'var(--space-xs)'
                   }}>
-                    Violations
+                    Product Bans
                   </div>
                   <div style={{ 
                     fontWeight: '600',
                     color: 'var(--text-primary)'
                   }}>
-                    {investigation.violation_ids.length}
+                    {investigation.violation_ids?.length || investigation.product_ban_ids?.length || 0}
                   </div>
                 </div>
                 <div>

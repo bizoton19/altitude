@@ -6,9 +6,9 @@ from typing import List, Optional
 from datetime import datetime
 import uuid
 
-from app.models.violation import (
-    ProductViolation, ViolationProduct, ViolationHazard,
-    ViolationRemedy, ViolationImage, ViolationCreate
+from app.models.product_ban import (
+    ProductBan, ProductBanProduct, ProductBanHazard,
+    ProductBanRemedy, ProductBanImage, ProductBanCreate
 )
 from app.models.marketplace import Marketplace, MarketplaceListing
 from app.models.investigation import Investigation, InvestigationCreate
@@ -17,8 +17,8 @@ from app.models.agent import AgentConfig, SearchTask
 from app.models.organization import Organization
 
 from app.db.models import (
-    ViolationDB, ViolationProductDB, ViolationHazardDB,
-    ViolationRemedyDB, ViolationImageDB,
+    ProductBanDB, ProductBanProductDB, ProductBanHazardDB,
+    ProductBanRemedyDB, ProductBanImageDB,
     MarketplaceDB, MarketplaceListingDB,
     InvestigationDB, InvestigationListingDB,
     ImportHistoryDB, AgentConfigDB, SearchTaskDB,
@@ -26,96 +26,96 @@ from app.db.models import (
 )
 
 
-# Violation conversions
-def violation_to_db(violation: ProductViolation) -> ViolationDB:
-    """Convert Pydantic ProductViolation to SQLAlchemy ViolationDB."""
-    return ViolationDB(
-        violation_id=violation.violation_id,
-        violation_number=violation.violation_number,
-        title=violation.title,
-        url=violation.url,
+# Product Ban conversions
+def product_ban_to_db(product_ban: ProductBan) -> ProductBanDB:
+    """Convert Pydantic ProductBan to SQLAlchemy ProductBanDB."""
+    return ProductBanDB(
+        product_ban_id=product_ban.product_ban_id,
+        ban_number=product_ban.ban_number,
+        title=product_ban.title,
+        url=product_ban.url,
         # Organization fields
-        organization_name=violation.organization_name,
-        organization_id=violation.organization_id,
-        organization_type=violation.organization_type,
+        organization_name=product_ban.organization_name,
+        organization_id=product_ban.organization_id,
+        organization_type=product_ban.organization_type,
         # Legacy agency fields
-        agency_name=violation.agency_name,
-        agency_acronym=violation.agency_acronym,
-        agency_id=violation.agency_id,
+        agency_name=product_ban.agency_name,
+        agency_acronym=product_ban.agency_acronym,
+        agency_id=product_ban.agency_id,
         # Joint recall fields
-        joint_organization_name=violation.joint_organization_name,
-        joint_organization_id=violation.joint_organization_id,
-        is_voluntary_recall=getattr(violation, 'is_voluntary_recall', False),
-        is_joint_recall=getattr(violation, 'is_joint_recall', False),
-        description=violation.description,
-        violation_date=violation.violation_date,
-        violation_type=violation.violation_type,
-        country=violation.country,
-        region=violation.region,
-        risk_level=violation.risk_level,
-        risk_score=violation.risk_score,
-        units_affected=violation.units_affected,
-        injuries=violation.injuries,
-        deaths=violation.deaths,
-        incidents=violation.incidents,
-        illnesses=violation.illnesses,
-        source_reference=violation.source_reference,
-        source_language=violation.source_language,
-        agency_metadata=violation.agency_metadata,
-        created_at=violation.created_at,
-        updated_at=violation.updated_at,
+        joint_organization_name=product_ban.joint_organization_name,
+        joint_organization_id=product_ban.joint_organization_id,
+        is_voluntary_recall=getattr(product_ban, 'is_voluntary_recall', False),
+        is_joint_recall=getattr(product_ban, 'is_joint_recall', False),
+        description=product_ban.description,
+        ban_date=product_ban.ban_date,
+        ban_type=product_ban.ban_type,
+        country=product_ban.country,
+        region=product_ban.region,
+        risk_level=product_ban.risk_level,
+        risk_score=product_ban.risk_score,
+        units_affected=product_ban.units_affected,
+        injuries=product_ban.injuries,
+        deaths=product_ban.deaths,
+        incidents=product_ban.incidents,
+        illnesses=product_ban.illnesses,
+        source_reference=product_ban.source_reference,
+        source_language=product_ban.source_language,
+        agency_metadata=product_ban.agency_metadata,
+        created_at=product_ban.created_at,
+        updated_at=product_ban.updated_at,
     )
 
 
-def db_to_violation(db_violation: ViolationDB) -> ProductViolation:
-    """Convert SQLAlchemy ViolationDB to Pydantic ProductViolation."""
-    return ProductViolation(
-        violation_id=db_violation.violation_id,
-        violation_number=db_violation.violation_number,
-        title=db_violation.title,
-        url=db_violation.url,
+def db_to_product_ban(db_product_ban: ProductBanDB) -> ProductBan:
+    """Convert SQLAlchemy ProductBanDB to Pydantic ProductBan."""
+    return ProductBan(
+        product_ban_id=db_product_ban.product_ban_id,
+        ban_number=db_product_ban.ban_number,
+        title=db_product_ban.title,
+        url=db_product_ban.url,
         # Organization fields
-        organization_name=db_violation.organization_name,
-        organization_id=db_violation.organization_id,
-        organization_type=db_violation.organization_type,
+        organization_name=db_product_ban.organization_name,
+        organization_id=db_product_ban.organization_id,
+        organization_type=db_product_ban.organization_type,
         # Legacy agency fields
-        agency_name=db_violation.agency_name,
-        agency_acronym=db_violation.agency_acronym,
-        agency_id=db_violation.agency_id,
+        agency_name=db_product_ban.agency_name,
+        agency_acronym=db_product_ban.agency_acronym,
+        agency_id=db_product_ban.agency_id,
         # Joint recall fields
-        joint_organization_name=db_violation.joint_organization_name,
-        joint_organization_id=db_violation.joint_organization_id,
-        is_voluntary_recall=getattr(db_violation, 'is_voluntary_recall', False),
-        is_joint_recall=getattr(db_violation, 'is_joint_recall', False),
-        description=db_violation.description,
-        violation_date=db_violation.violation_date,
-        violation_type=db_violation.violation_type,
-        country=db_violation.country,
-        region=db_violation.region,
-        risk_level=db_violation.risk_level,
-        risk_score=db_violation.risk_score,
-        units_affected=db_violation.units_affected,
-        injuries=db_violation.injuries,
-        deaths=db_violation.deaths,
-        incidents=db_violation.incidents,
-        illnesses=db_violation.illnesses,
-        products=[db_to_violation_product(p) for p in db_violation.products],
-        hazards=[db_to_violation_hazard(h) for h in db_violation.hazards],
-        remedies=[db_to_violation_remedy(r) for r in db_violation.remedies],
-        images=[db_to_violation_image(i) for i in db_violation.images],
-        source_reference=db_violation.source_reference,
-        source_language=db_violation.source_language,
-        agency_metadata=db_violation.agency_metadata or {},
-        created_at=db_violation.created_at,
-        updated_at=db_violation.updated_at,
+        joint_organization_name=db_product_ban.joint_organization_name,
+        joint_organization_id=db_product_ban.joint_organization_id,
+        is_voluntary_recall=getattr(db_product_ban, 'is_voluntary_recall', False),
+        is_joint_recall=getattr(db_product_ban, 'is_joint_recall', False),
+        description=db_product_ban.description,
+        ban_date=db_product_ban.ban_date,
+        ban_type=db_product_ban.ban_type,
+        country=db_product_ban.country,
+        region=db_product_ban.region,
+        risk_level=db_product_ban.risk_level,
+        risk_score=db_product_ban.risk_score,
+        units_affected=db_product_ban.units_affected,
+        injuries=db_product_ban.injuries,
+        deaths=db_product_ban.deaths,
+        incidents=db_product_ban.incidents,
+        illnesses=db_product_ban.illnesses,
+        products=[db_to_product_ban_product(p) for p in db_product_ban.products],
+        hazards=[db_to_product_ban_hazard(h) for h in db_product_ban.hazards],
+        remedies=[db_to_product_ban_remedy(r) for r in db_product_ban.remedies],
+        images=[db_to_product_ban_image(i) for i in db_product_ban.images],
+        source_reference=db_product_ban.source_reference,
+        source_language=db_product_ban.source_language,
+        agency_metadata=db_product_ban.agency_metadata or {},
+        created_at=db_product_ban.created_at,
+        updated_at=db_product_ban.updated_at,
     )
 
 
-def violation_product_to_db(product: ViolationProduct, violation_id: str) -> ViolationProductDB:
-    """Convert ViolationProduct to ViolationProductDB."""
-    return ViolationProductDB(
+def product_ban_product_to_db(product: ProductBanProduct, product_ban_id: str) -> ProductBanProductDB:
+    """Convert ProductBanProduct to ProductBanProductDB."""
+    return ProductBanProductDB(
         id=f"prod-{uuid.uuid4().hex[:12]}",
-        violation_id=violation_id,
+        product_ban_id=product_ban_id,
         name=product.name,
         description=product.description,
         model_number=product.model_number,
@@ -129,9 +129,9 @@ def violation_product_to_db(product: ViolationProduct, violation_id: str) -> Vio
     )
 
 
-def db_to_violation_product(db_product: ViolationProductDB) -> ViolationProduct:
-    """Convert ViolationProductDB to ViolationProduct."""
-    return ViolationProduct(
+def db_to_product_ban_product(db_product: ProductBanProductDB) -> ProductBanProduct:
+    """Convert ProductBanProductDB to ProductBanProduct."""
+    return ProductBanProduct(
         name=db_product.name,
         description=db_product.description,
         model_number=db_product.model_number,
@@ -145,60 +145,60 @@ def db_to_violation_product(db_product: ViolationProductDB) -> ViolationProduct:
     )
 
 
-def violation_hazard_to_db(hazard: ViolationHazard, violation_id: str) -> ViolationHazardDB:
-    """Convert ViolationHazard to ViolationHazardDB."""
-    return ViolationHazardDB(
+def product_ban_hazard_to_db(hazard: ProductBanHazard, product_ban_id: str) -> ProductBanHazardDB:
+    """Convert ProductBanHazard to ProductBanHazardDB."""
+    return ProductBanHazardDB(
         id=f"haz-{uuid.uuid4().hex[:12]}",
-        violation_id=violation_id,
+        product_ban_id=product_ban_id,
         description=hazard.description,
         hazard_type=hazard.hazard_type,
         severity=hazard.severity,
     )
 
 
-def db_to_violation_hazard(db_hazard: ViolationHazardDB) -> ViolationHazard:
-    """Convert ViolationHazardDB to ViolationHazard."""
-    return ViolationHazard(
+def db_to_product_ban_hazard(db_hazard: ProductBanHazardDB) -> ProductBanHazard:
+    """Convert ProductBanHazardDB to ProductBanHazard."""
+    return ProductBanHazard(
         description=db_hazard.description,
         hazard_type=db_hazard.hazard_type,
         severity=db_hazard.severity,
     )
 
 
-def violation_remedy_to_db(remedy: ViolationRemedy, violation_id: str) -> ViolationRemedyDB:
-    """Convert ViolationRemedy to ViolationRemedyDB."""
-    return ViolationRemedyDB(
+def product_ban_remedy_to_db(remedy: ProductBanRemedy, product_ban_id: str) -> ProductBanRemedyDB:
+    """Convert ProductBanRemedy to ProductBanRemedyDB."""
+    return ProductBanRemedyDB(
         id=f"rem-{uuid.uuid4().hex[:12]}",
-        violation_id=violation_id,
+        product_ban_id=product_ban_id,
         description=remedy.description,
         remedy_type=remedy.remedy_type,
         action_required=remedy.action_required,
     )
 
 
-def db_to_violation_remedy(db_remedy: ViolationRemedyDB) -> ViolationRemedy:
-    """Convert ViolationRemedyDB to ViolationRemedy."""
-    return ViolationRemedy(
+def db_to_product_ban_remedy(db_remedy: ProductBanRemedyDB) -> ProductBanRemedy:
+    """Convert ProductBanRemedyDB to ProductBanRemedy."""
+    return ProductBanRemedy(
         description=db_remedy.description,
         remedy_type=db_remedy.remedy_type,
         action_required=db_remedy.action_required,
     )
 
 
-def violation_image_to_db(image: ViolationImage, violation_id: str) -> ViolationImageDB:
-    """Convert ViolationImage to ViolationImageDB."""
-    return ViolationImageDB(
+def product_ban_image_to_db(image: ProductBanImage, product_ban_id: str) -> ProductBanImageDB:
+    """Convert ProductBanImage to ProductBanImageDB."""
+    return ProductBanImageDB(
         id=f"img-{uuid.uuid4().hex[:12]}",
-        violation_id=violation_id,
+        product_ban_id=product_ban_id,
         url=image.url,
         caption=image.caption,
         alt_text=image.alt_text,
     )
 
 
-def db_to_violation_image(db_image: ViolationImageDB) -> ViolationImage:
-    """Convert ViolationImageDB to ViolationImage."""
-    return ViolationImage(
+def db_to_product_ban_image(db_image: ProductBanImageDB) -> ProductBanImage:
+    """Convert ProductBanImageDB to ProductBanImage."""
+    return ProductBanImage(
         url=db_image.url,
         caption=db_image.caption,
         alt_text=db_image.alt_text,
@@ -278,7 +278,7 @@ def marketplace_listing_to_db(listing: MarketplaceListing) -> MarketplaceListing
     return MarketplaceListingDB(
         id=listing.id,
         marketplace_id=listing.marketplace_id,
-        violation_id=listing.violation_id or listing.recall_id,  # Support both
+        product_ban_id=listing.violation_id or listing.recall_id,  # Support both
         title=listing.title,
         description=listing.description,
         listing_url=listing.listing_url,
@@ -317,8 +317,8 @@ def db_to_marketplace_listing(db_listing: MarketplaceListingDB) -> MarketplaceLi
         image_url=db_listing.image_url,
         price=db_listing.price,
         currency=db_listing.currency,
-        recall_id=db_listing.violation_id or "",  # Backward compatibility
-        violation_id=db_listing.violation_id,
+        recall_id=db_listing.product_ban_id or "",  # Backward compatibility
+        violation_id=db_listing.product_ban_id,
         match_score=db_listing.match_score,
         match_reasons=db_listing.match_reasons or [],
         seller_name=db_listing.seller_name,
@@ -341,7 +341,7 @@ def investigation_to_db(investigation: Investigation) -> InvestigationDB:
         scheduled_start_time=investigation.scheduled_start_time,
         start_time=investigation.start_time,
         end_time=investigation.end_time,
-        violation_ids=investigation.violation_ids,
+        product_ban_ids=investigation.violation_ids,
         marketplace_ids=investigation.marketplace_ids,
         region_ids=investigation.region_ids or {},
         agent_id=investigation.agent_id,
@@ -371,7 +371,7 @@ def db_to_investigation(db_investigation: InvestigationDB) -> Investigation:
         scheduled_start_time=db_investigation.scheduled_start_time,
         start_time=db_investigation.start_time,
         end_time=db_investigation.end_time,
-        violation_ids=db_investigation.violation_ids or [],
+        violation_ids=db_investigation.product_ban_ids or [],
         marketplace_ids=db_investigation.marketplace_ids or [],
         region_ids=db_investigation.region_ids or {},
         agent_id=db_investigation.agent_id,
@@ -438,6 +438,10 @@ def organization_to_db(organization: Organization) -> OrganizationDB:
         api_key=organization.api_key,
         api_headers=organization.api_headers,
         api_enabled=organization.api_enabled,
+        api_import_schedule=organization.api_import_schedule,
+        api_import_enabled=getattr(organization, 'api_import_enabled', False),
+        api_import_last_run=getattr(organization, 'api_import_last_run', None),
+        api_import_field_mapping=getattr(organization, 'api_import_field_mapping', None),
         file_upload_method=organization.file_upload_method,
         blob_storage_provider=organization.blob_storage_provider,
         blob_storage_container=organization.blob_storage_container,
@@ -449,8 +453,8 @@ def organization_to_db(organization: Organization) -> OrganizationDB:
         email_import_enabled=organization.email_import_enabled,
         email_import_address=organization.email_import_address,
         metadata_schema=organization.metadata_schema,
-        violations_count=organization.violations_count,
-        last_violation_date=organization.last_violation_date,
+        product_bans_count=organization.violations_count,
+        last_product_ban_date=organization.last_violation_date,
         voluntary_recalls_count=organization.voluntary_recalls_count,
         joint_recalls_count=organization.joint_recalls_count,
         created_at=organization.created_at,
@@ -487,6 +491,10 @@ def db_to_organization(db_org: OrganizationDB) -> Organization:
         api_method=db_org.api_method,
         api_auth_type=db_org.api_auth_type,
         api_key=db_org.api_key,
+        api_import_schedule=getattr(db_org, 'api_import_schedule', None),
+        api_import_enabled=getattr(db_org, 'api_import_enabled', False),
+        api_import_last_run=getattr(db_org, 'api_import_last_run', None),
+        api_import_field_mapping=getattr(db_org, 'api_import_field_mapping', None),
         api_headers=db_org.api_headers or {},
         api_enabled=db_org.api_enabled,
         file_upload_method=db_org.file_upload_method,
@@ -500,8 +508,8 @@ def db_to_organization(db_org: OrganizationDB) -> Organization:
         email_import_enabled=db_org.email_import_enabled,
         email_import_address=db_org.email_import_address,
         metadata_schema=db_org.metadata_schema,
-        violations_count=db_org.violations_count,
-        last_violation_date=db_org.last_violation_date,
+        violations_count=db_org.product_bans_count,
+        last_violation_date=db_org.last_product_ban_date,
         voluntary_recalls_count=db_org.voluntary_recalls_count,
         joint_recalls_count=db_org.joint_recalls_count,
         created_at=db_org.created_at,

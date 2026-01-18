@@ -3,24 +3,24 @@ import RiskBadge from './RiskBadge'
 import ImageGallery from './ImageGallery'
 
 /**
- * RecallCard Component (also handles Violations)
- * Displays violation/recall information in a futuristic glass card
+ * ProductBanCard Component
+ * Displays product ban information in a futuristic glass card
  * Supports both API format (snake_case) and original JSON format (PascalCase)
  * Supports both violations and recalls for backward compatibility
  */
-function RecallCard({ recall, onClick, isSelected }) {
+function ProductBanCard({ productBan, onClick, isSelected }) {
   const [expanded, setExpanded] = useState(false)
 
-  if (!recall) return null
+  if (!productBan) return null
 
-  // Helper to get value from either format (violation or recall fields)
+  // Helper to get value from either format (violation or product ban fields)
   const get = (snakeCase, pascalCase, violationField = null) => {
     // Try violation field first if provided
-    if (violationField && recall[violationField]) return recall[violationField]
+    if (violationField && productBan[violationField]) return productBan[violationField]
     // Then try snake_case
-    if (recall[snakeCase]) return recall[snakeCase]
+    if (productBan[snakeCase]) return productBan[snakeCase]
     // Then try PascalCase
-    if (recall[pascalCase]) return recall[pascalCase]
+    if (productBan[pascalCase]) return productBan[pascalCase]
     return null
   }
 
@@ -38,11 +38,11 @@ function RecallCard({ recall, onClick, isSelected }) {
     }
   }
 
-  // Get violation/recall number (support both)
-  const violationNumber = get('violation_number', 'ViolationNumber') || get('recall_number', 'RecallNumber')
-  const violationDate = get('violation_date', 'ViolationDate') || get('recall_date', 'RecallDate')
+  // Get product ban number (support both old and new field names)
+  const violationNumber = get('ban_number', 'BanNumber') || get('violation_number', 'ViolationNumber') || get('recall_number', 'RecallNumber')
+  const violationDate = get('ban_date', 'BanDate') || get('violation_date', 'ViolationDate') || get('recall_date', 'RecallDate')
   
-  // Get URL (violations use 'url', recalls use 'source_url')
+  // Get URL (violations use 'url', product bans use 'source_url')
   const violationUrl = get('url', 'URL', 'url') || get('source_url', 'URL')
   
   // Get agency info
@@ -264,4 +264,4 @@ function RecallCard({ recall, onClick, isSelected }) {
   )
 }
 
-export default RecallCard
+export default ProductBanCard

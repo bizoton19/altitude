@@ -5,11 +5,11 @@ import BrowserChrome from './components/BrowserChrome'
 import MenuBar from './components/MenuBar'
 import FilterBar from './components/FilterBar'
 import RiskSummary from './components/RiskSummary'
-import RecallCard from './components/RecallCard'
-import RecallDetailView from './components/RecallDetailView'
+import ProductBanCard from './components/ProductBanCard'
+import ProductBanDetailView from './components/ProductBanDetailView'
 import MarketplaceManager from './components/MarketplaceManager'
 import AllListingsView from './components/AllListingsView'
-import ViolationForm from './components/ViolationForm'
+import ProductBanForm from './components/ProductBanForm'
 import InvestigationList from './components/InvestigationList'
 import InvestigationDetail from './components/InvestigationDetail'
 import ReviewQueue from './components/ReviewQueue'
@@ -133,9 +133,9 @@ function AppContent() {
     result.sort((a, b) => {
       switch (sortOrder) {
         case 'newest':
-          return new Date(b.violation_date || 0) - new Date(a.violation_date || 0)
+          return new Date(b.ban_date || b.violation_date || 0) - new Date(a.ban_date || a.violation_date || 0)
         case 'oldest':
-          return new Date(a.violation_date || 0) - new Date(b.violation_date || 0)
+          return new Date(a.ban_date || a.violation_date || 0) - new Date(b.ban_date || b.violation_date || 0)
         case 'risk-high':
           const riskOrder = { HIGH: 0, MEDIUM: 1, LOW: 2 }
           return (riskOrder[a.risk_level] ?? 2) - (riskOrder[b.risk_level] ?? 2)
@@ -475,7 +475,7 @@ function AppContent() {
             onLogout={handleLogout}
           />
           <div className="content-area">
-            <ViolationForm
+            <ProductBanForm
               onSuccess={handleViolationCreated}
               onCancel={() => setShowViolationForm(false)}
             />
@@ -631,8 +631,8 @@ function AppContent() {
             </div>
           ) : selectedViolation ? (
             /* Detail View for Selected Violation */
-            <RecallDetailView
-              recall={selectedViolation}
+            <ProductBanDetailView
+              productBan={selectedViolation}
               onClose={() => setSelectedViolation(null)}
               onInvestigationClick={handleInvestigationClick}
             />
@@ -676,9 +676,9 @@ function AppContent() {
                     </span>
                   </div>
                   {filteredViolations.map((violation) => (
-                    <RecallCard
+                    <ProductBanCard
                       key={violation.violation_id}
-                      recall={violation}
+                      productBan={violation}
                       onClick={() => handleViolationClick(violation)}
                       isSelected={false}
                     />

@@ -14,7 +14,7 @@ function Header() {
         <div className="usa-logo" id="extended-logo">
           <em className="usa-logo__text">
             <Link to="/" title="Home" aria-label="Home">
-              Recall Monitoring Browser
+              Product Ban Monitoring Browser
             </Link>
           </em>
         </div>
@@ -28,7 +28,7 @@ function Header() {
           <ul className="usa-nav__primary usa-accordion">
             <li className="usa-nav__primary-item">
               <Link to="/" className="usa-nav__link">
-                <span>Search Recalls</span>
+                <span>Search Product Bans</span>
               </Link>
             </li>
             <li className="usa-nav__primary-item">

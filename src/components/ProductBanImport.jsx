@@ -1,14 +1,17 @@
 import { useState, useRef, useEffect } from 'react'
 import * as api from '../services/api'
 
-// Standard ViolationCreate fields for mapping
+// Standard ProductBanCreate fields for mapping
 const STANDARD_FIELDS = [
-  // Core violation fields
-  { value: 'violation_number', label: 'Violation Number', category: 'core' },
+  // Core product ban fields
+  { value: 'ban_number', label: 'Ban Number', category: 'core' },
   { value: 'title', label: 'Title', category: 'core' },
   { value: 'url', label: 'URL', category: 'core' },
   { value: 'description', label: 'Description', category: 'core' },
-  { value: 'violation_date', label: 'Violation Date', category: 'core' },
+  { value: 'ban_date', label: 'Ban Date', category: 'core' },
+  // Backward compatibility fields
+  { value: 'violation_number', label: 'Violation Number (Legacy)', category: 'core' },
+  { value: 'violation_date', label: 'Violation Date (Legacy)', category: 'core' },
   { value: 'units_affected', label: 'Units Affected', category: 'core' },
   { value: 'injuries', label: 'Injuries', category: 'core' },
   { value: 'deaths', label: 'Deaths', category: 'core' },
@@ -40,7 +43,10 @@ const STANDARD_FIELDS = [
 
 const DATA_TYPES = ['string', 'integer', 'float', 'date', 'boolean']
 
-function ViolationImport() {
+function ProductBanImport() {
+  // Import method selection
+  const [importMethod, setImportMethod] = useState('file') // 'file' or 'api'
+  
   // File selection state
   const [file, setFile] = useState(null)
   const [fileType, setFileType] = useState(null)
@@ -51,6 +57,14 @@ function ViolationImport() {
   const [previewData, setPreviewData] = useState(null)
   const [previewLoading, setPreviewLoading] = useState(false)
   const [step, setStep] = useState(1) // 1: File select, 2: Mapping, 3: Import
+  
+  // API import state
+  const [apiUrl, setApiUrl] = useState('')
+  const [apiMethod, setApiMethod] = useState('GET')
+  const [authType, setAuthType] = useState('none') // 'none', 'bearer', 'basic'
+  const [authToken, setAuthToken] = useState('')
+  const [apiHeaders, setApiHeaders] = useState({})
+  const [sourceName, setSourceName] = useState('')
   
   // Mapping state
   const [useAutoMapping, setUseAutoMapping] = useState(true)
@@ -171,6 +185,8 @@ function ViolationImport() {
         formData.append('delimiter', delimiter)
         formData.append('has_header', hasHeader.toString())
       }
+      // Request LLM mapping when auto-mapping is enabled (default)
+      formData.append('use_llm_mapping', useAutoMapping.toString())
 
       const preview = await api.previewViolationsFile(formData)
       
@@ -298,7 +314,7 @@ function ViolationImport() {
       setResult(data)
       setStep(3)
     } catch (err) {
-      setError(err.message || 'Failed to import violations')
+      setError(err.message || 'Failed to import product bans')
     } finally {
       setLoading(false)
     }
@@ -315,18 +331,159 @@ function ViolationImport() {
     setError(null)
     setResult(null)
     if (fileInputRef.current) fileInputRef.current.value = ''
+    
+    // Reset API import state
+    setApiUrl('')
+    setApiMethod('GET')
+    setAuthType('none')
+    setAuthToken('')
+    setApiHeaders({})
+    setSourceName('')
+  }
+
+  const handleAPIImport = async (e) => {
+    e?.preventDefault()
+    
+    if (!apiUrl) {
+      setError('API URL is required')
+      return
+    }
+    
+    // Validate URL
+    try {
+      new URL(apiUrl)
+    } catch {
+      setError('Please enter a valid URL (must start with http:// or https://)')
+      return
+    }
+    
+    if (authType !== 'none' && !authToken) {
+      setError(`Authentication token is required for ${authType} authentication`)
+      return
+    }
+    
+    if (!organizationId || !currentOrganization) {
+      setError('Organization is required. Please ensure you have registered your organization in Settings → My Organization.')
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+    setResult(null)
+
+    try {
+      const requestData = {
+        source: 'api',
+        api_url: apiUrl,
+        api_method: apiMethod,
+        agency_name: currentOrganization.name,
+        organization_id: organizationId,
+        organization_name: currentOrganization.name,
+        organization_type: currentOrganization.organization_type,
+        // Legacy fields for backward compatibility
+        agency_id: organizationId,
+        auto_classify_risk: autoClassifyRisk,
+        source_name: sourceName || `API Import: ${apiUrl}`
+      }
+      
+      // Add auth if provided
+      if (authType !== 'none' && authToken) {
+        requestData.api_auth = {
+          type: authType,
+          token: authToken
+        }
+      }
+      
+      // Add custom headers if provided
+      if (Object.keys(apiHeaders).length > 0) {
+        requestData.api_headers = apiHeaders
+      }
+      
+      // Joint recall support
+      if (isJointRecall && jointOrganizationId) {
+        const jointOrg = organizations.find(o => o.organization_id === jointOrganizationId)
+        if (jointOrg) {
+          requestData.joint_organization_id = jointOrganizationId
+          requestData.joint_organization_name = jointOrg.name
+          requestData.is_joint_recall = true
+        }
+      }
+
+      const data = await api.importProductBansFromAPI(requestData)
+      setResult(data)
+      setStep(3)
+    } catch (err) {
+      setError(err.message || 'Failed to import product bans from API')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="glass-panel" style={{ padding: 'var(--space-xl)' }}>
       <div style={{ marginBottom: 'var(--space-lg)' }}>
         <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: 'var(--space-xs)' }}>
-          📥 Violation File Import
+          📥 Import Product Bans
         </h3>
         <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-          Upload a CSV or JSON file with violation data. Map fields and select data types before importing.
+          Import product bans from a file or REST API endpoint.
         </p>
       </div>
+
+      {/* Import Method Tabs */}
+      <div style={{ display: 'flex', gap: 'var(--space-sm)', marginBottom: 'var(--space-lg)', borderBottom: '1px solid var(--glass-border)' }}>
+        <button
+          onClick={() => {
+            setImportMethod('file')
+            handleReset()
+          }}
+          style={{
+            padding: 'var(--space-sm) var(--space-md)',
+            fontSize: '13px',
+            fontWeight: importMethod === 'file' ? '600' : '500',
+            background: importMethod === 'file' ? 'rgba(0, 240, 255, 0.15)' : 'transparent',
+            border: `1px solid ${importMethod === 'file' ? 'var(--neon-cyan)' : 'var(--glass-border)'}`,
+            borderBottom: importMethod === 'file' ? '2px solid var(--neon-cyan)' : '1px solid transparent',
+            color: importMethod === 'file' ? 'var(--neon-cyan)' : 'var(--text-secondary)',
+            borderRadius: 'var(--radius-sm) var(--radius-sm) 0 0',
+            cursor: 'pointer',
+            transition: 'all var(--transition-fast)',
+            marginBottom: '-1px'
+          }}
+        >
+          📄 File Upload
+        </button>
+        <button
+          onClick={() => {
+            setImportMethod('api')
+            handleReset()
+          }}
+          style={{
+            padding: 'var(--space-sm) var(--space-md)',
+            fontSize: '13px',
+            fontWeight: importMethod === 'api' ? '600' : '500',
+            background: importMethod === 'api' ? 'rgba(0, 240, 255, 0.15)' : 'transparent',
+            border: `1px solid ${importMethod === 'api' ? 'var(--neon-cyan)' : 'var(--glass-border)'}`,
+            borderBottom: importMethod === 'api' ? '2px solid var(--neon-cyan)' : '1px solid transparent',
+            color: importMethod === 'api' ? 'var(--neon-cyan)' : 'var(--text-secondary)',
+            borderRadius: 'var(--radius-sm) var(--radius-sm) 0 0',
+            cursor: 'pointer',
+            transition: 'all var(--transition-fast)',
+            marginBottom: '-1px'
+          }}
+        >
+          🔌 REST API
+        </button>
+      </div>
+
+      {/* File Import Section */}
+      {importMethod === 'file' && (
+        <>
+          <div style={{ marginBottom: 'var(--space-md)' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+              Upload a CSV or JSON file with product ban data. Map fields and select data types before importing.
+            </p>
+          </div>
 
       {/* Step 1: File Selection */}
       {step === 1 && (
@@ -468,8 +625,8 @@ function ViolationImport() {
               </span>
               <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 'var(--space-xs)', marginBottom: 0 }}>
                 {useAutoMapping 
-                  ? 'Using automatically detected field mappings'
-                  : 'Manually map each field to violation fields'}
+                  ? 'Using AI-powered field mapping (LLM + fuzzy matching)'
+                  : 'Manually map each field to product ban fields'}
               </p>
             </div>
             <div
@@ -748,7 +905,7 @@ function ViolationImport() {
                 </div>
               )}
               <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 'var(--space-xs)' }}>
-                Violations will be imported under this organization. To change, update your organization in Settings.
+                Product bans will be imported under this organization. To change, update your organization in Settings.
               </p>
             </div>
 
@@ -853,7 +1010,7 @@ function ViolationImport() {
               opacity: loading ? 0.5 : 1
             }}
           >
-            {loading ? 'Importing...' : `Import ${previewData.total_rows} Violations`}
+            {loading ? 'Importing...' : `Import ${previewData.total_rows} Product Bans`}
           </button>
         </form>
       )}
@@ -917,7 +1074,7 @@ function ViolationImport() {
 
             {result.created_violation_ids && result.created_violation_ids.length > 0 && (
               <div style={{ marginTop: 'var(--space-md)', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                Created {result.created_violation_ids.length} violation{result.created_violation_ids.length !== 1 ? 's' : ''}
+                Created {result.created_violation_ids.length} product ban{result.created_violation_ids.length !== 1 ? 's' : ''}
               </div>
             )}
 
@@ -939,6 +1096,412 @@ function ViolationImport() {
           </div>
         </div>
       )}
+        </>
+      )}
+
+      {/* API Import Section */}
+      {importMethod === 'api' && (
+        <>
+          <div style={{ marginBottom: 'var(--space-md)' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+              Import product bans from a REST API endpoint. Use your organization's configured API or enter API details manually.
+            </p>
+          </div>
+
+          {/* Organization-based API Import */}
+          {currentOrganization && currentOrganization.api_endpoint && currentOrganization.api_enabled && (
+            <div className="glass-panel" style={{ padding: 'var(--space-md)', marginBottom: 'var(--space-md)', background: 'var(--glass-bg)', border: '1px solid var(--border-primary)' }}>
+              <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: 'var(--space-sm)', color: 'var(--neon-cyan)' }}>
+                Organization API Configuration
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)', marginBottom: 'var(--space-md)' }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 'var(--space-xs)' }}>API Endpoint</div>
+                  <div style={{ fontSize: '13px', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                    {currentOrganization.api_endpoint}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 'var(--space-xs)' }}>Method</div>
+                  <div style={{ fontSize: '13px', color: 'var(--text-primary)' }}>
+                    {currentOrganization.api_method || 'GET'}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+                <button
+                  onClick={async () => {
+                    setLoading(true)
+                    setError(null)
+                    try {
+                      const testResult = await api.testAPIConnection(organizationId)
+                      if (testResult.connected) {
+                        alert(`✓ API connection successful!\n\nSample fields: ${testResult.fields?.length || 0}\nTotal items: ${testResult.total_items || 0}`)
+                      } else {
+                        setError(testResult.error || 'API connection failed')
+                      }
+                    } catch (err) {
+                      setError(err.message || 'Failed to test API connection')
+                    } finally {
+                      setLoading(false)
+                    }
+                  }}
+                  disabled={loading}
+                  style={{
+                    padding: 'var(--space-sm) var(--space-md)',
+                    background: 'transparent',
+                    border: '1px solid var(--glass-border)',
+                    color: 'var(--text-primary)',
+                    borderRadius: 'var(--radius-sm)',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    fontSize: '13px',
+                    opacity: loading ? 0.5 : 1
+                  }}
+                >
+                  Test Connection
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!organizationId || !currentOrganization) {
+                      setError('Organization is required')
+                      return
+                    }
+                    setLoading(true)
+                    setError(null)
+                    setResult(null)
+                    try {
+                      const data = await api.importProductBansFromAPIOrganization(organizationId, {
+                        auto_classify: autoClassifyRisk,
+                        auto_investigate: true
+                      })
+                      setResult(data)
+                      setStep(3)
+                    } catch (err) {
+                      setError(err.message || 'Failed to import product bans from organization API')
+                    } finally {
+                      setLoading(false)
+                    }
+                  }}
+                  disabled={loading}
+                  style={{
+                    padding: 'var(--space-sm) var(--space-md)',
+                    background: 'rgba(0, 240, 255, 0.1)',
+                    border: '1px solid var(--neon-cyan)',
+                    color: 'var(--neon-cyan)',
+                    borderRadius: 'var(--radius-sm)',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    opacity: loading ? 0.5 : 1
+                  }}
+                >
+                  Import Now
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Manual API Import Form */}
+          <form onSubmit={handleAPIImport} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+            <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: 'var(--space-sm)', color: 'var(--text-primary)' }}>
+              Manual API Import
+            </div>
+
+            {/* API URL */}
+            <div>
+              <label style={{
+                fontSize: '13px',
+                fontWeight: '500',
+                color: 'var(--text-secondary)',
+                display: 'block',
+                marginBottom: 'var(--space-sm)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                API URL *
+              </label>
+              <input
+                type="url"
+                value={apiUrl}
+                onChange={(e) => setApiUrl(e.target.value)}
+                placeholder="https://api.example.com/product-bans"
+                className="input"
+                required
+              />
+            </div>
+
+            {/* HTTP Method */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
+              <div>
+                <label style={{
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  color: 'var(--text-secondary)',
+                  display: 'block',
+                  marginBottom: 'var(--space-sm)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  HTTP Method
+                </label>
+                <select
+                  value={apiMethod}
+                  onChange={(e) => setApiMethod(e.target.value)}
+                  className="input"
+                >
+                  <option value="GET">GET</option>
+                  <option value="POST">POST</option>
+                  <option value="PUT">PUT</option>
+                  <option value="PATCH">PATCH</option>
+                </select>
+              </div>
+
+              {/* Auth Type */}
+              <div>
+                <label style={{
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  color: 'var(--text-secondary)',
+                  display: 'block',
+                  marginBottom: 'var(--space-sm)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  Authentication
+                </label>
+                <select
+                  value={authType}
+                  onChange={(e) => {
+                    setAuthType(e.target.value)
+                    if (e.target.value === 'none') setAuthToken('')
+                  }}
+                  className="input"
+                >
+                  <option value="none">None</option>
+                  <option value="bearer">Bearer Token</option>
+                  <option value="api_key">API Key</option>
+                  <option value="basic">Basic Auth</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Auth Token/Key */}
+            {authType !== 'none' && (
+              <div>
+                <label style={{
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  color: 'var(--text-secondary)',
+                  display: 'block',
+                  marginBottom: 'var(--space-sm)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  {authType === 'basic' ? 'Username:Password' : authType === 'api_key' ? 'API Key' : 'Bearer Token'}
+                </label>
+                <input
+                  type={authType === 'basic' ? 'text' : 'password'}
+                  value={authToken}
+                  onChange={(e) => setAuthToken(e.target.value)}
+                  placeholder={authType === 'basic' ? 'username:password' : 'Enter token or key'}
+                  className="input"
+                  required={authType !== 'none'}
+                />
+                {authType === 'basic' && (
+                  <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 'var(--space-xs)' }}>
+                    Format: username:password
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Source Name */}
+            <div>
+              <label style={{
+                fontSize: '13px',
+                fontWeight: '500',
+                color: 'var(--text-secondary)',
+                display: 'block',
+                marginBottom: 'var(--space-sm)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                Source Name (Optional)
+              </label>
+              <input
+                type="text"
+                value={sourceName}
+                onChange={(e) => setSourceName(e.target.value)}
+                placeholder="e.g., CPSC API, FDA Import"
+                className="input"
+              />
+            </div>
+
+            {/* Organization Display */}
+            {currentOrganization && (
+              <div style={{ padding: 'var(--space-md)', background: 'var(--glass-bg)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-primary)' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 'var(--space-xs)' }}>
+                  Importing As
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
+                  <span style={{ fontSize: '20px' }}>
+                    {currentOrganization.organization_type === 'regulatory_agency' ? '🏛️' : '🏢'}
+                  </span>
+                  <div>
+                    <div style={{ fontWeight: '600', color: 'var(--text-primary)' }}>
+                      {currentOrganization.name}
+                      {currentOrganization.acronym && (
+                        <span style={{ color: 'var(--text-secondary)', marginLeft: '8px' }}>
+                          ({currentOrganization.acronym})
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                      {currentOrganization.organization_type === 'regulatory_agency' ? 'Regulatory Agency' : 'Company'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Auto-classify Risk */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-md)', background: 'var(--glass-bg)', borderRadius: 'var(--radius-sm)' }}>
+              <div>
+                <span style={{ fontSize: '14px', color: 'var(--text-primary)', fontWeight: '500' }}>
+                  Auto-classify Risk Level
+                </span>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: 'var(--space-xs)', marginBottom: 0 }}>
+                  Automatically calculate risk based on injuries, deaths, and units affected
+                </p>
+              </div>
+              <div
+                onClick={() => setAutoClassifyRisk(!autoClassifyRisk)}
+                style={{
+                  width: '44px',
+                  height: '24px',
+                  borderRadius: '12px',
+                  background: autoClassifyRisk ? 'var(--neon-cyan)' : 'var(--glass-bg)',
+                  border: '1px solid var(--glass-border)',
+                  position: 'relative',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <div style={{
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  background: 'var(--text-primary)',
+                  position: 'absolute',
+                  top: '2px',
+                  left: autoClassifyRisk ? '22px' : '2px',
+                  transition: 'all 0.2s ease'
+                }} />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="glass-panel"
+              style={{
+                padding: 'var(--space-md)',
+                border: '1px solid var(--neon-cyan)',
+                color: 'var(--neon-cyan)',
+                background: 'rgba(0, 240, 255, 0.1)',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                fontWeight: '500',
+                opacity: loading ? 0.5 : 1
+              }}
+            >
+              {loading ? 'Importing...' : 'Import Product Bans from API'}
+            </button>
+          </form>
+
+          {/* Step 3: Results (reuse from file import) */}
+          {step === 3 && result && (
+            <div style={{ marginTop: 'var(--space-lg)' }}>
+              <div className="glass-panel" style={{
+                padding: 'var(--space-lg)',
+                border: `1px solid ${result.status === 'completed' ? 'var(--risk-low)' : result.status === 'partial' ? 'var(--neon-yellow)' : 'var(--risk-high)'}`,
+                background: result.status === 'completed' ? 'rgba(0, 255, 136, 0.05)' : result.status === 'partial' ? 'rgba(255, 193, 7, 0.05)' : 'rgba(255, 51, 102, 0.05)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
+                  <span style={{ fontSize: '20px' }}>
+                    {result.status === 'completed' ? '✅' : result.status === 'partial' ? '⚠️' : '❌'}
+                  </span>
+                  <h4 style={{ fontSize: '16px', fontWeight: '600', margin: 0 }}>
+                    Import {result.status === 'completed' ? 'Completed' : result.status === 'partial' ? 'Partially Completed' : 'Failed'}
+                  </h4>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-md)', marginBottom: 'var(--space-md)' }}>
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Total</div>
+                    <div style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-primary)' }}>{result.total_items}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Successful</div>
+                    <div style={{ fontSize: '20px', fontWeight: '600', color: 'var(--risk-low)' }}>{result.successful}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Failed</div>
+                    <div style={{ fontSize: '20px', fontWeight: '600', color: 'var(--risk-high)' }}>{result.failed}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Skipped</div>
+                    <div style={{ fontSize: '20px', fontWeight: '600', color: 'var(--text-secondary)' }}>{result.skipped || 0}</div>
+                  </div>
+                </div>
+
+                {result.errors && result.errors.length > 0 && (
+                  <div style={{ marginTop: 'var(--space-md)' }}>
+                    <div style={{ fontSize: '13px', fontWeight: '500', marginBottom: 'var(--space-xs)' }}>Errors:</div>
+                    <div style={{
+                      background: 'var(--glass-bg)',
+                      padding: 'var(--space-sm)',
+                      borderRadius: 'var(--radius-sm)',
+                      maxHeight: '200px',
+                      overflowY: 'auto',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '12px'
+                    }}>
+                      {result.errors.map((err, i) => (
+                        <div key={i} style={{ marginBottom: 'var(--space-xs)', color: 'var(--risk-high)' }}>
+                          {err.item}: {typeof err.error === 'string' ? err.error : JSON.stringify(err.error)}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {result.created_violation_ids && result.created_violation_ids.length > 0 && (
+                  <div style={{ marginTop: 'var(--space-md)', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    Created {result.created_violation_ids.length} product ban{result.created_violation_ids.length !== 1 ? 's' : ''}
+                  </div>
+                )}
+
+                <button
+                  onClick={handleReset}
+                  style={{
+                    marginTop: 'var(--space-md)',
+                    padding: 'var(--space-sm) var(--space-md)',
+                    background: 'var(--glass-bg)',
+                    border: '1px solid var(--glass-border)',
+                    color: 'var(--text-primary)',
+                    borderRadius: 'var(--radius-sm)',
+                    cursor: 'pointer',
+                    fontSize: '13px'
+                  }}
+                >
+                  Import Another
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
       {error && (
         <div className="glass-panel alert-error" style={{
@@ -957,4 +1520,4 @@ function ViolationImport() {
   )
 }
 
-export default ViolationImport
+export default ProductBanImport

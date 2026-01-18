@@ -6,7 +6,7 @@ Uses configurable rules based on units sold, injuries, deaths, and hazard severi
 """
 
 from app.models.recall import RiskLevel, Recall
-from app.models.violation import ProductViolation
+from app.models.product_ban import ProductBan
 from app.models.risk_classification import (
     RiskClassificationConfig,
     get_default_risk_classification_config,
@@ -42,15 +42,15 @@ async def get_risk_classification_config() -> RiskClassificationConfig:
         return get_default_risk_classification_config()
 
 
-def get_field_value(violation: ProductViolation, field_path: str) -> any:
-    """Get a field value from a violation using dot notation or direct attribute access."""
+def get_field_value(product_ban: ProductBan, field_path: str) -> any:
+    """Get a field value from a product ban using dot notation or direct attribute access."""
     # Handle direct attributes first
-    if hasattr(violation, field_path) and not field_path.startswith('metadata.'):
-        return getattr(violation, field_path)
+    if hasattr(product_ban, field_path) and not field_path.startswith('metadata.'):
+        return getattr(product_ban, field_path)
     
     # Handle nested paths (e.g., "metadata.some_key")
     parts = field_path.split('.')
-    value = violation
+    value = product_ban
     for part in parts:
         if hasattr(value, part):
             value = getattr(value, part)
@@ -62,9 +62,9 @@ def get_field_value(violation: ProductViolation, field_path: str) -> any:
     return value
 
 
-def evaluate_rule(violation: ProductViolation, rule, config: RiskClassificationConfig) -> Tuple[bool, float, Optional[str]]:
+def evaluate_rule(product_ban: ProductBan, rule, config: RiskClassificationConfig) -> Tuple[bool, float, Optional[str]]:
     """
-    Evaluate a score rule against a violation.
+    Evaluate a score rule against a product ban.
     
     Returns:
         Tuple of (matches, score_contribution, forced_level)
@@ -72,7 +72,7 @@ def evaluate_rule(violation: ProductViolation, rule, config: RiskClassificationC
     if not rule.enabled:
         return False, 0.0, None
     
-    field_value = get_field_value(violation, rule.field_path)
+    field_value = get_field_value(product_ban, rule.field_path)
     
     # Handle null checks
     if rule.operator == RuleOperator.IS_NULL:
@@ -162,7 +162,7 @@ def evaluate_units_sold_thresholds(units_sold: int, config: RiskClassificationCo
 
 
 async def calculate_risk_score(
-    violation: ProductViolation,
+    product_ban: ProductBan,
     units_sold: int = 0,
     injuries: int = 0,
     deaths: int = 0,
@@ -173,7 +173,7 @@ async def calculate_risk_score(
     Calculate a numeric risk score from 0.0 to 1.0 using configurable rules.
     
     Args:
-        violation: ProductViolation object (for field-based rules)
+        product_ban: ProductBan object (for field-based rules)
         units_sold: Number of units sold/distributed
         injuries: Number of reported injuries
         deaths: Number of reported deaths
@@ -188,7 +188,7 @@ async def calculate_risk_score(
     
     # Evaluate field-based score rules
     for rule in config.score_rules:
-        matches, contribution, _ = evaluate_rule(violation, rule, config)
+        matches, contribution, _ = evaluate_rule(product_ban, rule, config)
         if matches:
             score += contribution
     
@@ -205,7 +205,7 @@ async def calculate_risk_score(
 
 
 async def classify_risk(
-    violation: Optional[ProductViolation] = None,
+    product_ban: Optional[ProductBan] = None,
     units_sold: int = 0,
     injuries: int = 0,
     deaths: int = 0,
@@ -213,10 +213,10 @@ async def classify_risk(
     hazard_descriptions: list[str] = None
 ) -> Tuple[RiskLevel, float]:
     """
-    Classify a violation's risk level using configurable rules.
+    Classify a product ban's risk level using configurable rules.
     
     Args:
-        violation: ProductViolation object (optional, for field-based rules)
+        product_ban: ProductBan object (optional, for field-based rules)
         units_sold: Number of units sold/distributed
         injuries: Number of reported injuries
         deaths: Number of reported deaths
@@ -228,12 +228,12 @@ async def classify_risk(
     """
     config = await get_risk_classification_config()
     
-    # Create a minimal violation object if not provided (for backward compatibility)
-    if violation is None:
-        from app.models.violation import ProductViolation
-        violation = ProductViolation(
-            violation_id="temp",
-            violation_number="temp",
+    # Create a minimal product ban object if not provided (for backward compatibility)
+    if product_ban is None:
+        from app.models.product_ban import ProductBan
+        product_ban = ProductBan(
+            product_ban_id="temp",
+            ban_number="temp",
             title="",
             url="",
             agency_name="",
@@ -246,7 +246,7 @@ async def classify_risk(
     for rule in config.score_rules:
         if not rule.enabled or not rule.force_level:
             continue
-        matches, _, forced_level = evaluate_rule(violation, rule, config)
+        matches, _, forced_level = evaluate_rule(product_ban, rule, config)
         if matches and forced_level:
             # Find the risk level enum value
             for level_config in config.risk_levels:
@@ -255,7 +255,7 @@ async def classify_risk(
     
     # Calculate numeric score
     score = await calculate_risk_score(
-        violation=violation,
+        product_ban=product_ban,
         units_sold=units_sold,
         injuries=injuries,
         deaths=deaths,
@@ -286,11 +286,11 @@ async def classify_recall(recall: Recall) -> Recall:
     """
     hazard_descriptions = [h.description for h in recall.hazards]
     
-    # Convert recall to violation-like structure for rule evaluation
-    from app.models.violation import ProductViolation
-    violation = ProductViolation(
-        violation_id=recall.recall_id,
-        violation_number=recall.recall_number,
+    # Convert recall to product ban-like structure for rule evaluation
+    from app.models.product_ban import ProductBan
+    product_ban = ProductBan(
+        product_ban_id=recall.recall_id,
+        ban_number=recall.recall_number,
         title=recall.title,
         url=recall.source_url or "",
         agency_name=recall.source or "",
@@ -301,7 +301,7 @@ async def classify_recall(recall: Recall) -> Recall:
     )
     
     level, score = await classify_risk(
-        violation=violation,
+        product_ban=product_ban,
         units_sold=recall.units_sold or 0,
         injuries=recall.injuries or 0,
         deaths=recall.deaths or 0,
@@ -315,28 +315,28 @@ async def classify_recall(recall: Recall) -> Recall:
     return recall
 
 
-async def classify_violation(violation: ProductViolation) -> ProductViolation:
+async def classify_violation(product_ban: ProductBan) -> ProductBan:
     """
-    Classify a violation object and update its risk fields.
+    Classify a product ban object and update its risk fields (backward compatibility - function name kept for now).
     
     Args:
-        violation: ProductViolation object to classify
+        product_ban: ProductBan object to classify
     
     Returns:
-        Updated ProductViolation object with risk_level and risk_score
+        Updated ProductBan object with risk_level and risk_score
     """
-    hazard_descriptions = [h.description for h in violation.hazards]
+    hazard_descriptions = [h.description for h in product_ban.hazards]
     
     level, score = await classify_risk(
-        violation=violation,
-        units_sold=violation.units_affected or 0,
-        injuries=violation.injuries or 0,
-        deaths=violation.deaths or 0,
-        incidents=violation.incidents or 0,
+        product_ban=product_ban,
+        units_sold=product_ban.units_affected or 0,
+        injuries=product_ban.injuries or 0,
+        deaths=product_ban.deaths or 0,
+        incidents=product_ban.incidents or 0,
         hazard_descriptions=hazard_descriptions
     )
     
-    violation.risk_level = level
-    violation.risk_score = score
+    product_ban.risk_level = level
+    product_ban.risk_score = score
     
-    return violation
+    return product_ban

@@ -7,7 +7,7 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import uuid
 
-from app.models.violation import ProductViolation, ViolationCreate, RiskLevel, ViolationType
+from app.models.product_ban import ProductBan, ProductBanCreate, RiskLevel, BanType
 from app.models.investigation import Investigation, InvestigationCreate, InvestigationSchedule, InvestigationStatus
 from app.models.import_models import ImportHistory, ImportStatus, ImportSource
 from app.services import database as db
@@ -16,7 +16,7 @@ from app.skills.risk_classifier import classify_violation
 
 
 async def process_violation_import(
-    violation_data: ViolationCreate,
+    violation_data: ProductBanCreate,
     source: ImportSource,
     source_name: Optional[str] = None,
     auto_classify: bool = True,
@@ -24,8 +24,8 @@ async def process_violation_import(
     created_by: str = "system"
 ) -> Dict[str, Any]:
     """
-    Complete workflow for importing a violation:
-    1. Parse and validate violation data
+    Complete workflow for importing a product ban:
+    1. Parse and validate product ban data
     2. Save to database
     3. Auto-classify risk level
     4. Create import history record
@@ -35,13 +35,13 @@ async def process_violation_import(
     6. Return complete result
     """
     import_id = f"import-{uuid.uuid4().hex[:12]}"
-    violation_id = f"{violation_data.agency_acronym or 'VIOL'}-{violation_data.violation_number}"
+    product_ban_id = f"{violation_data.agency_acronym or 'BAN'}-{violation_data.ban_number}"
     
     try:
-        # 1. Create violation from ViolationCreate
-        violation = ProductViolation(
-            violation_id=violation_id,
-            violation_number=violation_data.violation_number,
+        # 1. Create product ban from ProductBanCreate
+        product_ban = ProductBan(
+            product_ban_id=product_ban_id,
+            ban_number=violation_data.ban_number,
             title=violation_data.title,
             url=violation_data.url,
             # Organization fields (required)
@@ -59,8 +59,8 @@ async def process_violation_import(
             is_joint_recall=violation_data.is_joint_recall,
             # Other fields
             description=violation_data.description,
-            violation_date=violation_data.violation_date,
-            violation_type=violation_data.violation_type or ViolationType.RECALL,
+            ban_date=violation_data.ban_date,
+            ban_type=violation_data.ban_type or BanType.RECALL,
             units_affected=violation_data.units_affected,
             injuries=violation_data.injuries,
             deaths=violation_data.deaths,
@@ -75,15 +75,15 @@ async def process_violation_import(
         
         # 2. Auto-classify risk if enabled
         if auto_classify:
-            violation = await classify_violation(violation)
+            product_ban = await classify_violation(product_ban)  # TODO: Rename to classify_product_ban
         
         # 3. Save to database
-        violation = await db.add_violation(violation)
+        product_ban = await db.add_violation(product_ban)  # TODO: Rename to add_product_ban
         
         # 4. Create import history
         import_history = ImportHistory(
             import_id=import_id,
-            import_type="violation",
+            import_type="product_ban",  # Updated from "violation"
             source=source,
             source_name=source_name or "Manual Import",
             status=ImportStatus.COMPLETED,
@@ -95,21 +95,23 @@ async def process_violation_import(
         )
         await db.save_import_history(import_history)
         
-        # 5. Auto-create investigation for HIGH risk violations
+        # 5. Auto-create investigation for HIGH risk product bans
         investigation = None
-        if auto_investigate and violation.risk_level == RiskLevel.HIGH:
+        if auto_investigate and product_ban.risk_level == RiskLevel.HIGH:
             investigation = await create_investigation_for_violation(
-                violation_id=violation.violation_id,
+                violation_id=product_ban.product_ban_id,  # TODO: Rename parameter to product_ban_id
                 auto_schedule=True,
                 created_by=created_by
             )
         
         return {
             "import_id": import_id,
-            "violation_id": violation.violation_id,
-            "violation": violation,
-            "risk_level": violation.risk_level,
-            "risk_score": violation.risk_score,
+            "violation_id": product_ban.product_ban_id,  # Backward compatibility key
+            "product_ban_id": product_ban.product_ban_id,
+            "violation": product_ban,  # Backward compatibility key
+            "product_ban": product_ban,
+            "risk_level": product_ban.risk_level,
+            "risk_score": product_ban.risk_score,
             "investigation": investigation,
             "investigation_id": investigation.investigation_id if investigation else None,
         }
@@ -118,7 +120,7 @@ async def process_violation_import(
         # Save failed import history
         import_history = ImportHistory(
             import_id=import_id,
-            import_type="violation",
+            import_type="product_ban",  # Updated from "violation"
             source=source,
             source_name=source_name or "Manual Import",
             status=ImportStatus.FAILED,
@@ -134,19 +136,19 @@ async def process_violation_import(
 
 
 async def create_investigation_for_violation(
-    violation_id: str,
+    violation_id: str,  # TODO: Rename parameter to product_ban_id
     marketplace_ids: Optional[List[str]] = None,
     auto_schedule: bool = True,
     created_by: str = "system"
 ) -> Investigation:
     """
-    Create an investigation for a violation.
+    Create an investigation for a product ban (backward compatibility - function name kept for now).
     If marketplace_ids is None, uses all enabled marketplaces.
     """
-    # Get violation to determine risk level
-    violation = await db.get_violation(violation_id)
-    if not violation:
-        raise ValueError(f"Violation {violation_id} not found")
+    # Get product ban to determine risk level
+    product_ban = await db.get_violation(violation_id)  # TODO: Rename to get_product_ban
+    if not product_ban:
+        raise ValueError(f"Product ban {violation_id} not found")
     
     # Get marketplaces
     if marketplace_ids is None or marketplace_ids == ["all_enabled"]:
@@ -154,13 +156,13 @@ async def create_investigation_for_violation(
         marketplace_ids = [mp.id for mp in all_marketplaces if mp.enabled]
     
     # Generate investigation name
-    investigation_name = f"Investigation: {violation.title[:50]}"
+    investigation_name = f"Investigation: {product_ban.title[:50]}"
     
     # Determine schedule based on risk level
-    if violation.risk_level == RiskLevel.HIGH:
+    if product_ban.risk_level == RiskLevel.HIGH:
         schedule = InvestigationSchedule.DAILY
         scheduled_start = datetime.utcnow() + timedelta(minutes=5)  # Start soon
-    elif violation.risk_level == RiskLevel.MEDIUM:
+    elif product_ban.risk_level == RiskLevel.MEDIUM:
         schedule = InvestigationSchedule.WEEKLY
         scheduled_start = datetime.utcnow() + timedelta(hours=1)
     else:
@@ -171,10 +173,10 @@ async def create_investigation_for_violation(
     investigation = Investigation(
         investigation_id=f"inv-{uuid.uuid4().hex[:8]}",
         name=investigation_name,
-        description=f"Auto-created investigation for {violation.violation_number}",
+        description=f"Auto-created investigation for {product_ban.ban_number}",
         schedule=schedule,
         scheduled_start_time=scheduled_start,
-        violation_ids=[violation_id],
+        violation_ids=[violation_id],  # TODO: Update to product_ban_ids
         marketplace_ids=marketplace_ids,
         status=InvestigationStatus.SCHEDULED,
         autonomous=True,
@@ -201,7 +203,7 @@ async def process_bulk_violation_import(
     created_by: str = "system"
 ) -> Dict[str, Any]:
     """
-    Process multiple violations in bulk.
+    Process multiple product bans in bulk (backward compatibility - function name kept for now).
     Returns summary of successful/failed imports and investigations created.
     """
     import_id = f"import-{uuid.uuid4().hex[:12]}"
@@ -211,11 +213,11 @@ async def process_bulk_violation_import(
     
     for i, data in enumerate(violations_data):
         try:
-            # Convert dict to ViolationCreate
-            violation_create = ViolationCreate(**data)
+            # Convert dict to ProductBanCreate
+            product_ban_create = ProductBanCreate(**data)
             
             result = await process_violation_import(
-                violation_data=violation_create,
+                violation_data=product_ban_create,
                 source=source,
                 source_name=source_name,
                 auto_classify=auto_classify,
@@ -223,7 +225,7 @@ async def process_bulk_violation_import(
                 created_by=created_by
             )
             
-            successful.append(result["violation_id"])
+            successful.append(result.get("product_ban_id") or result.get("violation_id"))
             if result.get("investigation_id"):
                 investigations_created.append(result["investigation_id"])
                 
@@ -237,7 +239,7 @@ async def process_bulk_violation_import(
     # Create import history
     import_history = ImportHistory(
         import_id=import_id,
-        import_type="violation",
+        import_type="product_ban",  # Updated from "violation"
         source=source,
         source_name=source_name or "Bulk Import",
         status=ImportStatus.PARTIAL if failed else ImportStatus.COMPLETED,
@@ -258,7 +260,8 @@ async def process_bulk_violation_import(
         "total": len(violations_data),
         "successful": len(successful),
         "failed": len(failed),
-        "violation_ids": successful,
+        "violation_ids": successful,  # Backward compatibility
+        "product_ban_ids": successful,
         "investigation_ids": investigations_created,
         "errors": failed,
     }

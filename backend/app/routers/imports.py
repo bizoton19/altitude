@@ -10,6 +10,7 @@ import uuid
 import os
 import asyncio
 import json
+import logging
 from datetime import datetime
 from typing import List, Optional, Tuple, Dict, Any
 from urllib.parse import urlparse
@@ -20,6 +21,8 @@ from dateutil import parser as date_parser
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, BackgroundTasks
 from pydantic import ValidationError
 
+logger = logging.getLogger(__name__)
+
 from app.config import settings
 
 from app.models.import_models import (
@@ -28,9 +31,16 @@ from app.models.import_models import (
     FilePreviewResult, FieldSchema
 )
 from app.models.marketplace import MarketplaceListing, Marketplace, MarketplaceStatus
-from app.models.violation import ViolationCreate, ProductViolation
+from app.models.product_ban import ProductBanCreate, ProductBan
 from app.services import database as db
 from app.services.workflow_service import process_violation_import, process_bulk_violation_import
+from app.services.api_import_service import (
+    fetch_from_organization_api,
+    fetch_from_api_url,
+    parse_api_response,
+    map_api_fields_to_product_ban,
+    build_auth_headers
+)
 
 router = APIRouter()
 
@@ -378,24 +388,24 @@ def map_violation_fields(
     auto_detect: bool = True
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """
-    Map source fields to ViolationCreate fields.
+    Map source fields to ProductBanCreate fields.
     Returns: (mapped_fields, extended_fields)
-    - mapped_fields: Fields that match ViolationCreate schema
+    - mapped_fields: Fields that match ProductBanCreate schema
     - extended_fields: Fields that go to agency_metadata
     """
-    # Standard ViolationCreate fields
+    # Standard ProductBanCreate fields
     standard_fields = {
-        'violation_number', 'title', 'url', 'agency_name', 'agency_acronym', 'agency_id',
-        'description', 'violation_date', 'violation_type', 'units_affected', 'injuries',
+        'ban_number', 'title', 'url', 'agency_name', 'agency_acronym', 'agency_id',
+        'description', 'ban_date', 'ban_type', 'units_affected', 'injuries',
         'deaths', 'incidents', 'country', 'region', 'agency_metadata'
     }
     
-    # Auto-detection mapping rules
+    # Auto-detection mapping rules (target fields use new names, source fields support both old and new)
     auto_mapping_rules = {
-        'violation_number': ['violation_number', 'recall_number', 'id', 'number', 'violation_id', 'recall_id'],
+        'ban_number': ['ban_number', 'violation_number', 'recall_number', 'id', 'number', 'violation_id', 'recall_id', 'product_ban_id'],
         'title': ['title', 'name', 'subject'],
         'description': ['description', 'details', 'summary'],
-        'violation_date': ['violation_date', 'recall_date', 'date', 'issued_date', 'published_date'],
+        'ban_date': ['ban_date', 'violation_date', 'recall_date', 'date', 'issued_date', 'published_date'],
         'units_affected': ['units_affected', 'units_sold', 'units', 'quantity', 'units_distributed'],
         'injuries': ['injuries', 'injury_count', 'injured'],
         'deaths': ['deaths', 'death_count', 'fatalities'],
@@ -460,19 +470,25 @@ def map_violation_fields(
 
 def normalize_violation_field_types(mapped_fields: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Normalize field types to match ViolationCreate schema.
+    Normalize field types to match ProductBanCreate schema.
     Converts:
-    - violation_number: int/float -> str
+    - ban_number: int/float -> str (also handles violation_number for backward compatibility)
     - injuries, deaths, incidents: list/str -> int (extracts count)
     - units_affected: str/float -> int
     """
     normalized = mapped_fields.copy()
     
-    # Convert violation_number to string
-    if 'violation_number' in normalized:
+    # Convert ban_number to string (handle both new and old field names)
+    if 'ban_number' in normalized:
+        val = normalized['ban_number']
+        if val is not None:
+            normalized['ban_number'] = str(val)
+    elif 'violation_number' in normalized:
+        # Backward compatibility: convert violation_number to ban_number
         val = normalized['violation_number']
         if val is not None:
-            normalized['violation_number'] = str(val)
+            normalized['ban_number'] = str(val)
+            del normalized['violation_number']
     
     # Convert injuries to integer (handle lists, strings, etc.)
     if 'injuries' in normalized:
@@ -624,39 +640,65 @@ def analyze_field_schema(field_name: str, values: List[Any]) -> FieldSchema:
     # Get sample values (first 3 non-null values)
     sample_values = [v for v in values[:10] if v is not None][:3]
     
-    # Suggest target field using auto-mapping rules
+    # Suggest target field using auto-mapping rules with fuzzy matching (target fields use new names)
     auto_mapping_rules = {
-        'violation_number': ['violation_number', 'recall_number', 'id', 'number', 'violation_id', 'recall_id'],
-        'title': ['title', 'name', 'subject'],
-        'description': ['description', 'details', 'summary'],
-        'violation_date': ['violation_date', 'recall_date', 'date', 'issued_date', 'published_date'],
-        'units_affected': ['units_affected', 'units_sold', 'units', 'quantity', 'units_distributed'],
-        'injuries': ['injuries', 'injury_count', 'injured'],
-        'deaths': ['deaths', 'death_count', 'fatalities'],
-        'incidents': ['incidents', 'incident_count'],
-        'country': ['country', 'country_code'],
-        'agency_name': ['agency_name', 'agency'],
+        'ban_number': ['ban_number', 'violation_number', 'recall_number', 'id', 'number', 'violation_id', 'recall_id', 'product_ban_id', 'ban_id', 'recall_num'],
+        'title': ['title', 'name', 'subject', 'product_name', 'product_title'],
+        'description': ['description', 'details', 'summary', 'notes', 'comment'],
+        'ban_date': ['ban_date', 'violation_date', 'recall_date', 'date', 'issued_date', 'published_date', 'announcement_date', 'effective_date'],
+        'units_affected': ['units_affected', 'units_sold', 'units', 'quantity', 'units_distributed', 'total_units', 'units_recalled'],
+        'injuries': ['injuries', 'injury_count', 'injured', 'injury', 'injuries_reported'],
+        'deaths': ['deaths', 'death_count', 'fatalities', 'fatal', 'deaths_reported'],
+        'incidents': ['incidents', 'incident_count', 'incident', 'incidents_reported'],
+        'country': ['country', 'country_code', 'nation', 'location_country'],
+        'region': ['region', 'state', 'province', 'territory', 'area'],
+        'agency_name': ['agency_name', 'agency', 'regulatory_agency', 'issuing_agency', 'authority'],
+        'agency_acronym': ['agency_acronym', 'acronym', 'agency_code', 'agency_abbreviation'],
+        'url': ['url', 'link', 'source_url', 'reference_url', 'announcement_url'],
     }
     
     suggested_target = None
     suggested_data_type = None
-    field_name_lower = field_name.lower().replace('_', '').replace('-', '')
+    field_name_lower = field_name.lower().replace('_', '').replace('-', '').replace(' ', '')
+    best_match_score = 0.0
+    
+    # Use fuzzy matching with similarity scoring
+    from difflib import SequenceMatcher
     
     for target_field, possible_names in auto_mapping_rules.items():
         for possible_name in possible_names:
-            possible_lower = possible_name.lower().replace('_', '').replace('-', '')
-            if field_name_lower == possible_lower or field_name_lower.startswith(possible_lower):
+            possible_lower = possible_name.lower().replace('_', '').replace('-', '').replace(' ', '')
+            
+            # Exact match
+            if field_name_lower == possible_lower:
                 suggested_target = target_field
-                # Suggest data type based on target field
-                if target_field in ['violation_number', 'title', 'url', 'description', 'country', 'region']:
-                    suggested_data_type = 'string'
-                elif target_field in ['injuries', 'deaths', 'incidents', 'units_affected']:
-                    suggested_data_type = 'integer'
-                elif target_field == 'violation_date':
-                    suggested_data_type = 'date'
+                best_match_score = 1.0
                 break
-        if suggested_target:
+            
+            # Contains match (partial)
+            if field_name_lower in possible_lower or possible_lower in field_name_lower:
+                score = SequenceMatcher(None, field_name_lower, possible_lower).ratio()
+                if score > best_match_score and score >= 0.6:  # 60% similarity threshold
+                    best_match_score = score
+                    suggested_target = target_field
+            
+            # Similarity match
+            score = SequenceMatcher(None, field_name_lower, possible_lower).ratio()
+            if score > best_match_score and score >= 0.7:  # 70% similarity threshold for non-contains matches
+                best_match_score = score
+                suggested_target = target_field
+        
+        if suggested_target and best_match_score >= 0.9:  # High confidence, stop early
             break
+    
+    # Set suggested data type if we found a match
+    if suggested_target:
+        if suggested_target in ['ban_number', 'title', 'url', 'description', 'country', 'region', 'agency_name', 'agency_acronym']:
+            suggested_data_type = 'string'
+        elif suggested_target in ['injuries', 'deaths', 'incidents', 'units_affected']:
+            suggested_data_type = 'integer'
+        elif suggested_target == 'ban_date':
+            suggested_data_type = 'date'
     
     return FieldSchema(
         field_name=field_name,
@@ -687,7 +729,8 @@ async def preview_violations_file(
     file: UploadFile = File(...),
     file_type: Optional[str] = Form(None),
     delimiter: Optional[str] = Form(","),
-    has_header: Optional[str] = Form("true")
+    has_header: Optional[str] = Form("true"),
+    use_llm_mapping: Optional[str] = Form("false")
 ):
     """
     Preview a file and return schema information for field mapping.
@@ -766,8 +809,67 @@ async def preview_violations_file(
         # Get sample rows (first 5)
         sample_rows = rows[:5]
         
-        # Get suggested mappings
-        suggested_mappings = get_suggested_mappings(field_schemas)
+        # Get suggested mappings - use LLM if requested and available
+        use_llm = use_llm_mapping and use_llm_mapping.lower() in ("true", "1", "yes")
+        if use_llm:
+            try:
+                from app.services.llm_field_mapper import llm_map_fields, fuzzy_map_fields
+                
+                # Prepare target fields list
+                target_fields = [
+                    {'value': 'ban_number', 'label': 'Ban Number', 'category': 'core'},
+                    {'value': 'title', 'label': 'Title', 'category': 'core'},
+                    {'value': 'url', 'label': 'URL', 'category': 'core'},
+                    {'value': 'description', 'label': 'Description', 'category': 'core'},
+                    {'value': 'ban_date', 'label': 'Ban Date', 'category': 'core'},
+                    {'value': 'units_affected', 'label': 'Units Affected', 'category': 'core'},
+                    {'value': 'injuries', 'label': 'Injuries', 'category': 'core'},
+                    {'value': 'deaths', 'label': 'Deaths', 'category': 'core'},
+                    {'value': 'incidents', 'label': 'Incidents', 'category': 'core'},
+                    {'value': 'country', 'label': 'Country', 'category': 'core'},
+                    {'value': 'region', 'label': 'Region', 'category': 'core'},
+                    {'value': 'agency_name', 'label': 'Agency Name', 'category': 'core'},
+                    {'value': 'agency_acronym', 'label': 'Agency Acronym', 'category': 'core'},
+                    {'value': 'agency_id', 'label': 'Agency ID', 'category': 'core'},
+                    {'value': 'hazards', 'label': 'Hazards (Array/JSON)', 'category': 'hazards'},
+                    {'value': 'hazard_description', 'label': 'Hazard Description', 'category': 'hazards'},
+                    {'value': 'hazard_type', 'label': 'Hazard Type', 'category': 'hazards'},
+                    {'value': 'images', 'label': 'Images (Array/JSON)', 'category': 'images'},
+                    {'value': 'image_url', 'label': 'Image URL', 'category': 'images'},
+                    {'value': 'remedies', 'label': 'Remedies (Array/JSON)', 'category': 'remedies'},
+                    {'value': 'remedy_description', 'label': 'Remedy Description', 'category': 'remedies'},
+                ]
+                
+                # Prepare source fields for LLM
+                source_fields_for_llm = [
+                    {
+                        'field_name': schema.field_name,
+                        'detected_type': schema.detected_type,
+                        'sample_values': schema.sample_values or []
+                    }
+                    for schema in field_schemas
+                ]
+                
+                # Get sample data for context
+                sample_data = sample_rows[0] if sample_rows else None
+                
+                # Use LLM to map fields
+                llm_mappings = await llm_map_fields(
+                    source_fields=source_fields_for_llm,
+                    target_fields=target_fields,
+                    sample_data=sample_data,
+                    model="gpt-3.5-turbo"  # Use cheaper model
+                )
+                
+                # Merge with fuzzy matches for fields LLM didn't map
+                fuzzy_mappings = get_suggested_mappings(field_schemas)
+                suggested_mappings = {**fuzzy_mappings, **llm_mappings}
+            except Exception as e:
+                print(f"Error using LLM mapping, falling back to fuzzy matching: {e}")
+                suggested_mappings = get_suggested_mappings(field_schemas)
+        else:
+            # Use improved fuzzy matching
+            suggested_mappings = get_suggested_mappings(field_schemas)
         
         return FilePreviewResult(
             file_type=detected_type,
@@ -1100,79 +1202,89 @@ async def process_single_violation_row(
                     "action_required": mapped_fields.pop('remedy_action_required', None)
                 })
         
-        # Filter to only ViolationCreate allowed fields
-        violation_create_fields = {
-            'violation_number', 'title', 'url', 'agency_name', 'agency_acronym', 'agency_id',
+        # Filter to only ProductBanCreate allowed fields (handle both old and new field names)
+        product_ban_create_fields = {
+            'ban_number', 'title', 'url', 'agency_name', 'agency_acronym', 'agency_id',
             'organization_id', 'organization_name', 'organization_type',
             'is_voluntary_recall', 'is_joint_recall',
             'joint_organization_id', 'joint_organization_name',
-            'description', 'violation_date', 'violation_type', 'units_affected', 'injuries',
-            'deaths', 'incidents', 'country', 'region', 'agency_metadata'
+            'description', 'ban_date', 'ban_type', 'units_affected', 'injuries',
+            'deaths', 'incidents', 'country', 'region', 'agency_metadata',
+            # Backward compatibility fields
+            'violation_number', 'violation_date', 'violation_type'
         }
-        filtered_fields = {k: v for k, v in mapped_fields.items() if k in violation_create_fields}
+        filtered_fields = {k: v for k, v in mapped_fields.items() if k in product_ban_create_fields}
         
-        # Create ViolationCreate
-        violation_create = ViolationCreate(**filtered_fields)
+        # Convert old field names to new ones for backward compatibility
+        if 'violation_number' in filtered_fields and 'ban_number' not in filtered_fields:
+            filtered_fields['ban_number'] = filtered_fields.pop('violation_number')
+        if 'violation_date' in filtered_fields and 'ban_date' not in filtered_fields:
+            filtered_fields['ban_date'] = filtered_fields.pop('violation_date')
+        if 'violation_type' in filtered_fields and 'ban_type' not in filtered_fields:
+            filtered_fields['ban_type'] = filtered_fields.pop('violation_type')
+        
+        # Create ProductBanCreate
+        product_ban_create = ProductBanCreate(**filtered_fields)
         
         # Convert hazards, images, remedies to Pydantic models
-        from app.models.violation import ViolationHazard, ViolationImage, ViolationRemedy
+        from app.models.product_ban import ProductBanHazard, ProductBanImage, ProductBanRemedy
         
         hazard_models = []
         for h in hazards:
             try:
-                hazard_models.append(ViolationHazard(**h))
+                hazard_models.append(ProductBanHazard(**h))
             except Exception as e:
                 # If validation fails, create with just description
-                hazard_models.append(ViolationHazard(description=str(h.get('description', h))))
+                hazard_models.append(ProductBanHazard(description=str(h.get('description', h))))
         
         image_models = []
         for img in images:
             try:
                 if 'url' in img:
-                    image_models.append(ViolationImage(**img))
+                    image_models.append(ProductBanImage(**img))
                 elif isinstance(img, str):
-                    image_models.append(ViolationImage(url=img))
+                    image_models.append(ProductBanImage(url=img))
             except Exception as e:
                 pass  # Skip invalid images
         
         remedy_models = []
         for r in remedies:
             try:
-                remedy_models.append(ViolationRemedy(**r))
+                remedy_models.append(ProductBanRemedy(**r))
             except Exception as e:
                 # If validation fails, create with just description
-                remedy_models.append(ViolationRemedy(description=str(r.get('description', r))))
+                remedy_models.append(ProductBanRemedy(description=str(r.get('description', r))))
         
-        # Create ProductViolation directly with hazards, images, remedies
-        violation_id = f"{violation_create.agency_acronym or 'VIOL'}-{violation_create.violation_number}"
-        from app.models.violation import ProductViolation, ViolationType
+        # Create ProductBan directly with hazards, images, remedies
+        product_ban_id = f"{product_ban_create.agency_acronym or 'BAN'}-{product_ban_create.ban_number}"
+        from app.models.product_ban import ProductBan, BanType
         from datetime import datetime
         
-        violation = ProductViolation(
-            violation_id=violation_id,
-            violation_number=violation_create.violation_number,
-            title=violation_create.title,
-            url=violation_create.url,
-            organization_name=violation_create.organization_name,
-            organization_id=violation_create.organization_id,
-            organization_type=violation_create.organization_type,
-            agency_name=violation_create.agency_name,
-            agency_acronym=violation_create.agency_acronym,
-            agency_id=violation_create.agency_id,
-            joint_organization_name=violation_create.joint_organization_name,
-            joint_organization_id=violation_create.joint_organization_id,
-            is_voluntary_recall=violation_create.is_voluntary_recall,
-            is_joint_recall=violation_create.is_joint_recall,
-            description=violation_create.description,
-            violation_date=violation_create.violation_date,
-            violation_type=violation_create.violation_type or ViolationType.RECALL,
-            units_affected=violation_create.units_affected,
-            injuries=violation_create.injuries,
-            deaths=violation_create.deaths,
-            incidents=violation_create.incidents,
-            country=violation_create.country,
-            region=violation_create.region,
-            agency_metadata=violation_create.agency_metadata or {},
+        product_ban = ProductBan(
+            product_ban_id=product_ban_id,
+            ban_number=product_ban_create.ban_number,
+            title=product_ban_create.title,
+            url=product_ban_create.url,
+            organization_name=product_ban_create.organization_name,
+            organization_id=product_ban_create.organization_id,
+            organization_type=product_ban_create.organization_type,
+            agency_name=product_ban_create.agency_name,
+            agency_acronym=product_ban_create.agency_acronym,
+            agency_id=product_ban_create.agency_id,
+            joint_organization_name=product_ban_create.joint_organization_name,
+            joint_organization_id=product_ban_create.joint_organization_id,
+            is_voluntary_recall=product_ban_create.is_voluntary_recall,
+            is_joint_recall=product_ban_create.is_joint_recall,
+            description=product_ban_create.description,
+            ban_date=product_ban_create.ban_date,
+            ban_type=product_ban_create.ban_type or BanType.RECALL,
+            units_affected=product_ban_create.units_affected,
+            injuries=product_ban_create.injuries,
+            deaths=product_ban_create.deaths,
+            incidents=product_ban_create.incidents,
+            country=product_ban_create.country,
+            region=product_ban_create.region,
+            agency_metadata=product_ban_create.agency_metadata or {},
             hazards=hazard_models,
             images=image_models,
             remedies=remedy_models,
@@ -1183,22 +1295,22 @@ async def process_single_violation_row(
         # Auto-classify if enabled
         if auto_classify_risk:
             from app.skills.risk_classifier import classify_violation
-            violation = await classify_violation(violation)
+            product_ban = await classify_violation(product_ban)
         
         # Save to database (this will create related records)
         from app.services import database as db
-        violation = await db.add_violation(violation)
+        product_ban = await db.add_violation(product_ban)
         
         # Create investigation if needed
-        if auto_investigate and violation.risk_level.value == "HIGH":
+        if auto_investigate and product_ban.risk_level.value == "HIGH":
             from app.services.workflow_service import create_investigation_for_violation
             await create_investigation_for_violation(
-                violation_id=violation.violation_id,
+                violation_id=product_ban.product_ban_id,  # TODO: Rename parameter
                 auto_schedule=True,
                 created_by="system"
             )
         
-        return {"violation_id": violation.violation_id}
+        return {"violation_id": product_ban.product_ban_id, "product_ban_id": product_ban.product_ban_id}  # Backward compatibility
         
     except ValidationError as e:
         error_details = []
@@ -1412,7 +1524,7 @@ async def import_violations_from_file(
 
 @router.post("/violations/workflow")
 async def import_violation_workflow(
-    violation_data: ViolationCreate,
+    violation_data: ProductBanCreate,  # Updated from ViolationCreate
     source: ImportSource = ImportSource.MANUAL,
     source_name: Optional[str] = None,
     auto_classify: bool = True,
@@ -1469,7 +1581,8 @@ async def get_import_details(import_id: str):
 @router.post("/violations/api", response_model=ViolationImportResult)
 async def import_violations_from_api(request: ViolationImportRequest):
     """
-    Import violations from a REST API endpoint.
+    Import violations from a REST API endpoint (manual API import).
+    Enhanced to use field mapping and workflow service.
     Phase 2: Programmatic Import
     """
     import_id = f"import-{uuid.uuid4().hex[:12]}"
@@ -1479,78 +1592,93 @@ async def import_violations_from_api(request: ViolationImportRequest):
     if not request.api_url:
         raise HTTPException(status_code=400, detail="api_url is required")
     
+    # Get organization if provided
+    organization = None
+    if request.agency_name or request.agency_id:
+        # Try to find organization by agency name/id
+        try:
+            orgs = await db.get_organizations()
+            for org in orgs:
+                if org.organization_id == request.agency_id or org.name == request.agency_name:
+                    organization = org
+                    break
+        except:
+            pass
+    
+    # Create a minimal organization object if not found
+    if not organization:
+        from app.models.organization import Organization, OrganizationType
+        organization = Organization(
+            organization_id=request.agency_id or f"org-{uuid.uuid4().hex[:8]}",
+            organization_type=OrganizationType.REGULATORY_AGENCY,
+            name=request.agency_name or "Unknown Organization",
+            acronym=None,
+            api_enabled=False
+        )
+    
     try:
         # Prepare request
         headers = request.api_headers or {}
+        basic_auth = None
+        
         if request.api_auth:
             auth_type = request.api_auth.get("type", "bearer")
             token = request.api_auth.get("token")
-            if auth_type == "bearer" and token:
-                headers["Authorization"] = f"Bearer {token}"
-            elif auth_type == "basic":
-                # Basic auth handled by httpx
-                pass
+            headers, basic_auth = build_auth_headers(auth_type, token, headers)
         
-        # Make API request
-        async with httpx.AsyncClient() as client:
-            response = await client.request(
-                method=request.api_method,
-                url=str(request.api_url),
-                headers=headers,
-                timeout=30.0
+        # Fetch data from API using service
+        items = await fetch_from_api_url(
+            url=str(request.api_url),
+            method=request.api_method,
+            headers=headers,
+            auth_type=request.api_auth.get("type", "none") if request.api_auth else "none",
+            basic_auth=basic_auth,
+            params=None,
+            timeout=30.0
+        )
+        
+        if not items:
+            return ViolationImportResult(
+                import_id=import_id,
+                status=ImportStatus.COMPLETED,
+                total_items=0,
+                successful=0,
+                failed=0,
+                skipped=0,
+                created_violation_ids=[],
+                errors=[],
+                completed_at=datetime.utcnow(),
+                source=ImportSource.API,
+                source_name=request.source_name or str(request.api_url)
             )
-            response.raise_for_status()
-            data = response.json()
         
-        # Handle different response formats
-        items = []
-        if isinstance(data, list):
-            items = data
-        elif isinstance(data, dict):
-            # Try common keys
-            for key in ["data", "results", "items", "recalls", "violations"]:
-                if key in data and isinstance(data[key], list):
-                    items = data[key]
-                    break
-            if not items:
-                items = [data]  # Single object
+        # Parse field mapping if provided
+        mapping_dict = request.field_mapping or {}
         
-        # Process each item
+        # Process each item through workflow service
         for i, item in enumerate(items):
             try:
-                # Try to extract violation data (basic mapping)
-                violation_data = {
-                    "violation_number": item.get("violation_number") or item.get("recall_number") or item.get("id") or f"API-{i+1}",
-                    "title": item.get("title") or item.get("name") or f"Imported Violation {i+1}",
-                    "description": item.get("description") or item.get("details") or "",
-                    "agency_name": request.agency_name or item.get("agency") or item.get("agency_name") or "Unknown",
-                    "violation_type": item.get("violation_type") or "RECALL",
-                    "units_affected": item.get("units_affected") or item.get("units_sold") or item.get("units") or 0,
-                    "injuries": item.get("injuries") or 0,
-                    "deaths": item.get("deaths") or 0,
-                    "incidents": item.get("incidents") or 0,
-                    "country": item.get("country") or "US"
-                }
+                # Map API fields to ProductBanCreate
+                product_ban_create = await map_api_fields_to_product_ban(
+                    item=item,
+                    organization=organization,
+                    field_mapping=mapping_dict
+                )
                 
-                # Parse date if provided
-                if "violation_date" in item or "recall_date" in item or "date" in item:
-                    date_str = item.get("violation_date") or item.get("recall_date") or item.get("date")
-                    try:
-                        violation_data["violation_date"] = date_parser.parse(date_str)
-                    except:
-                        pass
+                # Process through workflow service
+                result = await process_violation_import(
+                    violation_data=product_ban_create,
+                    source=ImportSource.API,
+                    source_name=request.source_name or str(request.api_url),
+                    auto_classify=request.auto_classify_risk,
+                    auto_investigate=True,
+                    created_by="system"
+                )
                 
-                violation_create = ViolationCreate(**violation_data)
-                violation = await db.add_violation_from_create(violation_create)
-                
-                # Auto-classify if requested
-                if request.auto_classify_risk:
-                    violation = db.classify_violation(violation)
-                    violation = await db.update_violation(violation)
-                
-                created_violations.append(violation.violation_id)
+                created_violations.append(result["product_ban_id"])
                 
             except Exception as e:
+                logger.error(f"Failed to import item {i+1} from API: {e}")
                 errors.append({"item": f"Item {i+1}", "error": str(e)})
                 continue
         
@@ -1571,7 +1699,7 @@ async def import_violations_from_api(request: ViolationImportRequest):
         # Save to history
         history = ImportHistory(
             import_id=import_id,
-            import_type="violation",
+            import_type="product_ban",
             source=ImportSource.API,
             source_name=request.source_name or str(request.api_url),
             status=result.status,
@@ -1589,7 +1717,199 @@ async def import_violations_from_api(request: ViolationImportRequest):
     except httpx.HTTPError as e:
         raise HTTPException(status_code=400, detail=f"API request failed: {str(e)}")
     except Exception as e:
+        logger.error(f"Failed to import from API: {e}")
         raise HTTPException(status_code=500, detail=f"Import failed: {str(e)}")
+
+
+@router.post("/violations/api/organization/{organization_id}", response_model=ViolationImportResult)
+async def import_violations_from_organization_api(
+    organization_id: str,
+    auto_classify: bool = True,
+    auto_investigate: bool = True,
+    field_mapping: Optional[str] = None,
+    background_tasks: BackgroundTasks = BackgroundTasks()
+):
+    """
+    Import product bans from an organization's configured API endpoint.
+    Uses organization's stored API configuration (endpoint, auth, headers).
+    """
+    import_id = f"import-{uuid.uuid4().hex[:12]}"
+    created_violations = []
+    errors = []
+    
+    # Parse field mapping if provided
+    mapping_dict = None
+    if field_mapping:
+        try:
+            mapping_dict = json.loads(field_mapping)
+        except (json.JSONDecodeError, TypeError) as e:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid field_mapping JSON: {str(e)}"
+            )
+    
+    try:
+        # Get organization
+        organization = await db.get_organization(organization_id)
+        if not organization:
+            raise HTTPException(status_code=404, detail=f"Organization {organization_id} not found")
+        
+        if not organization.api_endpoint:
+            raise HTTPException(status_code=400, detail=f"Organization {organization_id} does not have API endpoint configured")
+        
+        if not organization.api_enabled:
+            raise HTTPException(status_code=400, detail=f"API import is not enabled for organization {organization_id}")
+        
+        # Fetch data from API
+        items = await fetch_from_organization_api(organization_id)
+        
+        if not items:
+            return ViolationImportResult(
+                import_id=import_id,
+                status=ImportStatus.COMPLETED,
+                total_items=0,
+                successful=0,
+                failed=0,
+                skipped=0,
+                created_violation_ids=[],
+                errors=[],
+                completed_at=datetime.utcnow(),
+                source=ImportSource.API,
+                source_name=organization.name or f"Organization {organization_id} API"
+            )
+        
+        # Process each item through workflow service
+        for i, item in enumerate(items):
+            try:
+                # Map API fields to ProductBanCreate
+                product_ban_create = await map_api_fields_to_product_ban(
+                    item=item,
+                    organization=organization,
+                    field_mapping=mapping_dict
+                )
+                
+                # Process through workflow service
+                result = await process_product_ban_import(
+                    product_ban_data=product_ban_create,
+                    source=ImportSource.API,
+                    source_name=organization.name or f"Organization {organization_id} API",
+                    auto_classify=auto_classify,
+                    auto_investigate=auto_investigate,
+                    created_by="system"
+                )
+                
+                created_violations.append(result["product_ban_id"])
+                
+            except Exception as e:
+                logger.error(f"Failed to import item {i+1} from organization API: {e}")
+                errors.append({"item": f"Item {i+1}", "error": str(e)})
+                continue
+        
+        # Create result
+        result = ViolationImportResult(
+            import_id=import_id,
+            status=ImportStatus.COMPLETED if not errors else ImportStatus.PARTIAL,
+            total_items=len(items),
+            successful=len(created_violations),
+            failed=len(errors),
+            skipped=0,
+            created_violation_ids=created_violations,
+            errors=errors,
+            completed_at=datetime.utcnow(),
+            source=ImportSource.API,
+            source_name=organization.name or f"Organization {organization_id} API"
+        )
+        
+        # Save to history
+        history = ImportHistory(
+            import_id=import_id,
+            import_type="product_ban",
+            source=ImportSource.API,
+            source_name=organization.name or f"Organization {organization_id} API",
+            status=result.status,
+            total_items=result.total_items,
+            successful=result.successful,
+            failed=result.failed,
+            created_at=datetime.utcnow(),
+            completed_at=result.completed_at,
+            metadata={
+                "organization_id": organization_id,
+                "api_endpoint": organization.api_endpoint,
+                "api_method": organization.api_method
+            }
+        )
+        await db.save_import_history(history)
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to import from organization API: {e}")
+        raise HTTPException(status_code=500, detail=f"Import failed: {str(e)}")
+
+
+@router.get("/violations/api/test/{organization_id}")
+async def test_organization_api_connection(organization_id: str):
+    """
+    Test connection to an organization's configured API endpoint.
+    Returns sample data and field information for mapping.
+    """
+    try:
+        # Get organization
+        organization = await db.get_organization(organization_id)
+        if not organization:
+            raise HTTPException(status_code=404, detail=f"Organization {organization_id} not found")
+        
+        if not organization.api_endpoint:
+            raise HTTPException(status_code=400, detail=f"Organization {organization_id} does not have API endpoint configured")
+        
+        # Fetch sample data (just first few items)
+        items = await fetch_from_organization_api(organization_id)
+        
+        if not items:
+            return {
+                "connected": True,
+                "sample_data": None,
+                "fields": [],
+                "message": "API connection successful but no data returned"
+            }
+        
+        # Get first item as sample
+        sample_item = items[0] if items else {}
+        
+        # Analyze fields from sample item
+        fields = []
+        if isinstance(sample_item, dict):
+            for key, value in sample_item.items():
+                from app.routers.imports import detect_field_type
+                field_type = detect_field_type(value)
+                fields.append({
+                    "field_name": key,
+                    "detected_type": field_type,
+                    "sample_value": value if not isinstance(value, (dict, list)) else str(value)[:50]
+                })
+        
+        return {
+            "connected": True,
+            "sample_data": sample_item,
+            "fields": fields,
+            "total_items": len(items),
+            "organization_name": organization.name,
+            "api_endpoint": organization.api_endpoint,
+            "api_method": organization.api_method or "GET"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to test organization API connection: {e}")
+        return {
+            "connected": False,
+            "error": str(e),
+            "sample_data": None,
+            "fields": []
+        }
 
 
 @router.post("/violations/database", response_model=ViolationImportResult)

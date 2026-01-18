@@ -16,7 +16,7 @@ from app.models.marketplace import (
 )
 from app.models.agent import SearchTask, TaskType, TaskStatus
 from app.models.recall import Recall, RecallProduct
-from app.models.violation import ProductViolation
+from app.models.product_ban import ProductBan
 from app.services import database as db
 from app.skills.query_builder import build_search_query, build_search_variants
 from app.skills.match_analyzer import calculate_match_score
@@ -24,8 +24,8 @@ from app.skills.match_analyzer import calculate_match_score
 router = APIRouter()
 
 
-def violation_to_recall(violation: ProductViolation) -> Recall:
-    """Convert a ProductViolation to a Recall for compatibility with query builder."""
+def violation_to_recall(product_ban: ProductBan) -> Recall:
+    """Convert a ProductBan to a Recall for compatibility with query builder."""
     from app.models.recall import RecallImage, RecallHazard, RecallRemedy
     
     recall_products = [
@@ -36,26 +36,26 @@ def violation_to_recall(violation: ProductViolation) -> Recall:
             manufacturer=product.manufacturer,
             upc=product.identifiers.get("UPC") if product.identifiers else None
         )
-        for product in violation.products
+        for product in product_ban.products
     ]
     
     return Recall(
-        recall_id=violation.violation_id,
-        recall_number=violation.violation_number,
-        title=violation.title,
-        description=violation.description or "",
-        recall_date=violation.violation_date,
+        recall_id=product_ban.product_ban_id,
+        recall_number=product_ban.ban_number,
+        title=product_ban.title,
+        description=product_ban.description or "",
+        recall_date=product_ban.ban_date,
         units_sold=None,
-        injuries=violation.injuries,
-        deaths=violation.deaths,
-        incidents=violation.incidents,
+        injuries=product_ban.injuries,
+        deaths=product_ban.deaths,
+        incidents=product_ban.incidents,
         products=recall_products,
-        images=[RecallImage(url=img.url, caption=img.caption) for img in violation.images],
-        hazards=[RecallHazard(description=h.description, hazard_type=h.hazard_type) for h in violation.hazards],
-        remedies=[RecallRemedy(description=r.description, remedy_type=r.remedy_type) for r in violation.remedies],
-        source=violation.agency_name,
-        source_url=violation.url,
-        risk_level=violation.risk_level
+        images=[RecallImage(url=img.url, caption=img.caption) for img in product_ban.images],
+        hazards=[RecallHazard(description=h.description, hazard_type=h.hazard_type) for h in product_ban.hazards],
+        remedies=[RecallRemedy(description=r.description, remedy_type=r.remedy_type) for r in product_ban.remedies],
+        source=product_ban.agency_name,
+        source_url=product_ban.url,
+        risk_level=product_ban.risk_level
     )
 
 
@@ -119,13 +119,13 @@ async def search_marketplaces(request: MarketplaceSearchRequest):
     Returns listings found with match scores.
     Recalls are stored as violations with violation_type=RECALL.
     """
-    # Get violation (recalls are a type of violation)
-    violation = await db.get_violation(request.recall_id)
-    if not violation:
-        raise HTTPException(status_code=404, detail="Violation not found")
+    # Get product ban (backward compatibility - function name kept)
+    product_ban = await db.get_violation(request.recall_id)
+    if not product_ban:
+        raise HTTPException(status_code=404, detail="Product ban not found")
     
-    # Convert violation to recall for query building
-    recall = violation_to_recall(violation)
+    # Convert product ban to recall for query building
+    recall = violation_to_recall(product_ban)
     
     # Build search query
     search_query = build_search_query(recall)
@@ -212,9 +212,9 @@ async def execute_search_task(task_id: str):
     
     try:
         # Perform search
-        violation = await db.get_violation(task.recall_id)
-        if violation:
-            recall = violation_to_recall(violation)
+        product_ban = await db.get_violation(task.recall_id)
+        if product_ban:
+            recall = violation_to_recall(product_ban)
             search_query = build_search_query(recall)
             
             if task.marketplace_ids:
@@ -261,10 +261,10 @@ async def get_task_status(task_id: str):
 @router.get("/query-preview/{recall_id}")
 async def preview_search_query(recall_id: str):
     """Preview the search queries that would be generated for a recall."""
-    violation = await db.get_violation(recall_id)
-    if not violation:
-        raise HTTPException(status_code=404, detail="Violation not found")
-    recall = violation_to_recall(violation)
+    product_ban = await db.get_violation(recall_id)
+    if not product_ban:
+        raise HTTPException(status_code=404, detail="Product ban not found")
+    recall = violation_to_recall(product_ban)
     
     primary_query = build_search_query(recall)
     variants = build_search_variants(recall)
@@ -303,10 +303,10 @@ async def visual_search_recall(recall_id: str):
     """
     from app.services.visual_search import visual_search_service
     
-    violation = await db.get_violation(recall_id)
-    if not violation:
-        raise HTTPException(status_code=404, detail="Violation not found")
-    recall = violation_to_recall(violation)
+    product_ban = await db.get_violation(recall_id)
+    if not product_ban:
+        raise HTTPException(status_code=404, detail="Product ban not found")
+    recall = violation_to_recall(product_ban)
     
     if not recall.images:
         raise HTTPException(status_code=400, detail="Recall has no images")

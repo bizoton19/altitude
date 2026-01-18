@@ -109,7 +109,7 @@ function InvestigationForm({ investigation, onSuccess, onCancel }) {
 
     // Validation
     if (!formData.name || !formData.scheduled_start_time || formData.violation_ids.length === 0 || formData.marketplace_ids.length === 0) {
-      setError('Please fill in all required fields: Name, Start Time, at least one Violation, and at least one Marketplace')
+      setError('Please fill in all required fields: Name, Start Time, at least one Product Ban, and at least one Marketplace')
       setSubmitting(false)
       return
     }
@@ -189,7 +189,7 @@ function InvestigationForm({ investigation, onSuccess, onCancel }) {
           fontSize: '14px',
           margin: 0
         }}>
-          Schedule automated searches for violations on marketplaces. All fields marked with <span style={{ color: 'var(--risk-high)' }}>*</span> are required.
+          Schedule automated searches for product bans on marketplaces. All fields marked with <span style={{ color: 'var(--risk-high)' }}>*</span> are required.
         </p>
       </div>
 
@@ -361,7 +361,7 @@ function InvestigationForm({ investigation, onSuccess, onCancel }) {
               margin: 0,
               color: 'var(--text-primary)'
             }}>
-              Violations to Investigate <span style={{ color: 'var(--risk-high)', fontSize: '14px' }}>*</span>
+              Product Bans to Investigate <span style={{ color: 'var(--risk-high)', fontSize: '14px' }}>*</span>
             </h2>
             {formData.violation_ids.length > 0 && (
               <span style={{ 
@@ -390,13 +390,16 @@ function InvestigationForm({ investigation, onSuccess, onCancel }) {
                 color: 'var(--text-muted)',
                 fontSize: '14px'
               }}>
-                No violations available
+                No product bans available
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)' }}>
-                {violations.map((violation) => (
+                {violations.map((violation) => {
+                  const id = violation.product_ban_id || violation.violation_id
+                  const banNumber = violation.ban_number || violation.violation_number
+                  return (
                   <label
-                    key={violation.violation_id}
+                    key={id}
                     className="glass-panel"
                     style={{
                       display: 'flex',
@@ -405,28 +408,28 @@ function InvestigationForm({ investigation, onSuccess, onCancel }) {
                       padding: 'var(--space-md)',
                       cursor: 'pointer',
                       transition: 'all var(--transition-fast)',
-                      border: formData.violation_ids.includes(violation.violation_id) 
+                      border: formData.violation_ids.includes(id) 
                         ? '1px solid var(--neon-cyan)' 
                         : '1px solid var(--glass-border)',
-                      background: formData.violation_ids.includes(violation.violation_id)
+                      background: formData.violation_ids.includes(id)
                         ? 'rgba(0, 240, 255, 0.1)'
                         : 'transparent'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = formData.violation_ids.includes(violation.violation_id)
+                      e.currentTarget.style.background = formData.violation_ids.includes(id)
                         ? 'rgba(0, 240, 255, 0.15)'
                         : 'var(--glass-bg-hover)'
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = formData.violation_ids.includes(violation.violation_id)
+                      e.currentTarget.style.background = formData.violation_ids.includes(id)
                         ? 'rgba(0, 240, 255, 0.1)'
                         : 'transparent'
                     }}
                   >
                     <input
                       type="checkbox"
-                      checked={formData.violation_ids.includes(violation.violation_id)}
-                      onChange={() => handleViolationToggle(violation.violation_id)}
+                      checked={formData.violation_ids.includes(id)}
+                      onChange={() => handleViolationToggle(id)}
                       style={{
                         width: '18px',
                         height: '18px',
@@ -451,11 +454,11 @@ function InvestigationForm({ investigation, onSuccess, onCancel }) {
                       }}>
                         <span>{violation.agency_name || violation.agency_acronym}</span>
                         <span>•</span>
-                        <span>{violation.violation_number}</span>
+                        <span>{banNumber}</span>
                       </div>
                     </div>
                   </label>
-                ))}
+                )})}
               </div>
             )}
           </div>

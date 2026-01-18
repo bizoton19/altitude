@@ -1,12 +1,12 @@
 /**
- * ViolationsPage - Main violations list view with tabs
+ * ViolationsPage - Main product bans list view with tabs
  */
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import FilterBar from '../components/FilterBar'
 import RiskSummary from '../components/RiskSummary'
-import RecallCard from '../components/RecallCard'
-import ViolationImport from '../components/ViolationImport'
+import ProductBanCard from '../components/ProductBanCard'
+import ProductBanImport from '../components/ProductBanImport'
 import ImportHistory from '../components/ImportHistory'
 import * as api from '../services/api'
 
@@ -92,9 +92,9 @@ function ViolationsPage() {
     result.sort((a, b) => {
       switch (sortOrder) {
         case 'newest':
-          return new Date(b.violation_date || 0) - new Date(a.violation_date || 0)
+          return new Date(b.ban_date || b.violation_date || 0) - new Date(a.ban_date || a.violation_date || 0)
         case 'oldest':
-          return new Date(a.violation_date || 0) - new Date(b.violation_date || 0)
+          return new Date(a.ban_date || a.violation_date || 0) - new Date(b.ban_date || b.violation_date || 0)
         case 'risk-high':
           const riskOrder = { HIGH: 0, MEDIUM: 1, LOW: 2 }
           return (riskOrder[a.risk_level] ?? 2) - (riskOrder[b.risk_level] ?? 2)
@@ -110,12 +110,13 @@ function ViolationsPage() {
   }, [violations, riskFilter, sortOrder])
 
   const handleViolationClick = (violation) => {
-    navigate(`/violations/${violation.violation_id}`)
+    const id = violation.product_ban_id || violation.violation_id
+    navigate(`/violations/${id}`)
   }
 
   const handleDeleteAll = async () => {
     const count = violations.length
-    if (!window.confirm(`⚠️ WARNING: This will delete ALL ${count} violations and all associated data (products, hazards, remedies, images, listings). This action cannot be undone!\n\nAre you absolutely sure?`)) {
+    if (!window.confirm(`⚠️ WARNING: This will delete ALL ${count} product ban${count !== 1 ? 's' : ''} and all associated data (products, hazards, remedies, images, listings). This action cannot be undone!\n\nAre you absolutely sure?`)) {
       return
     }
 
@@ -123,14 +124,14 @@ function ViolationsPage() {
     setError(null)
     setDeleteMessage(null)
     
-    // Optimistically mark all visible violations as deleting
-    const allViolationIds = new Set(violations.map(v => v.violation_id))
-    setDeletingViolations(allViolationIds)
+    // Optimistically mark all visible product bans as deleting
+    const allProductBanIds = new Set(violations.map(v => v.product_ban_id || v.violation_id))
+    setDeletingViolations(allProductBanIds)
     
     // Show friendly message immediately
     setDeleteMessage({
       type: 'info',
-      text: `🗑️ Deleting ${count} violation${count !== 1 ? 's' : ''}... This may take a moment.`
+      text: `🗑️ Deleting ${count} product ban${count !== 1 ? 's' : ''}... This may take a moment.`
     })
 
     try {
@@ -139,7 +140,7 @@ function ViolationsPage() {
       // Show success message
       setDeleteMessage({
         type: 'success',
-        text: `✅ Successfully deleted ${count} violation${count !== 1 ? 's' : ''} and all associated data.`
+        text: `✅ Successfully deleted ${count} product ban${count !== 1 ? 's' : ''} and all associated data.`
       })
       
       // Clear violations from state
@@ -152,7 +153,7 @@ function ViolationsPage() {
         setDeleteMessage(null)
       }, 3000)
     } catch (err) {
-      setError(err.message || 'Failed to delete violations')
+      setError(err.message || 'Failed to delete product bans')
       setDeleteMessage(null)
       // Clear optimistic state on error
       setDeletingViolations(new Set())
@@ -185,7 +186,7 @@ function ViolationsPage() {
         paddingBottom: 'var(--space-sm)'
       }}>
         <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>
-          <h2 style={{ fontSize: '24px', fontWeight: '600', margin: 0, marginRight: 'var(--space-md)' }}>Violations</h2>
+          <h2 style={{ fontSize: '24px', fontWeight: '600', margin: 0, marginRight: 'var(--space-md)' }}>Product Bans</h2>
           <div style={{ display: 'flex', gap: '4px' }}>
             <button
               onClick={() => setActiveTab('list')}
@@ -279,7 +280,7 @@ function ViolationsPage() {
               gap: 'var(--space-xs)'
             }}
           >
-            ⚡ Create Violation
+            ⚡ Create Product Ban
           </button>
         )}
       </div>
@@ -367,12 +368,12 @@ function ViolationsPage() {
               <div className="empty-state glass-panel" style={{ padding: '40px', textAlign: 'center' }}>
                 <div style={{ fontSize: '48px', marginBottom: '16px', opacity: 0.5 }}>🔍</div>
                 <div style={{ fontSize: '18px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
-                  No violations found
+                  No product bans found
                 </div>
                 <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
                   {searchTerm 
                     ? `No results for "${searchTerm}". Try a different search term.`
-                    : 'Enter a search term or adjust filters to find violations.'}
+                    : 'Enter a search term or adjust filters to find product bans.'}
                 </div>
               </div>
             ) : (
@@ -386,7 +387,7 @@ function ViolationsPage() {
                   alignItems: 'center'
                 }}>
                   <span>
-                    Showing {filteredViolations.length} violation{filteredViolations.length !== 1 ? 's' : ''}
+                    Showing {filteredViolations.length} product ban{filteredViolations.length !== 1 ? 's' : ''}
                     {searchTerm && ` for "${searchTerm}"`}
                   </span>
                   {violations.length > 0 && (
@@ -404,14 +405,15 @@ function ViolationsPage() {
                         opacity: deleting ? 0.5 : 1
                       }}
                     >
-                      {deleting ? 'Deleting...' : '🗑️ Delete All Violations'}
+                      {deleting ? 'Deleting...' : '🗑️ Delete All Product Bans'}
                     </button>
                   )}
                 </div>
                 {filteredViolations.map((violation) => {
-                  const isDeleting = deletingViolations.has(violation.violation_id)
+                  const id = violation.product_ban_id || violation.violation_id
+                  const isDeleting = deletingViolations.has(id)
                   return (
-                    <div key={violation.violation_id} style={{ position: 'relative' }}>
+                    <div key={id} style={{ position: 'relative' }}>
                       {isDeleting && (
                         <div style={{
                           position: 'absolute',
@@ -442,8 +444,8 @@ function ViolationsPage() {
                         transition: 'opacity 0.3s ease-in-out',
                         pointerEvents: isDeleting ? 'none' : 'auto'
                       }}>
-                        <RecallCard
-                          recall={violation}
+                        <ProductBanCard
+                          productBan={violation}
                           onClick={() => !isDeleting && handleViolationClick(violation)}
                           isSelected={false}
                         />
@@ -460,13 +462,13 @@ function ViolationsPage() {
 
       {activeTab === 'import' && (
         <div style={{ padding: 'var(--space-lg) 0' }}>
-          <ViolationImport />
+          <ProductBanImport />
         </div>
       )}
 
       {activeTab === 'history' && (
         <div style={{ padding: 'var(--space-lg) 0' }}>
-          <ImportHistory importType="violation" />
+          <ImportHistory importType="product_ban" />
         </div>
       )}
     </div>

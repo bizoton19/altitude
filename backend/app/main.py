@@ -83,6 +83,8 @@ app.add_middleware(
 
 # Include routers
 if violations:
+    app.include_router(violations.router, prefix="/api/product-bans", tags=["Product Bans"])
+    # Backward compatibility - also register under /api/violations
     app.include_router(violations.router, prefix="/api/violations", tags=["Violations"])
 if investigations:
     app.include_router(investigations.router, prefix="/api/investigations", tags=["Investigations"])

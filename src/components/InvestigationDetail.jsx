@@ -154,7 +154,7 @@ function InvestigationDetail({ investigationId, onBack }) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--space-md)', marginTop: 'var(--space-md)' }}>
           <div>
             <label style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-              Optional: Link imported URLs to a specific violation in this investigation
+              Optional: Link imported URLs to a specific product ban in this investigation
             </label>
             <select
               value={linkViolationId}
@@ -274,10 +274,10 @@ function InvestigationDetail({ investigationId, onBack }) {
         <div className="space-y-4">
           <div>
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-              Violations ({investigation.violation_ids.length})
+              Product Bans ({investigation.violation_ids?.length || investigation.product_ban_ids?.length || 0})
             </div>
             <div className="flex flex-wrap gap-2">
-              {investigation.violation_ids.map((id) => (
+              {(investigation.violation_ids || investigation.product_ban_ids || []).map((id) => (
                 <span
                   key={id}
                   className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs"

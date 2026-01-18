@@ -66,6 +66,7 @@ class Settings(BaseSettings):
     # External API Keys (loaded from .env)
     GOOGLE_VISION_API_KEY: str = ""
     TINEYE_API_KEY: str = ""
+    OPENAI_API_KEY: str = ""  # For LLM-powered field mapping
     
     # Agent settings
     DEFAULT_SEARCH_FREQUENCY: int = 60  # minutes

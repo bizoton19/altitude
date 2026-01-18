@@ -17,7 +17,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import OperationalError
 
 from app.models.recall import Recall, RecallImage, RecallProduct, RecallHazard, RecallRemedy, RiskLevel
-from app.models.violation import ProductViolation, ViolationImage, ViolationProduct, ViolationHazard, ViolationRemedy, ViolationCreate, ViolationType
+from app.models.product_ban import ProductBan, ProductBanImage, ProductBanProduct, ProductBanHazard, ProductBanRemedy, ProductBanCreate, BanType
 from app.models.marketplace import Marketplace, MarketplaceListing, DEFAULT_MARKETPLACES
 from app.models.agent import AgentConfig, SearchTask, ToolConfig, ToolType, LLMProvider, AgentSkill, SkillType
 from app.models.investigation import Investigation
@@ -26,20 +26,21 @@ from app.models.import_models import ImportHistory, ImportSource
 from app.models.organization import Organization, OrganizationCreate, OrganizationUpdate, OrganizationType, OrganizationStatus
 from app.models.risk_classification import get_default_risk_classification_config, RiskClassificationConfig
 from app.skills.risk_classifier import classify_recall, classify_violation, classify_risk
+from app.config import settings
 
 from app.db.session import AsyncSessionLocal, init_database
 from app.db.models import (
-    ViolationDB, ViolationProductDB, ViolationHazardDB,
-    ViolationRemedyDB, ViolationImageDB,
+    ProductBanDB, ProductBanProductDB, ProductBanHazardDB,
+    ProductBanRemedyDB, ProductBanImageDB,
     MarketplaceDB, MarketplaceListingDB,
     InvestigationDB, InvestigationListingDB,
     ImportHistoryDB, AgentConfigDB, SearchTaskDB,
     OrganizationDB
 )
 from app.db.converters import (
-    violation_to_db, db_to_violation,
-    violation_product_to_db, violation_hazard_to_db,
-    violation_remedy_to_db, violation_image_to_db,
+    product_ban_to_db, db_to_product_ban,
+    product_ban_product_to_db, product_ban_hazard_to_db,
+    product_ban_remedy_to_db, product_ban_image_to_db,
     marketplace_to_db, db_to_marketplace,
     marketplace_listing_to_db, db_to_marketplace_listing,
     investigation_to_db, db_to_investigation,
@@ -108,6 +109,10 @@ async def init_db():
                 session.add(db_config)
                 await session.commit()
                 print("Default agent config initialized")
+            
+            # Initialize default organization for local development
+            if settings.DEBUG:
+                await ensure_default_organization(session)
         except Exception as e:
             await session.rollback()
             print(f"Error initializing database: {e}")
@@ -115,38 +120,38 @@ async def init_db():
 
 
 # Violation operations
-async def get_all_violations(limit: Optional[int] = None, offset: int = 0) -> List[ProductViolation]:
-    """Get all violations."""
+async def get_all_violations(limit: Optional[int] = None, offset: int = 0) -> List[ProductBan]:
+    """Get all product bans (backward compatibility - function name kept for now)."""
     async with AsyncSessionLocal() as session:
-        query = select(ViolationDB).options(
-            selectinload(ViolationDB.products),
-            selectinload(ViolationDB.hazards),
-            selectinload(ViolationDB.remedies),
-            selectinload(ViolationDB.images),
-        ).order_by(ViolationDB.created_at.desc())
+        query = select(ProductBanDB).options(
+            selectinload(ProductBanDB.products),
+            selectinload(ProductBanDB.hazards),
+            selectinload(ProductBanDB.remedies),
+            selectinload(ProductBanDB.images),
+        ).order_by(ProductBanDB.created_at.desc())
         
         if limit:
             query = query.limit(limit).offset(offset)
         
         result = await session.execute(query)
-        db_violations = result.scalars().all()
-        return [db_to_violation(v) for v in db_violations]
+        db_product_bans = result.scalars().all()
+        return [db_to_product_ban(v) for v in db_product_bans]
 
 
-async def get_violation(violation_id: str) -> Optional[ProductViolation]:
-    """Get a specific violation by ID."""
+async def get_violation(violation_id: str) -> Optional[ProductBan]:
+    """Get a specific product ban by ID (backward compatibility - function name kept for now)."""
     async with AsyncSessionLocal() as session:
         result = await session.execute(
-            select(ViolationDB).options(
-                selectinload(ViolationDB.products),
-                selectinload(ViolationDB.hazards),
-                selectinload(ViolationDB.remedies),
-                selectinload(ViolationDB.images),
-            ).where(ViolationDB.violation_id == violation_id)
+            select(ProductBanDB).options(
+                selectinload(ProductBanDB.products),
+                selectinload(ProductBanDB.hazards),
+                selectinload(ProductBanDB.remedies),
+                selectinload(ProductBanDB.images),
+            ).where(ProductBanDB.product_ban_id == violation_id)
         )
-        db_violation = result.scalar_one_or_none()
-        if db_violation:
-            return db_to_violation(db_violation)
+        db_product_ban = result.scalar_one_or_none()
+        if db_product_ban:
+            return db_to_product_ban(db_product_ban)
         return None
 
 
@@ -155,14 +160,14 @@ async def search_violations(
     risk_level: Optional[RiskLevel] = None,
     agency_name: Optional[str] = None,
     country: Optional[str] = None
-) -> List[ProductViolation]:
-    """Search violations by text query and optional filters."""
+) -> List[ProductBan]:
+    """Search product bans by text query and optional filters (backward compatibility - function name kept for now)."""
     async with AsyncSessionLocal() as session:
-        stmt = select(ViolationDB).options(
-            selectinload(ViolationDB.products),
-            selectinload(ViolationDB.hazards),
-            selectinload(ViolationDB.remedies),
-            selectinload(ViolationDB.images),
+        stmt = select(ProductBanDB).options(
+            selectinload(ProductBanDB.products),
+            selectinload(ProductBanDB.hazards),
+            selectinload(ProductBanDB.remedies),
+            selectinload(ProductBanDB.images),
         )
         
         conditions = []
@@ -171,116 +176,116 @@ async def search_violations(
         # Text search
         conditions.append(
             or_(
-                ViolationDB.title.ilike(f"%{query}%"),
-                ViolationDB.description.ilike(f"%{query}%"),
-                ViolationDB.violation_number.ilike(f"%{query}%"),
+                ProductBanDB.title.ilike(f"%{query}%"),
+                ProductBanDB.description.ilike(f"%{query}%"),
+                ProductBanDB.ban_number.ilike(f"%{query}%"),
             )
         )
         
         # Filters
         if risk_level:
-            conditions.append(ViolationDB.risk_level == risk_level)
+            conditions.append(ProductBanDB.risk_level == risk_level)
         if agency_name:
-            conditions.append(ViolationDB.agency_name.ilike(f"%{agency_name}%"))
+            conditions.append(ProductBanDB.agency_name.ilike(f"%{agency_name}%"))
         if country:
-            conditions.append(ViolationDB.country == country)
+            conditions.append(ProductBanDB.country == country)
         
         if conditions:
             stmt = stmt.where(*conditions)
         
         result = await session.execute(stmt)
-        db_violations = result.scalars().all()
+        db_product_bans = result.scalars().all()
         
-        violations = [db_to_violation(v) for v in db_violations]
+        product_bans = [db_to_product_ban(v) for v in db_product_bans]
         
         # Additional product-based filtering
         filtered = []
-        for violation in violations:
-            searchable = f"{violation.title} {violation.description or ''} {violation.violation_number}".lower()
-            for product in violation.products:
+        for product_ban in product_bans:
+            searchable = f"{product_ban.title} {product_ban.description or ''} {product_ban.ban_number}".lower()
+            for product in product_ban.products:
                 searchable += f" {product.name} {product.model_number or ''} {product.manufacturer or ''}".lower()
             
             if query_lower in searchable:
-                filtered.append(violation)
+                filtered.append(product_ban)
         
         return filtered
 
 
-async def add_violation(violation: ProductViolation) -> ProductViolation:
-    """Add a new violation with auto-classification."""
+async def add_violation(product_ban: ProductBan) -> ProductBan:
+    """Add a new product ban with auto-classification (backward compatibility - function name kept for now)."""
     # Auto-classify risk
-    violation = await classify_violation(violation)
+    product_ban = await classify_violation(product_ban)  # TODO: Rename to classify_product_ban
     
     async with AsyncSessionLocal() as session:
         try:
-            # Check if violation already exists
-            existing = await session.get(ViolationDB, violation.violation_id)
+            # Check if product ban already exists
+            existing = await session.get(ProductBanDB, product_ban.product_ban_id)
             if existing:
                 # Update existing
-                db_violation = violation_to_db(violation)
-                for key, value in db_violation.__dict__.items():
-                    if not key.startswith('_') and key != 'violation_id':
+                db_product_ban = product_ban_to_db(product_ban)
+                for key, value in db_product_ban.__dict__.items():
+                    if not key.startswith('_') and key != 'product_ban_id':
                         setattr(existing, key, value)
                 existing.updated_at = datetime.utcnow()
             else:
                 # Create new
-                db_violation = violation_to_db(violation)
-                session.add(db_violation)
+                db_product_ban = product_ban_to_db(product_ban)
+                session.add(db_product_ban)
             
             # Add related objects
             try:
-                for product in violation.products:
-                    db_product = violation_product_to_db(product, violation.violation_id)
+                for product in product_ban.products:
+                    db_product = product_ban_product_to_db(product, product_ban.product_ban_id)
                     session.add(db_product)
             except Exception as e:
-                print(f"[ERROR] Failed to add products for {violation.violation_id}: {e}")
+                print(f"[ERROR] Failed to add products for {product_ban.product_ban_id}: {e}")
                 raise
             
             try:
-                for hazard in violation.hazards:
-                    db_hazard = violation_hazard_to_db(hazard, violation.violation_id)
+                for hazard in product_ban.hazards:
+                    db_hazard = product_ban_hazard_to_db(hazard, product_ban.product_ban_id)
                     session.add(db_hazard)
             except Exception as e:
-                print(f"[ERROR] Failed to add hazards for {violation.violation_id}: {e}")
+                print(f"[ERROR] Failed to add hazards for {product_ban.product_ban_id}: {e}")
                 raise
             
             try:
-                for remedy in violation.remedies:
-                    db_remedy = violation_remedy_to_db(remedy, violation.violation_id)
+                for remedy in product_ban.remedies:
+                    db_remedy = product_ban_remedy_to_db(remedy, product_ban.product_ban_id)
                     session.add(db_remedy)
             except Exception as e:
-                print(f"[ERROR] Failed to add remedies for {violation.violation_id}: {e}")
+                print(f"[ERROR] Failed to add remedies for {product_ban.product_ban_id}: {e}")
                 raise
             
             try:
-                for image in violation.images:
-                    db_image = violation_image_to_db(image, violation.violation_id)
+                for image in product_ban.images:
+                    db_image = product_ban_image_to_db(image, product_ban.product_ban_id)
                     session.add(db_image)
             except Exception as e:
-                print(f"[ERROR] Failed to add images for {violation.violation_id}: {e}")
+                print(f"[ERROR] Failed to add images for {product_ban.product_ban_id}: {e}")
                 raise
             
             await session.commit()
-            await session.refresh(db_violation if not existing else existing)
+            await session.refresh(db_product_ban if not existing else existing)
             
-            return await get_violation(violation.violation_id)
+            return await get_violation(product_ban.product_ban_id)
         except Exception as e:
             await session.rollback()
             import traceback
             error_details = {
-                'violation_id': violation.violation_id,
-                'violation_number': violation.violation_number,
+                'product_ban_id': product_ban.product_ban_id,
+                'ban_number': product_ban.ban_number,
                 'error_type': type(e).__name__,
                 'error_message': str(e),
                 'traceback': traceback.format_exc()
             }
-            print(f"[ERROR] Failed to add violation {violation.violation_id}:")
+            print(f"[ERROR] Failed to add product ban {product_ban.product_ban_id}:")
             print(f"[ERROR] Type: {error_details['error_type']}")
             print(f"[ERROR] Message: {error_details['error_message']}")
             print(f"[ERROR] Traceback:\n{error_details['traceback']}")
-            # Log violation data for debugging (truncated)
-            print(f"[ERROR] Violation data: violation_id={violation.violation_id}, title={violation.title[:50] if violation.title else None}")
-            print(f"[ERROR] Products: {len(violation.products)}, Hazards: {len(violation.hazards)}, Remedies: {len(violation.remedies)}, Images: {len(violation.images)}")
+            # Log product ban data for debugging (truncated)
+            print(f"[ERROR] Product ban data: product_ban_id={product_ban.product_ban_id}, title={product_ban.title[:50] if product_ban.title else None}")
+            print(f"[ERROR] Products: {len(product_ban.products)}, Hazards: {len(product_ban.hazards)}, Remedies: {len(product_ban.remedies)}, Images: {len(product_ban.images)}")
             raise
 
 
@@ -290,31 +295,31 @@ async def delete_violation(violation_id: str) -> bool:
     
     async with AsyncSessionLocal() as session:
         try:
-            # Get violation with all relationships loaded
-            db_violation = await session.get(
-                ViolationDB,
+            # Get product ban with all relationships loaded
+            db_product_ban = await session.get(
+                ProductBanDB,
                 violation_id,
                 options=[
-                    selectinload(ViolationDB.products),
-                    selectinload(ViolationDB.hazards),
-                    selectinload(ViolationDB.remedies),
-                    selectinload(ViolationDB.images),
+                    selectinload(ProductBanDB.products),
+                    selectinload(ProductBanDB.hazards),
+                    selectinload(ProductBanDB.remedies),
+                    selectinload(ProductBanDB.images),
                 ]
             )
             
-            if not db_violation:
+            if not db_product_ban:
                 return False
             
             # Delete associated listings (listings don't have cascade delete)
             listings_result = await session.execute(
-                select(MarketplaceListingDB).where(MarketplaceListingDB.violation_id == violation_id)
+                select(MarketplaceListingDB).where(MarketplaceListingDB.product_ban_id == violation_id)
             )
             listings = listings_result.scalars().all()
             for listing in listings:
                 await session.delete(listing)
             
-            # Delete violation (cascade will handle products, hazards, remedies, images)
-            await session.delete(db_violation)
+            # Delete product ban (cascade will handle products, hazards, remedies, images)
+            await session.delete(db_product_ban)
             
             await session.commit()
             return True
@@ -330,27 +335,27 @@ async def delete_all_violations() -> int:
     
     async with AsyncSessionLocal() as session:
         try:
-            # Get all violation IDs
-            result = await session.execute(select(ViolationDB.violation_id))
-            violation_ids = [row[0] for row in result.all()]
-            count = len(violation_ids)
+            # Get all product ban IDs
+            result = await session.execute(select(ProductBanDB.product_ban_id))
+            product_ban_ids = [row[0] for row in result.all()]
+            count = len(product_ban_ids)
             
             if count == 0:
                 return 0
             
             # Delete all associated listings
             listings_result = await session.execute(
-                select(MarketplaceListingDB).where(MarketplaceListingDB.violation_id.in_(violation_ids))
+                select(MarketplaceListingDB).where(MarketplaceListingDB.product_ban_id.in_(product_ban_ids))
             )
             listings = listings_result.scalars().all()
             for listing in listings:
                 await session.delete(listing)
             
-            # Delete all violations (cascade will handle related data)
-            violations_result = await session.execute(select(ViolationDB))
-            violations = violations_result.scalars().all()
-            for violation in violations:
-                await session.delete(violation)
+            # Delete all product bans (cascade will handle related data)
+            product_bans_result = await session.execute(select(ProductBanDB))
+            product_bans = product_bans_result.scalars().all()
+            for product_ban in product_bans:
+                await session.delete(product_ban)
             
             await session.commit()
             return count
@@ -360,48 +365,48 @@ async def delete_all_violations() -> int:
             raise
 
 
-async def get_violations_by_agency(agency_name: str) -> List[ProductViolation]:
-    """Get all violations from a specific agency."""
+async def get_violations_by_agency(agency_name: str) -> List[ProductBan]:
+    """Get all product bans from a specific agency (backward compatibility - function name kept for now)."""
     async with AsyncSessionLocal() as session:
         result = await session.execute(
-            select(ViolationDB).options(
-                selectinload(ViolationDB.products),
-                selectinload(ViolationDB.hazards),
-                selectinload(ViolationDB.remedies),
-                selectinload(ViolationDB.images),
-            ).where(ViolationDB.agency_name.ilike(f"%{agency_name}%"))
+            select(ProductBanDB).options(
+                selectinload(ProductBanDB.products),
+                selectinload(ProductBanDB.hazards),
+                selectinload(ProductBanDB.remedies),
+                selectinload(ProductBanDB.images),
+            ).where(ProductBanDB.agency_name.ilike(f"%{agency_name}%"))
         )
-        db_violations = result.scalars().all()
-        return [db_to_violation(v) for v in db_violations]
+        db_product_bans = result.scalars().all()
+        return [db_to_product_ban(v) for v in db_product_bans]
 
 
-async def get_violations_by_risk(risk_level: RiskLevel) -> List[ProductViolation]:
-    """Get violations filtered by risk level."""
+async def get_violations_by_risk(risk_level: RiskLevel) -> List[ProductBan]:
+    """Get product bans filtered by risk level (backward compatibility - function name kept for now)."""
     async with AsyncSessionLocal() as session:
         result = await session.execute(
-            select(ViolationDB).options(
-                selectinload(ViolationDB.products),
-                selectinload(ViolationDB.hazards),
-                selectinload(ViolationDB.remedies),
-                selectinload(ViolationDB.images),
-            ).where(ViolationDB.risk_level == risk_level)
+            select(ProductBanDB).options(
+                selectinload(ProductBanDB.products),
+                selectinload(ProductBanDB.hazards),
+                selectinload(ProductBanDB.remedies),
+                selectinload(ProductBanDB.images),
+            ).where(ProductBanDB.risk_level == risk_level)
         )
-        db_violations = result.scalars().all()
-        return [db_to_violation(v) for v in db_violations]
+        db_product_bans = result.scalars().all()
+        return [db_to_product_ban(v) for v in db_product_bans]
 
 
 async def get_violations_risk_summary() -> Dict[str, int]:
-    """Get count of violations by risk level."""
+    """Get count of product bans by risk level (backward compatibility - function name kept for now)."""
     async with AsyncSessionLocal() as session:
         result = await session.execute(
             select(
-                ViolationDB.risk_level,
-                func.count(ViolationDB.violation_id).label('count')
-            ).group_by(ViolationDB.risk_level)
+                ProductBanDB.risk_level,
+                func.count(ProductBanDB.product_ban_id).label('count')
+            ).group_by(ProductBanDB.risk_level)
         )
         counts = {row.risk_level.value: row.count for row in result}
         
-        total_result = await session.execute(select(func.count(ViolationDB.violation_id)))
+        total_result = await session.execute(select(func.count(ProductBanDB.product_ban_id)))
         total = total_result.scalar() or 0
         
         return {
@@ -508,7 +513,7 @@ async def save_listing(listing: MarketplaceListing) -> MarketplaceListing:
                 if listing.match_score > existing.match_score:
                     existing.match_score = listing.match_score
                     existing.match_reasons = listing.match_reasons
-                    existing.violation_id = listing.violation_id or listing.recall_id
+                    existing.product_ban_id = listing.violation_id or listing.recall_id  # Support both old and new field names
                 existing.updated_at = datetime.utcnow()
                 await session.commit()
                 await session.refresh(existing)
@@ -526,11 +531,11 @@ async def save_listing(listing: MarketplaceListing) -> MarketplaceListing:
 
 
 async def get_listings_for_violation(violation_id: str) -> List[MarketplaceListing]:
-    """Get all listings found for a violation."""
+    """Get all listings found for a product ban (backward compatibility - function name kept for now)."""
     async with AsyncSessionLocal() as session:
         result = await session.execute(
             select(MarketplaceListingDB).where(
-                MarketplaceListingDB.violation_id == violation_id
+                MarketplaceListingDB.product_ban_id == violation_id
             )
         )
         db_listings = result.scalars().all()
@@ -954,13 +959,13 @@ async def get_all_recalls() -> List[Recall]:
     from app.models.recall import Recall
     recalls = []
     for v in violations:
-        # Simple conversion - in practice, violations and recalls are the same
+        # Simple conversion - in practice, product bans and recalls are the same
         recall = Recall(
-            recall_id=v.violation_id,
-            recall_number=v.violation_number,
+            recall_id=v.product_ban_id,
+            recall_number=v.ban_number,
             title=v.title,
             description=v.description or "",
-            recall_date=v.violation_date,
+            recall_date=v.ban_date,
             units_sold=v.units_affected,
             injuries=v.injuries,
             deaths=v.deaths,
@@ -1038,49 +1043,49 @@ async def search_recalls(query: str, risk_level: Optional[RiskLevel] = None) -> 
 
 async def add_recall(recall: Recall) -> Recall:
     """Add a new recall (backward compatibility)."""
-    # Convert recall to violation
-    violation = ProductViolation(
-        violation_id=recall.recall_id,
-        violation_number=recall.recall_number,
+    # Convert recall to product ban
+    product_ban = ProductBan(
+        product_ban_id=recall.recall_id,
+        ban_number=recall.recall_number,
         title=recall.title,
         url=recall.source_url or "",
         agency_name=recall.source or "",
         description=recall.description,
-        violation_date=recall.recall_date,
+        ban_date=recall.recall_date,
         units_affected=recall.units_sold,
         injuries=recall.injuries,
         deaths=recall.deaths,
         incidents=recall.incidents,
-        products=[ViolationProduct(**p.model_dump()) for p in recall.products],
-        images=[ViolationImage(**i.model_dump()) for i in recall.images],
-        hazards=[ViolationHazard(**h.model_dump()) for h in recall.hazards],
-        remedies=[ViolationRemedy(**r.model_dump()) for r in recall.remedies],
+        products=[ProductBanProduct(**p.model_dump()) for p in recall.products],
+        images=[ProductBanImage(**i.model_dump()) for i in recall.images],
+        hazards=[ProductBanHazard(**h.model_dump()) for h in recall.hazards],
+        remedies=[ProductBanRemedy(**r.model_dump()) for r in recall.remedies],
         risk_level=recall.risk_level,
         risk_score=recall.risk_score,
     )
     
-    violation = await add_violation(violation)
+    product_ban = await add_violation(product_ban)
     
     # Convert back to recall
     from app.models.recall import Recall, RecallProduct, RecallImage, RecallHazard, RecallRemedy
     return Recall(
-        recall_id=violation.violation_id,
-        recall_number=violation.violation_number,
-        title=violation.title,
-        description=violation.description or "",
-        recall_date=violation.violation_date,
-        units_sold=violation.units_affected,
-        injuries=violation.injuries,
-        deaths=violation.deaths,
-        incidents=violation.incidents,
-        products=[RecallProduct(**p.model_dump()) for p in violation.products],
-        images=[RecallImage(**i.model_dump()) for i in violation.images],
-        hazards=[RecallHazard(**h.model_dump()) for h in violation.hazards],
-        remedies=[RecallRemedy(**r.model_dump()) for r in violation.remedies],
-        source=violation.agency_name,
-        source_url=violation.url,
-        risk_level=violation.risk_level,
-        risk_score=violation.risk_score,
+        recall_id=product_ban.product_ban_id,
+        recall_number=product_ban.ban_number,
+        title=product_ban.title,
+        description=product_ban.description or "",
+        recall_date=product_ban.ban_date,
+        units_sold=product_ban.units_affected,
+        injuries=product_ban.injuries,
+        deaths=product_ban.deaths,
+        incidents=product_ban.incidents,
+        products=[RecallProduct(**p.model_dump()) for p in product_ban.products],
+        images=[RecallImage(**i.model_dump()) for i in product_ban.images],
+        hazards=[RecallHazard(**h.model_dump()) for h in product_ban.hazards],
+        remedies=[RecallRemedy(**r.model_dump()) for r in product_ban.remedies],
+        source=product_ban.agency_name,
+        source_url=product_ban.url,
+        risk_level=product_ban.risk_level,
+        risk_score=product_ban.risk_score,
     )
 
 
@@ -1092,11 +1097,11 @@ async def get_recalls_by_risk(risk_level: RiskLevel) -> List[Recall]:
     recalls = []
     for v in violations:
         recall = Recall(
-            recall_id=v.violation_id,
-            recall_number=v.violation_number,
+            recall_id=v.product_ban_id,
+            recall_number=v.ban_number,
             title=v.title,
             description=v.description or "",
-            recall_date=v.violation_date,
+            recall_date=v.ban_date,
             units_sold=v.units_affected,
             injuries=v.injuries,
             deaths=v.deaths,
@@ -1151,11 +1156,11 @@ async def load_recalls_from_json():
     await load_violations_from_json()
 
 
-def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductViolation]:
-    """Convert CPSC recall data to a ProductViolation."""
+def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductBan]:
+    """Convert CPSC recall data to a ProductBan."""
     try:
         recall_number = data.get('RecallNumber', data.get('recallNumber', f'RECALL-{index}'))
-        violation_id = f"cpsc-{recall_number}"
+        product_ban_id = f"cpsc-{recall_number}"
         
         # Parse products
         products = []
@@ -1163,7 +1168,7 @@ def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductViola
         if isinstance(products_data, list):
             for p in products_data:
                 if isinstance(p, dict):
-                    products.append(ViolationProduct(
+                    products.append(ProductBanProduct(
                         name=p.get('Name', p.get('name', 'Unknown Product')),
                         description=p.get('Description', p.get('description', '')),
                         model_number=p.get('ModelNumber', p.get('model', '')),
@@ -1179,9 +1184,9 @@ def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductViola
                 if isinstance(img, dict):
                     url = img.get('URL', img.get('url', ''))
                     if url:
-                        images.append(ViolationImage(url=url))
+                        images.append(ProductBanImage(url=url))
                 elif isinstance(img, str):
-                    images.append(ViolationImage(url=img))
+                    images.append(ProductBanImage(url=img))
         
         # Parse hazards
         hazards = []
@@ -1189,12 +1194,12 @@ def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductViola
         if isinstance(hazard_data, list):
             for h in hazard_data:
                 if isinstance(h, dict):
-                    hazards.append(ViolationHazard(
+                    hazards.append(ProductBanHazard(
                         description=h.get('Name', h.get('description', '')),
                         hazard_type=h.get('HazardType', '')
                     ))
                 elif isinstance(h, str):
-                    hazards.append(ViolationHazard(description=h))
+                    hazards.append(ProductBanHazard(description=h))
         
         # Parse remedies
         remedies = []
@@ -1202,21 +1207,21 @@ def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductViola
         if isinstance(remedy_data, list):
             for r in remedy_data:
                 if isinstance(r, dict):
-                    remedies.append(ViolationRemedy(
+                    remedies.append(ProductBanRemedy(
                         description=r.get('Name', r.get('description', '')),
                         remedy_type=r.get('RemedyType', '')
                     ))
         
         # Parse date
         date_str = data.get('RecallDate', data.get('recallDate', ''))
-        violation_date = datetime.now()
+        ban_date = datetime.now()
         if date_str:
             try:
-                violation_date = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+                ban_date = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
             except:
                 try:
                     from dateutil import parser
-                    violation_date = parser.parse(date_str)
+                    ban_date = parser.parse(date_str)
                 except:
                     pass
         
@@ -1240,12 +1245,12 @@ def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductViola
         if not url:
             url = f"https://www.cpsc.gov/Recalls/{recall_number}"
         
-        return ProductViolation(
-            violation_id=violation_id,
-            violation_number=recall_number,
+        return ProductBan(
+            product_ban_id=product_ban_id,
+            ban_number=recall_number,
             title=title,
             description=data.get('Description', data.get('description', '')),
-            violation_date=violation_date,
+            ban_date=ban_date,
             units_affected=safe_int(data.get('NumberOfUnits', data.get('unitsAffected'))),
             injuries=safe_int(data.get('Injuries', data.get('injuries'))),
             deaths=safe_int(data.get('Deaths', data.get('deaths'))),
@@ -1257,7 +1262,7 @@ def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductViola
             agency_name="Consumer Product Safety Commission",
             agency_acronym="CPSC",
             url=url,
-            violation_type=ViolationType.RECALL,
+            ban_type=BanType.RECALL,
         )
         
     except Exception as e:
@@ -1266,6 +1271,43 @@ def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductViola
 
 
 # Organization service functions
+async def ensure_default_organization(session: AsyncSession):
+    """Ensure a default organization exists for local development."""
+    try:
+        # Check if any organization exists
+        result = await session.execute(select(OrganizationDB).limit(1))
+        existing = result.scalar_one_or_none()
+        
+        if not existing:
+            # Create a default development organization
+            org_id = f"{OrganizationType.REGULATORY_AGENCY.value}-dev-{uuid.uuid4().hex[:8]}"
+            default_org = Organization(
+                organization_id=org_id,
+                organization_type=OrganizationType.REGULATORY_AGENCY,
+                name="Development Organization",
+                legal_name="Development Organization",
+                acronym="DEV",
+                contact_email="dev@localhost",
+                contact_name="Development Team",
+                country="US",
+                status=OrganizationStatus.ACTIVE,
+                verified=True,
+                import_methods=["file_upload", "api"],
+                violations_count=0,
+                voluntary_recalls_count=0,
+                joint_recalls_count=0,
+            )
+            db_org = organization_to_db(default_org)
+            session.add(db_org)
+            await session.commit()
+            print(f"Default development organization created: {org_id}")
+        else:
+            print(f"Organization already exists: {existing.organization_id}")
+    except Exception as e:
+        print(f"Error ensuring default organization: {e}")
+        # Don't raise - this is optional initialization
+
+
 async def get_organizations(
     organization_type: Optional[OrganizationType] = None,
     status: Optional[OrganizationStatus] = None,

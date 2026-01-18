@@ -1,6 +1,6 @@
 """
-Product Violation data models.
-Generic model for violations from any regulatory agency.
+Product Ban data models.
+Generic model for banned products from any regulatory agency.
 Agencies sign up and define their own metadata structure.
 """
 
@@ -10,16 +10,19 @@ from datetime import datetime
 from enum import Enum
 
 
-class ViolationType(str, Enum):
-    """Type of violation."""
+class BanType(str, Enum):
+    """Type of product ban."""
     RECALL = "recall"
     WARNING = "warning"
     ADVISORY = "advisory"
     ALERT = "alert"
     NOTICE = "notice"
-    VIOLATION = "violation"
+    BAN = "ban"
     IMPORT_ALERT = "import_alert"
     SAFETY_ADVISORY = "safety_advisory"
+    
+    # Alias for backward compatibility
+    ViolationType = "violation"  # Deprecated, use BAN
 
 
 class RiskLevel(str, Enum):
@@ -29,15 +32,15 @@ class RiskLevel(str, Enum):
     LOW = "LOW"
 
 
-class ViolationImage(BaseModel):
-    """Image associated with a violation."""
+class ProductBanImage(BaseModel):
+    """Image associated with a product ban."""
     url: str
     caption: Optional[str] = None
     alt_text: Optional[str] = None
 
 
-class ViolationProduct(BaseModel):
-    """Product information from a violation."""
+class ProductBanProduct(BaseModel):
+    """Product information from a product ban."""
     name: str
     description: Optional[str] = None
     model_number: Optional[str] = None
@@ -58,35 +61,35 @@ class ViolationProduct(BaseModel):
     product_metadata: Dict[str, Any] = Field(default_factory=dict, description="Agency-specific product fields")
 
 
-class ViolationHazard(BaseModel):
-    """Hazard/violation information."""
+class ProductBanHazard(BaseModel):
+    """Hazard/product ban information."""
     description: str
     hazard_type: Optional[str] = None
     severity: Optional[str] = None  # For FDA/USDA: Class I, II, III
 
 
-class ViolationRemedy(BaseModel):
+class ProductBanRemedy(BaseModel):
     """Remedy/recommendation information."""
     description: str
     remedy_type: Optional[str] = None
     action_required: Optional[str] = None
 
 
-class ProductViolation(BaseModel):
+class ProductBan(BaseModel):
     """
-    Generic product violation record.
-    Core attributes common to all violations, with flexible metadata for agency-specific data.
+    Generic product ban record.
+    Core attributes common to all banned products, with flexible metadata for agency-specific data.
     """
-    violation_id: str = Field(..., description="Unique violation identifier (e.g., CPSC-26156, FDA-2024-123)")
+    product_ban_id: str = Field(..., description="Unique product ban identifier (e.g., CPSC-26156, FDA-2024-123)")
     
     # Core required attributes
-    violation_number: str = Field(..., description="Violation identifier (can be recall number, statute number, press release number, etc.)")
-    title: str = Field(..., description="Title of the violation/recall/alert")
-    url: str = Field(..., description="URL to the violation description on the agency's website")
+    ban_number: str = Field(..., description="Product ban identifier (can be recall number, statute number, press release number, etc.)")
+    title: str = Field(..., description="Title of the product ban/recall/alert")
+    url: str = Field(..., description="URL to the product ban description on the agency's website")
     
     # Organization information
     # Primary organization (required) - can be agency or company
-    organization_name: str = Field(..., description="Name of the organization issuing the violation (agency or company)")
+    organization_name: str = Field(..., description="Name of the organization issuing the product ban (agency or company)")
     organization_id: Optional[str] = Field(None, description="Internal organization ID (if organization has an account)")
     organization_type: Optional[str] = Field(None, description="Type: 'regulatory_agency' or 'company'")
     
@@ -102,15 +105,15 @@ class ProductViolation(BaseModel):
     is_joint_recall: bool = Field(False, description="True if this is a joint recall issued by both organizations")
     
     # Optional core attributes
-    description: Optional[str] = Field(None, description="Description of the violation")
-    violation_date: Optional[datetime] = Field(None, description="Date violation was issued")
+    description: Optional[str] = Field(None, description="Description of the product ban")
+    ban_date: Optional[datetime] = Field(None, description="Date product ban was issued")
     
     # Location
     country: Optional[str] = Field(None, description="Country/region code (ISO 3166-1 alpha-2, e.g., 'US', 'CA', 'GB', 'AU')")
     region: Optional[str] = Field(None, description="Region (e.g., 'North America', 'EU', 'APAC')")
     
-    # Violation type
-    violation_type: ViolationType = ViolationType.RECALL
+    # Product ban type
+    ban_type: BanType = BanType.RECALL
     
     # Classification
     risk_level: RiskLevel = RiskLevel.LOW
@@ -124,14 +127,14 @@ class ProductViolation(BaseModel):
     illnesses: Optional[int] = None  # For food/drug violations
     
     # Product info
-    products: List[ViolationProduct] = []
+    products: List[ProductBanProduct] = []
     
-    # Violation details
-    hazards: List[ViolationHazard] = []
-    remedies: List[ViolationRemedy] = []
+    # Product ban details
+    hazards: List[ProductBanHazard] = []
+    remedies: List[ProductBanRemedy] = []
     
     # Media
-    images: List[ViolationImage] = []
+    images: List[ProductBanImage] = []
     
     # Source information
     source_reference: Optional[str] = None  # Agency-specific reference ID
@@ -151,24 +154,24 @@ class ProductViolation(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
     @property
-    def primary_product(self) -> Optional[ViolationProduct]:
+    def primary_product(self) -> Optional[ProductBanProduct]:
         """
         Get the primary (first) product for display purposes.
-        Most violations have one product, so this is a convenience method.
+        Most product bans have one product, so this is a convenience method.
         """
         return self.products[0] if self.products else None
     
     @property
     def is_single_product(self) -> bool:
-        """Check if this violation has exactly one product (common case)."""
+        """Check if this product ban has exactly one product (common case)."""
         return len(self.products) == 1
     
     @property
     def product_count(self) -> int:
-        """Get the number of products in this violation."""
+        """Get the number of products in this product ban."""
         return len(self.products)
     
-    def get_product_by_name(self, name: str) -> Optional[ViolationProduct]:
+    def get_product_by_name(self, name: str) -> Optional[ProductBanProduct]:
         """Get a product by name (case-insensitive)."""
         name_lower = name.lower()
         for product in self.products:
@@ -180,12 +183,12 @@ class ProductViolation(BaseModel):
         from_attributes = True
 
 
-class ViolationCreate(BaseModel):
-    """Schema for creating a new violation."""
+class ProductBanCreate(BaseModel):
+    """Schema for creating a new product ban."""
     # Required core attributes
-    violation_number: str = Field(..., description="Violation identifier (recall number, statute number, press release, etc.)")
-    title: str = Field(..., description="Title of the violation")
-    url: str = Field(..., description="URL to violation description")
+    ban_number: str = Field(..., description="Product ban identifier (recall number, statute number, press release, etc.)")
+    title: str = Field(..., description="Title of the product ban")
+    url: str = Field(..., description="URL to product ban description")
     
     # Organization information
     organization_name: str = Field(..., description="Name of the organization (agency or company)")
@@ -205,8 +208,8 @@ class ViolationCreate(BaseModel):
     
     # Optional attributes
     description: Optional[str] = None
-    violation_date: Optional[datetime] = None
-    violation_type: ViolationType = ViolationType.RECALL
+    ban_date: Optional[datetime] = None
+    ban_type: BanType = BanType.RECALL
     units_affected: Optional[int] = None
     injuries: int = 0
     deaths: int = 0
@@ -216,38 +219,48 @@ class ViolationCreate(BaseModel):
     agency_metadata: Dict[str, Any] = Field(default_factory=dict)
 
 
-class ViolationSummary(BaseModel):
-    """Lightweight violation summary for lists."""
-    violation_id: str
-    violation_number: str
+class ProductBanSummary(BaseModel):
+    """Lightweight product ban summary for lists."""
+    product_ban_id: str
+    ban_number: str
     title: str
     url: str
     agency_name: str
     agency_acronym: Optional[str] = None
-    violation_type: ViolationType
+    ban_type: BanType
     risk_level: RiskLevel
     risk_score: float
-    violation_date: Optional[datetime] = None
+    ban_date: Optional[datetime] = None
     injuries: int
     deaths: int
     country: Optional[str] = None
     image_url: Optional[str] = None
 
 
-class ViolationSearchResult(BaseModel):
+class ProductBanSearchResult(BaseModel):
     """Search result with match information."""
-    violation: ViolationSummary
+    product_ban: ProductBanSummary
     relevance_score: float = 1.0
     match_highlights: List[str] = []
 
 
 # Backward compatibility aliases (for gradual migration)
-Recall = ProductViolation
-RecallImage = ViolationImage
-RecallProduct = ViolationProduct
-RecallHazard = ViolationHazard
-RecallRemedy = ViolationRemedy
-RecallSummary = ViolationSummary
-RecallCreate = ViolationCreate
-RecallSearchResult = ViolationSearchResult
+# Note: These aliases maintain compatibility with old code during migration
+ViolationType = BanType  # Deprecated, use BanType
+ViolationImage = ProductBanImage  # Deprecated, use ProductBanImage
+ViolationProduct = ProductBanProduct  # Deprecated, use ProductBanProduct
+ViolationHazard = ProductBanHazard  # Deprecated, use ProductBanHazard
+ViolationRemedy = ProductBanRemedy  # Deprecated, use ProductBanRemedy
+ProductViolation = ProductBan  # Deprecated, use ProductBan
+ViolationSummary = ProductBanSummary  # Deprecated, use ProductBanSummary
+ViolationCreate = ProductBanCreate  # Deprecated, use ProductBanCreate
+ViolationSearchResult = ProductBanSearchResult  # Deprecated, use ProductBanSearchResult
+Recall = ProductBan  # Deprecated, use ProductBan
+RecallImage = ProductBanImage  # Deprecated, use ProductBanImage
+RecallProduct = ProductBanProduct  # Deprecated, use ProductBanProduct
+RecallHazard = ProductBanHazard  # Deprecated, use ProductBanHazard
+RecallRemedy = ProductBanRemedy  # Deprecated, use ProductBanRemedy
+RecallSummary = ProductBanSummary  # Deprecated, use ProductBanSummary
+RecallCreate = ProductBanCreate  # Deprecated, use ProductBanCreate
+RecallSearchResult = ProductBanSearchResult  # Deprecated, use ProductBanSearchResult
 

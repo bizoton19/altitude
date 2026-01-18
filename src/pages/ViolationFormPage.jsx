@@ -2,7 +2,7 @@
  * ViolationFormPage - Create new violation
  */
 import { useNavigate } from 'react-router-dom'
-import ViolationForm from '../components/ViolationForm'
+import ProductBanForm from '../components/ProductBanForm'
 
 function ViolationFormPage() {
   const navigate = useNavigate()
@@ -19,7 +19,7 @@ function ViolationFormPage() {
 
   return (
     <div className="content-area">
-      <ViolationForm
+      <ProductBanForm
         onSuccess={handleSuccess}
         onCancel={handleCancel}
       />

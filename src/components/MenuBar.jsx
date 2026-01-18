@@ -15,7 +15,7 @@ function MenuBar({
   const menuItems = [
     {
       id: 'violations',
-      label: 'Violations',
+      label: 'Product Bans',
       icon: '📋',
       onClick: onCreateViolation,
       active: activeView === 'violations' || activeView === 'violation-form',

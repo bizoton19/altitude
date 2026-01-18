@@ -1,9 +1,9 @@
 /**
- * ViolationDetailPage - Single violation detail view
+ * ViolationDetailPage - Single product ban detail view
  */
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import RecallDetailView from '../components/RecallDetailView'
+import ProductBanDetailView from '../components/ProductBanDetailView'
 import * as api from '../services/api'
 
 function ViolationDetailPage() {
@@ -33,7 +33,8 @@ function ViolationDetailPage() {
   }
 
   const handleDelete = async () => {
-    if (!window.confirm(`Are you sure you want to delete violation "${violation?.violation_id}"? This will also delete all associated products, hazards, remedies, images, and listings. This action cannot be undone.`)) {
+    const productBanId = violation?.product_ban_id || violation?.violation_id
+    if (!window.confirm(`Are you sure you want to delete product ban "${productBanId}"? This will also delete all associated products, hazards, remedies, images, and listings. This action cannot be undone.`)) {
       return
     }
 
@@ -41,7 +42,7 @@ function ViolationDetailPage() {
       await api.deleteViolation(id)
       navigate('/violations')
     } catch (err) {
-      setError(err.message || 'Failed to delete violation')
+      setError(err.message || 'Failed to delete product ban')
     }
   }
 
@@ -67,8 +68,8 @@ function ViolationDetailPage() {
 
   return (
     <div className="content-area">
-      <RecallDetailView
-        recall={violation}
+      <ProductBanDetailView
+        productBan={violation}
         onClose={() => navigate('/violations')}
         onInvestigationClick={handleInvestigationClick}
         onDelete={handleDelete}

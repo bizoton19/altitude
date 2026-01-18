@@ -7,10 +7,10 @@ import InvestigationSummaryCard from './InvestigationSummaryCard'
 import * as api from '../services/api'
 
 /**
- * RecallDetailView Component
- * Full detail view for a selected recall with image gallery and marketplace listings
+ * ProductBanDetailView Component
+ * Full detail view for a selected product ban with image gallery and marketplace listings
  */
-function RecallDetailView({ recall, onClose, onInvestigationClick, onDelete }) {
+function ProductBanDetailView({ productBan, onClose, onInvestigationClick, onDelete }) {
   const [listings, setListings] = useState([])
   const [loadingListings, setLoadingListings] = useState(false)
   const [searchingMarketplaces, setSearchingMarketplaces] = useState(false)
@@ -18,12 +18,12 @@ function RecallDetailView({ recall, onClose, onInvestigationClick, onDelete }) {
   const [loadingInvestigations, setLoadingInvestigations] = useState(false)
 
   // Helper to get value from either format (API snake_case or JSON PascalCase)
-  const get = (snakeCase, pascalCase) => recall[snakeCase] || recall[pascalCase]
+  const get = (snakeCase, pascalCase) => productBan[snakeCase] || productBan[pascalCase]
 
-  const violationId = get('violation_id', 'ViolationID') || get('recall_id', 'RecallID') // Support both for compatibility
+  const violationId = get('product_ban_id', 'ProductBanID') || get('violation_id', 'ViolationID') || get('recall_id', 'RecallID') // Support both for compatibility
   const title = get('title', 'Title')
-  const violationNumber = get('violation_number', 'ViolationNumber') || get('recall_number', 'RecallNumber')
-  const violationDate = get('violation_date', 'ViolationDate') || get('recall_date', 'RecallDate')
+  const violationNumber = get('ban_number', 'BanNumber') || get('violation_number', 'ViolationNumber') || get('recall_number', 'RecallNumber')
+  const violationDate = get('ban_date', 'BanDate') || get('violation_date', 'ViolationDate') || get('recall_date', 'RecallDate')
   const description = get('description', 'Description')
   const riskLevel = get('risk_level', 'riskLevel')
   const sourceUrl = get('url', 'URL') || get('source_url', 'URL')
@@ -89,7 +89,7 @@ function RecallDetailView({ recall, onClose, onInvestigationClick, onDelete }) {
     }
   }
 
-  if (!recall) return null
+  if (!productBan) return null
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A'
@@ -186,10 +186,10 @@ function RecallDetailView({ recall, onClose, onInvestigationClick, onDelete }) {
         <ImageGallery images={images} />
       )}
 
-      {/* Recall Details */}
+      {/* Product Ban Details */}
       <div className="glass-panel" style={{ padding: '20px', marginBottom: '16px' }}>
         <h3 style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-          Violation Details
+          Product Ban Details
         </h3>
         
         <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', marginBottom: '16px' }}>
@@ -311,11 +311,11 @@ function RecallDetailView({ recall, onClose, onInvestigationClick, onDelete }) {
 
       {/* Export Panel */}
       <ExportPanel 
-        recall={recall}
+        recall={productBan}
         marketplaceResults={listings}
       />
     </div>
   )
 }
 
-export default RecallDetailView
+export default ProductBanDetailView

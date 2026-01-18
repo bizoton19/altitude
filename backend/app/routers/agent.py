@@ -16,7 +16,7 @@ from app.models.risk_classification import (
     RiskClassificationConfig,
     get_default_risk_classification_config
 )
-from app.models.violation import ProductViolation
+from app.models.product_ban import ProductBan
 from app.skills.risk_classifier import classify_violation
 from app.services import database as db
 from app.services.credential_encryption import credential_encryption
@@ -252,15 +252,15 @@ async def update_risk_classification_config(updates: RiskClassificationConfig):
 
 
 @router.post("/skills/risk_classifier/test")
-async def test_risk_classification(violation: ProductViolation):
-    """Test risk classification against a sample violation."""
+async def test_risk_classification(product_ban: ProductBan):
+    """Test risk classification against a sample product ban."""
     try:
-        classified = await classify_violation(violation)
+        classified = await classify_violation(product_ban)
         return {
-            "violation_id": violation.violation_id,
+            "product_ban_id": product_ban.product_ban_id,
             "risk_level": classified.risk_level.value,
             "risk_score": classified.risk_score,
-            "original_violation": violation.model_dump()
+            "original_product_ban": product_ban.model_dump()
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error classifying violation: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error classifying product ban: {str(e)}")

@@ -1,7 +1,18 @@
 # Data models
-# New violation models (multi-agency support)
-from app.models.violation import (
-    ProductViolation,
+# Product ban models (multi-agency support)
+from app.models.product_ban import (
+    ProductBan,
+    ProductBanImage,
+    ProductBanProduct,
+    ProductBanHazard,
+    ProductBanRemedy,
+    ProductBanSummary,
+    ProductBanCreate,
+    ProductBanSearchResult,
+    BanType,
+    RiskLevel,
+    # Backward compatibility aliases
+    ViolationType,
     ViolationImage,
     ViolationProduct,
     ViolationHazard,
@@ -9,9 +20,7 @@ from app.models.violation import (
     ViolationSummary,
     ViolationCreate,
     ViolationSearchResult,
-    ViolationType,
-    RiskLevel,
-    # Backward compatibility aliases
+    ProductViolation,
     Recall,
     RecallImage,
     RecallProduct,

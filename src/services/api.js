@@ -36,31 +36,40 @@ async function fetchAPI(endpoint, options = {}) {
 }
 
 // ============================================
-// VIOLATIONS API (Primary)
+// PRODUCT BANS API (Primary)
 // ============================================
 
 /**
- * Get all violations with optional filtering
+ * Get all product bans with optional filtering
  */
-export async function getViolations({ riskLevel, agencyName, country, violationType, limit = 50, offset = 0 } = {}) {
+export async function getViolations({ riskLevel, agencyName, country, banType, limit = 50, offset = 0 } = {}) {
   const params = new URLSearchParams({ limit, offset });
   if (riskLevel) params.append('risk_level', riskLevel);
   if (agencyName) params.append('agency_name', agencyName);
   if (country) params.append('country', country);
-  if (violationType) params.append('violation_type', violationType);
+  if (banType) params.append('ban_type', banType);
   
-  return fetchAPI(`/violations/?${params}`);
+  // Try new endpoint first, fallback to old for backward compatibility
+  try {
+    return await fetchAPI(`/product-bans/?${params}`);
+  } catch {
+    return fetchAPI(`/violations/?${params}`);
+  }
 }
 
 /**
- * Get risk summary (counts by level) for violations
+ * Get risk summary (counts by level) for product bans
  */
 export async function getViolationsRiskSummary() {
-  return fetchAPI('/violations/summary');
+  try {
+    return await fetchAPI('/product-bans/summary');
+  } catch {
+    return fetchAPI('/violations/summary');
+  }
 }
 
 /**
- * Search violations by query
+ * Search product bans by query
  */
 export async function searchViolations(query, riskLevel = null, agencyName = null, country = null) {
   const params = new URLSearchParams({ q: query });
@@ -68,66 +77,108 @@ export async function searchViolations(query, riskLevel = null, agencyName = nul
   if (agencyName) params.append('agency_name', agencyName);
   if (country) params.append('country', country);
   
-  return fetchAPI(`/violations/search?${params}`);
+  try {
+    return await fetchAPI(`/product-bans/search?${params}`);
+  } catch {
+    return fetchAPI(`/violations/search?${params}`);
+  }
 }
 
 /**
- * Get a specific violation by ID
+ * Get a specific product ban by ID
  */
 export async function getViolation(violationId) {
-  return fetchAPI(`/violations/${violationId}`);
+  try {
+    return await fetchAPI(`/product-bans/${violationId}`);
+  } catch {
+    return fetchAPI(`/violations/${violationId}`);
+  }
 }
 
 /**
- * Get listings found for a violation
+ * Get listings found for a product ban
  */
 export async function getViolationListings(violationId) {
-  return fetchAPI(`/violations/${violationId}/listings`);
+  try {
+    return await fetchAPI(`/product-bans/${violationId}/listings`);
+  } catch {
+    return fetchAPI(`/violations/${violationId}/listings`);
+  }
 }
 
 /**
- * Delete a single violation
+ * Delete a single product ban
  */
 export async function deleteViolation(violationId) {
-  return fetchAPI(`/violations/${violationId}`, {
-    method: 'DELETE',
-  });
+  try {
+    return await fetchAPI(`/product-bans/${violationId}`, {
+      method: 'DELETE',
+    });
+  } catch {
+    return fetchAPI(`/violations/${violationId}`, {
+      method: 'DELETE',
+    });
+  }
 }
 
 /**
- * Delete all violations (bulk delete)
+ * Delete all product bans (bulk delete)
  */
 export async function deleteAllViolations() {
-  return fetchAPI('/violations', {
-    method: 'DELETE',
-  });
+  try {
+    return await fetchAPI('/product-bans', {
+      method: 'DELETE',
+    });
+  } catch {
+    return fetchAPI('/violations', {
+      method: 'DELETE',
+    });
+  }
 }
 
 /**
- * Get violations by agency
+ * Get product bans by agency
  */
 export async function getViolationsByAgency(agencyName) {
-  return fetchAPI(`/violations/by-agency/${agencyName}`);
+  try {
+    return await fetchAPI(`/product-bans/by-agency/${agencyName}`);
+  } catch {
+    return fetchAPI(`/violations/by-agency/${agencyName}`);
+  }
 }
 
 /**
  * Classify risk for given parameters
  */
 export async function classifyViolationRisk(params) {
-  return fetchAPI('/violations/classify', {
-    method: 'POST',
-    body: JSON.stringify(params),
-  });
+  try {
+    return await fetchAPI('/product-bans/classify', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  } catch {
+    return fetchAPI('/violations/classify', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  }
 }
 
 /**
- * Create a new violation
+ * Create a new product ban
  */
 export async function createViolation(violationData) {
-  return fetchAPI('/violations/', {
-    method: 'POST',
-    body: JSON.stringify(violationData),
-  });
+  try {
+    return await fetchAPI('/product-bans/', {
+      method: 'POST',
+      body: JSON.stringify(violationData),
+    });
+  } catch {
+    return fetchAPI('/violations/', {
+      method: 'POST',
+      body: JSON.stringify(violationData),
+    });
+  }
 }
 
 // ============================================
@@ -196,9 +247,10 @@ export async function getInvestigationListings(investigationId) {
 }
 
 /**
- * Get investigations for a specific violation
+ * Get investigations for a specific product ban
  */
 export async function getInvestigationsByViolation(violationId) {
+  // Backward compatibility - endpoint may still use violation_id
   return fetchAPI(`/investigations/by-violation/${violationId}`);
 }
 
@@ -557,6 +609,7 @@ export async function importListingFromExtension(formData) {
  * Preview file and get schema information for mapping
  */
 export async function previewViolationsFile(formData) {
+  // Backward compatibility - endpoint still uses /violations/ path
   return fetchAPI('/imports/violations/file/preview', {
     method: 'POST',
     body: formData,
@@ -564,13 +617,51 @@ export async function previewViolationsFile(formData) {
 }
 
 /**
- * Import violations from file (CSV or JSON)
+ * Import product bans from file (CSV or JSON)
  */
 export async function importViolationsFromFile(formData) {
+  // Backward compatibility - endpoint still uses /violations/ path
   return fetchAPI('/imports/violations/file', {
     method: 'POST',
     body: formData,
   });
+}
+
+/**
+ * Import product bans from REST API endpoint (manual API import)
+ */
+export async function importProductBansFromAPI(requestData) {
+  // Backend endpoint uses /violations/ path for backward compatibility
+  return fetchAPI('/imports/violations/api', {
+    method: 'POST',
+    body: JSON.stringify(requestData),
+  });
+}
+
+/**
+ * Import product bans from organization's configured API endpoint
+ */
+export async function importProductBansFromAPIOrganization(organizationId, options = {}) {
+  const { auto_classify = true, auto_investigate = true, field_mapping = null } = options;
+  
+  const params = new URLSearchParams();
+  if (auto_classify !== undefined) params.append('auto_classify', auto_classify.toString());
+  if (auto_investigate !== undefined) params.append('auto_investigate', auto_investigate.toString());
+  if (field_mapping) params.append('field_mapping', JSON.stringify(field_mapping));
+  
+  const queryString = params.toString();
+  // Backend endpoint uses /violations/ path for backward compatibility
+  return fetchAPI(`/imports/violations/api/organization/${organizationId}${queryString ? '?' + queryString : ''}`, {
+    method: 'POST',
+  });
+}
+
+/**
+ * Test API connection for an organization (for product ban imports)
+ */
+export async function testAPIConnection(organizationId) {
+  // Backend endpoint uses /violations/ path for backward compatibility
+  return fetchAPI(`/imports/violations/api/test/${organizationId}`);
 }
 
 /**
@@ -631,7 +722,7 @@ export async function updateRiskClassificationConfig(config) {
 }
 
 /**
- * Test risk classification against a sample violation
+ * Test risk classification against a sample product ban
  */
 export async function testRiskClassification(violation) {
   return fetchAPI('/agent/skills/risk_classifier/test', {
@@ -775,6 +866,9 @@ export default {
   importListingFromExtension,
   previewViolationsFile,
   importViolationsFromFile,
+  importProductBansFromAPI,
+  importProductBansFromAPIOrganization,
+  testAPIConnection,
   getImportHistory,
   getImportDetails,
   

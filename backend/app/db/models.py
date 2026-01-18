@@ -15,7 +15,7 @@ from sqlalchemy.orm import declarative_base
 
 # Import Base from session to avoid circular imports
 from app.db.session import Base
-from app.models.violation import ViolationType, RiskLevel
+from app.models.product_ban import BanType, RiskLevel
 from app.models.marketplace import MarketplaceStatus
 from app.models.investigation import InvestigationStatus, InvestigationSchedule
 from app.models.import_models import ImportSource, ImportStatus
@@ -23,13 +23,13 @@ from app.models.agent import TaskStatus, TaskType
 from app.models.organization import OrganizationType, OrganizationStatus
 
 
-# Violation Models
-class ViolationDB(Base):
-    """Violation table - main violation/recall records."""
-    __tablename__ = "violations"
+# Product Ban Models
+class ProductBanDB(Base):
+    """Product ban table - main banned product/recall records."""
+    __tablename__ = "product_bans"
     
-    violation_id = Column(String, primary_key=True, index=True)
-    violation_number = Column(String, nullable=False, index=True)
+    product_ban_id = Column(String, primary_key=True, index=True)
+    ban_number = Column(String, nullable=False, index=True)
     title = Column(String, nullable=False)
     url = Column(String, nullable=False)
     
@@ -51,8 +51,8 @@ class ViolationDB(Base):
     
     # Core attributes
     description = Column(Text, nullable=True)
-    violation_date = Column(DateTime, nullable=True, index=True)
-    violation_type = Column(SQLEnum(ViolationType), default=ViolationType.RECALL, index=True)
+    ban_date = Column(DateTime, nullable=True, index=True)
+    ban_type = Column(SQLEnum(BanType), default=BanType.RECALL, index=True)
     
     # Location
     country = Column(String, nullable=True)
@@ -79,19 +79,19 @@ class ViolationDB(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relationships
-    products = relationship("ViolationProductDB", back_populates="violation", cascade="all, delete-orphan")
-    hazards = relationship("ViolationHazardDB", back_populates="violation", cascade="all, delete-orphan")
-    remedies = relationship("ViolationRemedyDB", back_populates="violation", cascade="all, delete-orphan")
-    images = relationship("ViolationImageDB", back_populates="violation", cascade="all, delete-orphan")
-    listings = relationship("MarketplaceListingDB", back_populates="violation")
+    products = relationship("ProductBanProductDB", back_populates="product_ban", cascade="all, delete-orphan")
+    hazards = relationship("ProductBanHazardDB", back_populates="product_ban", cascade="all, delete-orphan")
+    remedies = relationship("ProductBanRemedyDB", back_populates="product_ban", cascade="all, delete-orphan")
+    images = relationship("ProductBanImageDB", back_populates="product_ban", cascade="all, delete-orphan")
+    listings = relationship("MarketplaceListingDB", back_populates="product_ban")
 
 
-class ViolationProductDB(Base):
-    """Violation products - one-to-many with violations."""
-    __tablename__ = "violation_products"
+class ProductBanProductDB(Base):
+    """Product ban products - one-to-many with product bans."""
+    __tablename__ = "product_ban_products"
     
     id = Column(String, primary_key=True)
-    violation_id = Column(String, ForeignKey("violations.violation_id", ondelete="CASCADE"), nullable=False, index=True)
+    product_ban_id = Column(String, ForeignKey("product_bans.product_ban_id", ondelete="CASCADE"), nullable=False, index=True)
     
     name = Column(String, nullable=False)
     description = Column(Text, nullable=True)
@@ -105,49 +105,49 @@ class ViolationProductDB(Base):
     identifiers = Column(SQLiteJSON, default=dict)
     product_metadata = Column(SQLiteJSON, default=dict)
     
-    violation = relationship("ViolationDB", back_populates="products")
+    product_ban = relationship("ProductBanDB", back_populates="products")
 
 
-class ViolationHazardDB(Base):
-    """Violation hazards - one-to-many with violations."""
-    __tablename__ = "violation_hazards"
+class ProductBanHazardDB(Base):
+    """Product ban hazards - one-to-many with product bans."""
+    __tablename__ = "product_ban_hazards"
     
     id = Column(String, primary_key=True)
-    violation_id = Column(String, ForeignKey("violations.violation_id", ondelete="CASCADE"), nullable=False, index=True)
+    product_ban_id = Column(String, ForeignKey("product_bans.product_ban_id", ondelete="CASCADE"), nullable=False, index=True)
     
     description = Column(Text, nullable=False)
     hazard_type = Column(String, nullable=True)
     severity = Column(String, nullable=True)
     
-    violation = relationship("ViolationDB", back_populates="hazards")
+    product_ban = relationship("ProductBanDB", back_populates="hazards")
 
 
-class ViolationRemedyDB(Base):
-    """Violation remedies - one-to-many with violations."""
-    __tablename__ = "violation_remedies"
+class ProductBanRemedyDB(Base):
+    """Product ban remedies - one-to-many with product bans."""
+    __tablename__ = "product_ban_remedies"
     
     id = Column(String, primary_key=True)
-    violation_id = Column(String, ForeignKey("violations.violation_id", ondelete="CASCADE"), nullable=False, index=True)
+    product_ban_id = Column(String, ForeignKey("product_bans.product_ban_id", ondelete="CASCADE"), nullable=False, index=True)
     
     description = Column(Text, nullable=False)
     remedy_type = Column(String, nullable=True)
     action_required = Column(String, nullable=True)
     
-    violation = relationship("ViolationDB", back_populates="remedies")
+    product_ban = relationship("ProductBanDB", back_populates="remedies")
 
 
-class ViolationImageDB(Base):
-    """Violation images - one-to-many with violations."""
-    __tablename__ = "violation_images"
+class ProductBanImageDB(Base):
+    """Product ban images - one-to-many with product bans."""
+    __tablename__ = "product_ban_images"
     
     id = Column(String, primary_key=True)
-    violation_id = Column(String, ForeignKey("violations.violation_id", ondelete="CASCADE"), nullable=False, index=True)
+    product_ban_id = Column(String, ForeignKey("product_bans.product_ban_id", ondelete="CASCADE"), nullable=False, index=True)
     
     url = Column(String, nullable=False)
     caption = Column(Text, nullable=True)
     alt_text = Column(Text, nullable=True)
     
-    violation = relationship("ViolationDB", back_populates="images")
+    product_ban = relationship("ProductBanDB", back_populates="images")
 
 
 # Marketplace Models
@@ -192,7 +192,7 @@ class MarketplaceListingDB(Base):
     
     id = Column(String, primary_key=True, index=True)
     marketplace_id = Column(String, ForeignKey("marketplaces.id", ondelete="SET NULL"), nullable=True, index=True)
-    violation_id = Column(String, ForeignKey("violations.violation_id", ondelete="CASCADE"), nullable=True, index=True)
+    product_ban_id = Column(String, ForeignKey("product_bans.product_ban_id", ondelete="CASCADE"), nullable=True, index=True)
     
     # Listing details
     title = Column(String, nullable=False)
@@ -224,7 +224,7 @@ class MarketplaceListingDB(Base):
     
     # Relationships
     marketplace = relationship("MarketplaceDB", back_populates="listings")
-    violation = relationship("ViolationDB", back_populates="listings")
+    product_ban = relationship("ProductBanDB", back_populates="listings")
     investigation_links = relationship("InvestigationListingDB", back_populates="listing")
 
 
@@ -244,7 +244,7 @@ class InvestigationDB(Base):
     end_time = Column(DateTime, nullable=True)
     
     # Scope
-    violation_ids = Column(SQLiteJSON, default=list)  # List of violation IDs
+    product_ban_ids = Column("violation_ids", SQLiteJSON, default=list)  # List of product ban IDs (mapped from violation_ids for backward compatibility)
     marketplace_ids = Column(SQLiteJSON, default=list)  # List of marketplace IDs
     region_ids = Column(SQLiteJSON, default=dict)  # {marketplace_id: [region_ids]}
     
@@ -305,7 +305,7 @@ class ImportHistoryDB(Base):
     __tablename__ = "import_history"
     
     import_id = Column(String, primary_key=True, index=True)
-    import_type = Column(String, nullable=False, index=True)  # "listing" or "violation"
+    import_type = Column(String, nullable=False, index=True)  # "listing" or "product_ban"
     source = Column(SQLEnum(ImportSource), nullable=False, index=True)
     source_name = Column(String, nullable=True)
     status = Column(SQLEnum(ImportStatus), default=ImportStatus.PENDING, index=True)
@@ -349,7 +349,7 @@ class SearchTaskDB(Base):
     
     # Task parameters
     recall_id = Column(String, nullable=True, index=True)
-    violation_id = Column(String, nullable=True, index=True)
+    product_ban_id = Column(String, nullable=True, index=True)
     marketplace_ids = Column(SQLiteJSON, default=list)
     search_query = Column(String, nullable=True)
     
@@ -415,6 +415,12 @@ class OrganizationDB(Base):
     api_headers = Column(SQLiteJSON, default=dict)
     api_enabled = Column(Boolean, default=False)
     
+    # API import schedule configuration
+    api_import_schedule = Column(String, nullable=True)  # 'daily', 'weekly', 'monthly', 'none'
+    api_import_enabled = Column(Boolean, default=False)
+    api_import_last_run = Column(DateTime, nullable=True)
+    api_import_field_mapping = Column(SQLiteJSON, nullable=True)  # Organization-specific field mapping
+    
     # File import configuration
     file_upload_method = Column(String, nullable=True)
     # Blob storage configuration (supports S3, Azure, GCS, etc.)
@@ -434,8 +440,8 @@ class OrganizationDB(Base):
     metadata_schema = Column(SQLiteJSON, nullable=True)
     
     # Statistics
-    violations_count = Column(Integer, default=0)
-    last_violation_date = Column(DateTime, nullable=True)
+    product_bans_count = Column("violations_count", Integer, default=0)  # Mapped from violations_count for backward compatibility
+    last_product_ban_date = Column("last_violation_date", DateTime, nullable=True)  # Mapped from last_violation_date for backward compatibility
     voluntary_recalls_count = Column(Integer, default=0)
     joint_recalls_count = Column(Integer, default=0)
     

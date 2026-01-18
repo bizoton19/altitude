@@ -70,6 +70,12 @@ class Organization(BaseModel):
     api_headers: Dict[str, str] = Field(default_factory=dict, description="Custom API headers")
     api_enabled: bool = False
     
+    # API import schedule configuration
+    api_import_schedule: Optional[str] = Field(None, description="API import schedule: 'daily', 'weekly', 'monthly', 'none'")
+    api_import_enabled: bool = False
+    api_import_last_run: Optional[datetime] = None
+    api_import_field_mapping: Optional[Dict[str, str]] = Field(None, description="Organization-specific field mapping for API imports")
+    
     # File import configuration
     file_upload_method: Optional[str] = Field(None, description="File upload method: 'browser', 'blob_storage', 'sftp'")
     # Blob storage configuration (supports S3, Azure Blob Storage, GCS, etc.)
@@ -141,6 +147,11 @@ class OrganizationCreate(BaseModel):
     api_key: Optional[str] = None
     api_headers: Dict[str, str] = Field(default_factory=dict)
     
+    # API import schedule configuration
+    api_import_schedule: Optional[str] = None  # 'daily', 'weekly', 'monthly', 'none'
+    api_import_enabled: bool = False
+    api_import_field_mapping: Optional[Dict[str, str]] = None
+    
     # File upload configuration (if import_methods includes 'file_upload' or 'blob_storage')
     file_upload_method: Optional[str] = None  # 'browser', 'blob_storage', 'sftp'
     # Blob storage configuration
@@ -184,6 +195,11 @@ class OrganizationUpdate(BaseModel):
     api_key: Optional[str] = None
     api_headers: Optional[Dict[str, str]] = None
     api_enabled: Optional[bool] = None
+    
+    # API import schedule updates
+    api_import_schedule: Optional[str] = None
+    api_import_enabled: Optional[bool] = None
+    api_import_field_mapping: Optional[Dict[str, str]] = None
     file_upload_method: Optional[str] = None
     blob_storage_provider: Optional[str] = None
     blob_storage_container: Optional[str] = None

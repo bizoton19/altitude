@@ -2,28 +2,30 @@ import { useState, useEffect } from 'react'
 import { createViolation, classifyViolationRisk } from '../services/api'
 import RiskBadge from './RiskBadge'
 
-const ViolationType = {
+const BanType = {
   RECALL: 'recall',
   WARNING: 'warning',
   ADVISORY: 'advisory',
   ALERT: 'alert',
   NOTICE: 'notice',
-  VIOLATION: 'violation',
+  BAN: 'ban',
   IMPORT_ALERT: 'import_alert',
   SAFETY_ADVISORY: 'safety_advisory',
 }
+// Backward compatibility
+const ViolationType = BanType
 
-function ViolationForm({ onSuccess, onCancel }) {
+function ProductBanForm({ onSuccess, onCancel }) {
   const [formData, setFormData] = useState({
-    violation_number: '',
+    ban_number: '',
     title: '',
     url: '',
     agency_name: '',
     agency_acronym: '',
     agency_id: '',
     description: '',
-    violation_date: '',
-    violation_type: ViolationType.RECALL,
+    ban_date: '',
+    ban_type: BanType.RECALL,
     units_affected: '',
     injuries: 0,
     deaths: 0,
@@ -171,24 +173,24 @@ function ViolationForm({ onSuccess, onCancel }) {
     setSubmitting(true)
 
     // Validation
-    if (!formData.violation_number || !formData.title || !formData.url || !formData.agency_name) {
-      setError('Please fill in all required fields: Violation Number, Title, URL, and Agency Name')
+    if (!formData.ban_number || !formData.title || !formData.url || !formData.agency_name) {
+      setError('Please fill in all required fields: Ban Number, Title, URL, and Agency Name')
       setSubmitting(false)
       return
     }
 
     try {
-      // Prepare submission data
+      // Prepare submission data (use new field names, backend will handle backward compatibility)
       const submissionData = {
-        violation_number: formData.violation_number,
+        ban_number: formData.ban_number,
         title: formData.title,
         url: formData.url,
         agency_name: formData.agency_name,
         agency_acronym: formData.agency_acronym || undefined,
         agency_id: formData.agency_id || undefined,
         description: formData.description || undefined,
-        violation_date: formData.violation_date || undefined,
-        violation_type: formData.violation_type,
+        ban_date: formData.ban_date || undefined,
+        ban_type: formData.ban_type,
         units_affected: formData.units_affected ? parseInt(formData.units_affected) : undefined,
         injuries: formData.injuries || 0,
         deaths: formData.deaths || 0,
@@ -207,8 +209,8 @@ function ViolationForm({ onSuccess, onCancel }) {
         onSuccess(result)
       }
     } catch (err) {
-      setError(err.message || 'Failed to create violation')
-      console.error('Error creating violation:', err)
+      setError(err.message || 'Failed to create product ban')
+      console.error('Error creating product ban:', err)
     } finally {
       setSubmitting(false)
     }
@@ -237,14 +239,14 @@ function ViolationForm({ onSuccess, onCancel }) {
           gap: 'var(--space-md)'
         }}>
           <span style={{ fontSize: '32px' }}>⚡</span>
-          Create New Violation
+          Create New Product Ban
         </h1>
         <p style={{ 
           color: 'var(--text-secondary)', 
           fontSize: '14px',
           margin: 0
         }}>
-          Enter violation details manually. All fields marked with <span style={{ color: 'var(--risk-high)' }}>*</span> are required.
+          Enter product ban details manually. All fields marked with <span style={{ color: 'var(--risk-high)' }}>*</span> are required.
         </p>
       </div>
 
@@ -317,12 +319,12 @@ function ViolationForm({ onSuccess, onCancel }) {
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px'
               }}>
-                Violation Number <span style={{ color: 'var(--risk-high)' }}>*</span>
+                Ban Number <span style={{ color: 'var(--risk-high)' }}>*</span>
               </label>
               <input
                 type="text"
-                value={formData.violation_number}
-                onChange={(e) => handleChange('violation_number', e.target.value)}
+                value={formData.ban_number}
+                onChange={(e) => handleChange('ban_number', e.target.value)}
                 className="input"
                 placeholder="e.g., CPSC-26156"
                 required
@@ -380,12 +382,12 @@ function ViolationForm({ onSuccess, onCancel }) {
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px'
               }}>
-                Violation Date
+                Ban Date
               </label>
               <input
                 type="date"
-                value={formData.violation_date}
-                onChange={(e) => handleChange('violation_date', e.target.value)}
+                value={formData.ban_date}
+                onChange={(e) => handleChange('ban_date', e.target.value)}
                 className="input"
               />
             </div>
@@ -399,15 +401,15 @@ function ViolationForm({ onSuccess, onCancel }) {
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px'
               }}>
-                Violation Type
+                Ban Type
               </label>
               <select
-                value={formData.violation_type}
-                onChange={(e) => handleChange('violation_type', e.target.value)}
+                value={formData.ban_type}
+                onChange={(e) => handleChange('ban_type', e.target.value)}
                 className="input"
                 style={{ cursor: 'pointer' }}
               >
-                {Object.values(ViolationType).map(type => (
+                {Object.values(BanType).map(type => (
                   <option key={type} value={type}>
                     {type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                   </option>
@@ -1556,4 +1558,4 @@ function ViolationForm({ onSuccess, onCancel }) {
   )
 }
 
-export default ViolationForm
+export default ProductBanForm

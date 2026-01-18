@@ -3,13 +3,13 @@ import * as api from '../services/api'
 
 /**
  * AllListingsView Component
- * Shows all marketplace listings across all violations, sortable by risk, date, or violation
+ * Shows all marketplace listings across all product bans, sortable by risk, date, or product ban
  */
 function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
   const [listings, setListings] = useState([])
-  const [violations, setViolations] = useState({}) // Map of violation_id -> violation data
+  const [productBans, setProductBans] = useState({}) // Map of product_ban_id -> product ban data
   const [loading, setLoading] = useState(true)
-  const [sortBy, setSortBy] = useState('risk') // risk, date, violation, marketplace
+  const [sortBy, setSortBy] = useState('risk') // risk, date, product-ban, marketplace
   const [sortOrder, setSortOrder] = useState('desc') // asc, desc
   const [filterRisk, setFilterRisk] = useState('all') // all, HIGH, MEDIUM, LOW
   const [filterMarketplace, setFilterMarketplace] = useState('all')
@@ -17,22 +17,26 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
   // Support both onViolationClick and onRecallClick for compatibility
   const handleViolationClick = onViolationClick || onRecallClick
 
-  // Fetch all listings and violations on mount
+  // Fetch all listings and product bans on mount
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        // Fetch all violations to get risk levels
-        const violationsData = await api.getViolations({ limit: 200 })
-        const violationsMap = {}
-        violationsData.forEach(v => {
-          violationsMap[v.violation_id] = v
+        // Fetch all product bans to get risk levels
+        const productBansData = await api.getViolations({ limit: 200 })
+        const productBansMap = {}
+        productBansData.forEach(v => {
+          // Map by product_ban_id (primary), with fallback to violation_id for backward compatibility
+          const id = v.product_ban_id || v.violation_id
+          if (id) {
+            productBansMap[id] = v
+          }
           // Also map by recall_id for backward compatibility with listings
           if (v.recall_id) {
-            violationsMap[v.recall_id] = v
+            productBansMap[v.recall_id] = v
           }
         })
-        setViolations(violationsMap)
+        setProductBans(productBansMap)
 
         // Fetch all listings
         const allListings = await api.getAllListings()
@@ -53,23 +57,28 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
     return ['all', ...Array.from(unique).sort()]
   }, [listings])
 
-  // Get risk level for a listing based on its violation
+  // Get risk level for a listing based on its product ban
   const getListingRisk = (listing) => {
-    const violation = violations[listing.violation_id] || violations[listing.recall_id]
-    return violation?.risk_level || 'LOW'
+    const productBanId = listing.product_ban_id || listing.violation_id || listing.recall_id
+    const productBan = productBans[productBanId]
+    return productBan?.risk_level || 'LOW'
   }
 
   // Sort and filter listings
   const processedListings = useMemo(() => {
     let result = [...listings]
 
-    // Add violation data to each listing
-    result = result.map(listing => ({
-      ...listing,
-      violation: violations[listing.violation_id] || violations[listing.recall_id],
-      recall: violations[listing.violation_id] || violations[listing.recall_id], // Keep for backward compatibility
-      risk_level: getListingRisk(listing)
-    }))
+    // Add product ban data to each listing
+    result = result.map(listing => {
+      const productBanId = listing.product_ban_id || listing.violation_id || listing.recall_id
+      const productBan = productBans[productBanId]
+      return {
+        ...listing,
+        productBan: productBan,
+        recall: productBan, // Keep for backward compatibility
+        risk_level: getListingRisk(listing)
+      }
+    })
 
     // Filter by risk
     if (filterRisk !== 'all') {
@@ -96,8 +105,8 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
           comparison = new Date(b.found_at || 0) - new Date(a.found_at || 0)
           break
         case 'recall':
-        case 'violation':
-          comparison = (a.violation?.title || a.recall?.title || '').localeCompare(b.violation?.title || b.recall?.title || '')
+        case 'product-ban':
+          comparison = (a.productBan?.title || a.recall?.title || '').localeCompare(b.productBan?.title || b.recall?.title || '')
           break
         case 'marketplace':
           comparison = (a.marketplace_name || '').localeCompare(b.marketplace_name || '')
@@ -116,7 +125,7 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
     })
 
     return result
-  }, [listings, violations, sortBy, sortOrder, filterRisk, filterMarketplace])
+  }, [listings, productBans, sortBy, sortOrder, filterRisk, filterMarketplace])
 
   // Stats
   const stats = useMemo(() => {
@@ -167,12 +176,12 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
             All Marketplace Listings
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
-            {processedListings.length} listing{processedListings.length !== 1 ? 's' : ''} found across all monitored violations
+            {processedListings.length} listing{processedListings.length !== 1 ? 's' : ''} found across all monitored product bans
           </p>
         </div>
         {onBack && (
           <button className="btn btn-secondary" onClick={onBack}>
-            ← Back to Violations
+            ← Back to Product Bans
           </button>
         )}
       </div>
@@ -229,7 +238,7 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
             >
               <option value="risk">Risk Level</option>
               <option value="date">Date Found</option>
-              <option value="violation">Violation</option>
+              <option value="product-ban">Product Ban</option>
               <option value="marketplace">Marketplace</option>
               <option value="match">Match Score</option>
               <option value="price">Price</option>
@@ -313,7 +322,7 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
           <div style={{ fontSize: '48px', marginBottom: '16px', opacity: 0.5 }}>🔍</div>
           <h3 style={{ marginBottom: '8px', color: 'var(--text-secondary)' }}>No Listings Found</h3>
           <p style={{ color: 'var(--text-muted)', maxWidth: '400px', margin: '0 auto' }}>
-            No marketplace listings have been found yet. Search for violated products on the violation detail pages to populate this view.
+            No marketplace listings have been found yet. Search for violated products on the product ban detail pages to populate this view.
           </p>
         </div>
       ) : (
@@ -334,7 +343,7 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
           }}>
             <div>Risk</div>
             <div>Listing</div>
-            <div>Violation</div>
+            <div>Product Ban</div>
             <div>Marketplace</div>
             <div>Match</div>
             <div>Price</div>
@@ -405,11 +414,11 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
                   )}
                 </div>
 
-                {/* Violation Info */}
+                {/* Product Ban Info */}
                 <div style={{ minWidth: 0 }}>
-                  {(listing.violation || listing.recall) ? (
+                  {(listing.productBan || listing.recall) ? (
                     <button
-                      onClick={() => handleViolationClick && handleViolationClick(listing.violation || listing.recall)}
+                      onClick={() => handleViolationClick && handleViolationClick(listing.productBan || listing.recall)}
                       style={{
                         background: 'none',
                         border: 'none',
@@ -424,16 +433,16 @@ function AllListingsView({ onViolationClick, onRecallClick, onBack }) {
                         display: 'block',
                         width: '100%'
                       }}
-                      title={listing.violation?.title || listing.recall?.title}
+                      title={listing.productBan?.title || listing.recall?.title}
                     >
                       <span style={{ color: 'var(--neon-purple)', marginRight: '4px' }}>
-                        #{(listing.violation?.violation_number || listing.recall?.recall_number)}
+                        #{(listing.productBan?.ban_number || listing.productBan?.violation_number || listing.recall?.recall_number)}
                       </span>
-                      {(listing.violation?.title || listing.recall?.title)?.substring(0, 30)}...
+                      {(listing.productBan?.title || listing.recall?.title)?.substring(0, 30)}...
                     </button>
                   ) : (
                     <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
-                      Unknown Violation
+                      Unknown Product Ban
                     </span>
                   )}
                 </div>

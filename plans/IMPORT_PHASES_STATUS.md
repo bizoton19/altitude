@@ -25,7 +25,7 @@
 
 ---
 
-## ✅ Phase 2: Programmatic Import - COMPLETE
+## 🚧 Phase 2: Programmatic Import - BACKEND COMPLETE, UI IN PROGRESS
 
 ### Backend Endpoints
 - ✅ `POST /api/imports/violations/api` - Import violations from REST API
@@ -33,13 +33,19 @@
 
 ### Features Implemented
 
-#### API Import
+#### API Import (Backend)
 - ✅ REST API client (httpx)
 - ✅ Configurable HTTP methods (GET, POST, etc.)
 - ✅ Authentication support (Bearer token, Basic auth)
 - ✅ Flexible response parsing (handles arrays, objects, nested data)
 - ✅ Automatic field mapping from API responses
 - ✅ Error handling and partial success reporting
+
+#### API Import (Frontend)
+- ❌ UI section in ViolationImport component
+- ❌ API function in services/api.js
+- ❌ Form for API configuration
+- 📋 See `REST_API_IMPORT_UI_PLAN.md` for implementation plan
 
 #### Automated Listing Creation
 - ✅ Import history tracking in `execute_search_task`
