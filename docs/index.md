@@ -5,13 +5,13 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 ---
 
 <div class="hero-section">
-  <h1 class="hero-title">AI powered Banned Product Monitoring</h1>
+  <h1 class="hero-title">AI Powered Banned Product Monitoring</h1>
   <p class="hero-subtitle">
     Streamline your banned product workflow with automated marketplace monitoring. Federal and state agencies, manufacturers, 
     importers, retailers, and non-profits use Altitude to replace hours of manual searches with intelligent automation.
   </p>
   <div class="hero-cta">
-    <a href="{{ '/userguide.html' | relative_url }}" class="btn-primary">Get Started</a>
+    <a href="{{ '/wiki/Home.html' | relative_url }}" class="btn-primary">Get Started</a>
     <a href="https://github.com/bizoton19/altitude" target="_blank" class="btn-secondary">Open Source</a>
   </div>
 </div>
@@ -21,22 +21,34 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 <div class="audience-section" style="margin: 3rem 0; text-align: center;">
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 2rem 0;">
     <div class="audience-card">
-      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏛️</div>
+      <div style="margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: center;">
+        <img src="{{ '/assets/logos/fda.svg' | relative_url }}" alt="Federal & State Regulatory Agencies" style="width: 80px; height: 80px; object-fit: contain; max-width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;">🏛️</div>
+      </div>
       <h4>Federal & State Regulatory Agencies</h4>
       <p>FDA, NHTSA, and state consumer protection agencies monitoring banned products across marketplaces</p>
     </div>
     <div class="audience-card">
-      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏭</div>
+      <div style="margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: center;">
+        <img src="{{ '/assets/logos/manufacturer.svg' | relative_url }}" alt="Manufacturers & Importers" style="width: 80px; height: 80px; object-fit: contain; max-width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;">🏭</div>
+      </div>
       <h4>Manufacturers & Importers</h4>
       <p>Monitor marketplaces for unauthorized sales of banned products and ensure compliance</p>
     </div>
     <div class="audience-card">
-      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏪</div>
+      <div style="margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: center;">
+        <img src="{{ '/assets/logos/retailer.svg' | relative_url }}" alt="Retailers & Private Sellers" style="width: 80px; height: 80px; object-fit: contain; max-width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;">🏪</div>
+      </div>
       <h4>Retailers & Private Sellers</h4>
       <p>Verify product compliance before listing and prevent selling banned product inventory</p>
     </div>
     <div class="audience-card">
-      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
+      <div style="margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: center;">
+        <img src="{{ '/assets/logos/nonprofit.svg' | relative_url }}" alt="Non-Profit Organizations" style="width: 80px; height: 80px; object-fit: contain; max-width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;">🤝</div>
+      </div>
       <h4>Non-Profit Organizations</h4>
       <p>Consumer safety advocates and watchdog groups protecting consumers from banned products</p>
     </div>
@@ -91,7 +103,7 @@ Altitude is currently available as an open source platform. Get started today wi
       <h3>Automated Monitoring</h3>
       <p class="product-subtitle">Core banned product management workflow</p>
     </div>
-    <a href="{{ '/userguide.html#scheduled-investigations' | relative_url }}" class="product-cta">Get Started</a>
+    <a href="{{ '/wiki/Investigations.html' | relative_url }}" class="product-cta">Get Started</a>
     <ul class="product-features">
       <li>Import banned products from FDA, NHTSA feeds</li>
       <li>Automated marketplace investigations</li>
@@ -130,7 +142,7 @@ Altitude is currently available as an open source platform. Get started today wi
       <h3>Risk Management</h3>
       <p class="product-subtitle">Intelligent prioritization and classification</p>
     </div>
-    <a href="{{ '/userguide.html' | relative_url }}" class="product-cta">Learn More</a>
+    <a href="{{ '/wiki/Home.html' | relative_url }}" class="product-cta">Learn More</a>
     <ul class="product-features">
       <li>Automatic risk classification based on injuries, deaths, units affected</li>
       <li>Hazard-based prioritization (fire, electrocution, choking, etc.)</li>
@@ -146,8 +158,8 @@ Altitude is currently available as an open source platform. Get started today wi
 
 ## Coming Soon: Premium Features
 
-<div class="premium-features-section" style="margin: 4rem 0; padding: 3rem 2rem; background: var(--color-card-bg); border: 2px solid var(--color-primary); border-radius: 16px; box-shadow: var(--shadow-card);">
-  <h2 style="text-align: center; margin-bottom: 2rem; font-family: 'Poppins', sans-serif;">Premium Features Roadmap</h2>
+<div class="premium-features-section" style="margin: 4rem auto; padding: 3rem 2rem; background: var(--color-card-bg); border: 2px solid var(--color-text-primary); border-radius: 8px; max-width: 1200px;">
+  <h2 style="text-align: center; margin-bottom: 2rem; font-family: 'Inter', sans-serif; font-weight: 600;">Premium Features Roadmap</h2>
   <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
     The following premium features are planned for future releases. These capabilities will enable even more powerful banned product detection and management workflows.
   </p>
@@ -155,7 +167,7 @@ Altitude is currently available as an open source platform. Get started today wi
   <div class="premium-features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
     <div class="premium-feature-card">
       <div style="font-size: 3rem; margin-bottom: 1rem;">🌐</div>
-      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Public Submission API</h3>
+      <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Public Submission API</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Enable anyone to submit potential banned product listings via HTTP API. Perfect for consumer watchdogs, regulatory tip lines, and community reporting. All submissions enter a queue for review and classification.
       </p>
@@ -336,4 +348,4 @@ Altitude is available as an open source platform. Get started today:
 3. **Manage Risk** — Use automated risk classification to prioritize HIGH-risk items
 4. **Notify & Takedown** — Receive alerts, export reports, and track takedown effectiveness
 
-[Get Started]({{ '/userguide.html' | relative_url }}) · [View on GitHub](https://github.com/bizoton19/altitude) · [API Documentation]({{ '/api.html' | relative_url }}) · [Contact Us]({{ '/contact.html' | relative_url }})
+[Get Started]({{ '/wiki/Home.html' | relative_url }}) · [View on GitHub](https://github.com/bizoton19/altitude) · [API Documentation]({{ '/api.html' | relative_url }}) · [Contact Us]({{ '/contact.html' | relative_url }})

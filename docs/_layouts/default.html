@@ -149,6 +149,40 @@
       padding: 2rem;
     }
 
+    /* Full-width sections - Anthropic style */
+    main {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Content sections - Anthropic central/wide format */
+    main > div:not(.hero-section):not(.audience-section):not(.workflow-section):not(.products-grid):not(.testimonials-grid):not(.features-grid):not(.premium-features-section),
+    main > section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    main > h1,
+    main > h2,
+    main > h3,
+    main > p:not(.hero-subtitle):not(.tagline),
+    main > ul,
+    main > ol {
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    /* Full-width hero sections */
+    .hero-section {
+      max-width: 100%;
+      padding: 6rem 2rem 4rem;
+      margin: 0 auto;
+    }
+
     /* ============================================
        THEME TOGGLE
        ============================================ */
@@ -407,11 +441,13 @@
       transition: border-color 0.2s ease;
     }
 
-    /* Hero Section - Cherry Servers Style */
+    /* Hero Section - Anthropic style */
     .hero-section {
       text-align: center;
       padding: 6rem 2rem 4rem;
       margin-bottom: 4rem;
+      max-width: 100%;
+      width: 100%;
     }
 
     .hero-title {
@@ -711,9 +747,10 @@
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 2rem;
       margin: 3rem 0;
-      max-width: 1400px;
+      max-width: 1200px;
       margin-left: auto;
       margin-right: auto;
+      padding: 0 2rem;
     }
 
     .product-card {
@@ -824,7 +861,9 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1.5rem;
-      margin: 3rem 0;
+      margin: 3rem auto;
+      max-width: 1200px;
+      padding: 0 2rem;
     }
 
     .testimonial-card {
@@ -872,7 +911,9 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
-      margin: 3rem 0;
+      margin: 3rem auto;
+      max-width: 1200px;
+      padding: 0 2rem;
     }
 
     .feature-item {
@@ -936,6 +977,19 @@
       line-height: 1.6;
     }
 
+    .audience-section {
+      margin: 3rem 0;
+      text-align: center;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .audience-section > div {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
     /* ============================================
        WORKFLOW STEPS
        ============================================ */
@@ -943,6 +997,19 @@
     .workflow-section {
       max-width: 900px;
       margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .premium-features-section {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 3rem 2rem;
+    }
+
+    .premium-features-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
     }
 
     .workflow-step {
@@ -1243,7 +1310,7 @@
         <a href="{{ site.baseurl }}/#features">Features</a>
         <a href="{{ site.baseurl }}/#benefits">Benefits</a>
         <a href="{{ site.baseurl }}/#getting-started">Getting Started</a>
-        <a href="{{ '/userguide.html' | relative_url }}">User Guide</a>
+        <a href="{{ '/wiki/Home.html' | relative_url }}">Wiki</a>
         <a href="{{ '/contact.html' | relative_url }}">Contact</a>
         <a href="{{ '/api.html' | relative_url }}">API Docs</a>
       </nav>
@@ -1266,29 +1333,29 @@
         <div class="footer-section">
           <h4>Products</h4>
           <ul>
-            <li><a href="{{ '/userguide.html' | relative_url }}">Automated Monitoring</a></li>
-            <li><a href="{{ '/userguide.html' | relative_url }}">Enterprise Platform</a></li>
+            <li><a href="{{ '/wiki/Home.html' | relative_url }}">Automated Monitoring</a></li>
+            <li><a href="{{ '/wiki/Home.html' | relative_url }}">Enterprise Platform</a></li>
             <li><a href="{{ '/contact.html' | relative_url }}">Custom Deployment</a></li>
-            <li><a href="{{ '/userguide.html' | relative_url }}">API Access</a></li>
-            <li><a href="{{ '/userguide.html' | relative_url }}">MCP Integration</a></li>
+            <li><a href="{{ '/api.html' | relative_url }}">API Access</a></li>
+            <li><a href="{{ '/wiki/Home.html' | relative_url }}">MCP Integration</a></li>
           </ul>
         </div>
 
         <div class="footer-section">
           <h4>Solutions</h4>
           <ul>
-            <li><a href="{{ '/userguide.html' | relative_url }}">Marketplace Monitoring</a></li>
-            <li><a href="{{ '/userguide.html' | relative_url }}">Risk Classification</a></li>
-            <li><a href="{{ '/userguide.html' | relative_url }}">Compliance & Auditing</a></li>
-            <li><a href="{{ '/userguide.html' | relative_url }}">Visual Search</a></li>
-            <li><a href="{{ '/userguide.html' | relative_url }}">Scheduled Investigations</a></li>
+            <li><a href="{{ '/wiki/Listings.html' | relative_url }}">Marketplace Monitoring</a></li>
+            <li><a href="{{ '/wiki/Understanding-Risk-Levels.html' | relative_url }}">Risk Classification</a></li>
+            <li><a href="{{ '/wiki/Settings.html' | relative_url }}">Compliance & Auditing</a></li>
+            <li><a href="{{ '/wiki/Home.html' | relative_url }}">Visual Search</a></li>
+            <li><a href="{{ '/wiki/Investigations.html' | relative_url }}">Scheduled Investigations</a></li>
           </ul>
         </div>
 
         <div class="footer-section">
           <h4>Resources</h4>
           <ul>
-            <li><a href="{{ '/userguide.html' | relative_url }}">User Guide</a></li>
+            <li><a href="{{ '/wiki/Home.html' | relative_url }}">Wiki</a></li>
             <li><a href="{{ '/api.html' | relative_url }}">API Documentation</a></li>
             <li><a href="https://github.com/bizoton19/altitude" target="_blank">GitHub Repository</a></li>
             <li><a href="{{ '/contact.html' | relative_url }}">Contact Support</a></li>
