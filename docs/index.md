@@ -23,7 +23,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     <div class="audience-card">
       <div style="margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: center;">
         <img src="{{ '/assets/logos/fda.svg' | relative_url }}" alt="Federal & State Regulatory Agencies" style="width: 80px; height: 80px; object-fit: contain; max-width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;">🏛️</div>
+        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;"><i class="fas fa-landmark"></i></div>
       </div>
       <h4>Federal & State Regulatory Agencies</h4>
       <p>FDA, NHTSA, and state consumer protection agencies monitoring banned products across marketplaces</p>
@@ -31,7 +31,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     <div class="audience-card">
       <div style="margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: center;">
         <img src="{{ '/assets/logos/manufacturer.svg' | relative_url }}" alt="Manufacturers & Importers" style="width: 80px; height: 80px; object-fit: contain; max-width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;">🏭</div>
+        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;"><i class="fas fa-industry"></i></div>
       </div>
       <h4>Manufacturers & Importers</h4>
       <p>Monitor marketplaces for unauthorized sales of banned products and ensure compliance</p>
@@ -39,7 +39,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     <div class="audience-card">
       <div style="margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: center;">
         <img src="{{ '/assets/logos/retailer.svg' | relative_url }}" alt="Retailers & Private Sellers" style="width: 80px; height: 80px; object-fit: contain; max-width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;">🏪</div>
+        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;"><i class="fas fa-store"></i></div>
       </div>
       <h4>Retailers & Private Sellers</h4>
       <p>Verify product compliance before listing and prevent selling banned product inventory</p>
@@ -47,7 +47,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     <div class="audience-card">
       <div style="margin-bottom: 1rem; min-height: 80px; display: flex; align-items: center; justify-content: center;">
         <img src="{{ '/assets/logos/nonprofit.svg' | relative_url }}" alt="Non-Profit Organizations" style="width: 80px; height: 80px; object-fit: contain; max-width: 100%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;">🤝</div>
+        <div style="font-size: 2.5rem; display: none; align-items: center; justify-content: center;"><i class="fas fa-handshake"></i></div>
       </div>
       <h4>Non-Profit Organizations</h4>
       <p>Consumer safety advocates and watchdog groups protecting consumers from banned products</p>
@@ -166,7 +166,7 @@ Altitude is currently available as an open source platform. Get started today wi
 
   <div class="premium-features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;">🌐</div>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-globe"></i></div>
       <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Public Submission API</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Enable anyone to submit potential banned product listings via HTTP API. Perfect for consumer watchdogs, regulatory tip lines, and community reporting. All submissions enter a queue for review and classification.
@@ -174,40 +174,40 @@ Altitude is currently available as an open source platform. Get started today wi
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;">🥽</div>
-      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Meta Glasses Integration</h3>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-vr-cardboard"></i></div>
+      <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Meta Glasses Integration</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Browse marketplace listings through Meta glasses and instantly identify potential banned products. AI-powered visual recognition sends suspected items directly to Altitude's review queue for rapid verification and classification.
       </p>
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;">🔌</div>
-      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Browser Extension</h3>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-plug"></i></div>
+      <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Browser Extension</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         One-click browser extension captures marketplace listings and sends them to Altitude API for instant banned product checking. Works with Chrome, Firefox, Safari, and Edge. Perfect for compliance teams browsing marketplaces manually.
       </p>
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;">🌍</div>
-      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Browser Context Integration</h3>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-earth-americas"></i></div>
+      <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Browser Context Integration</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Advanced browser context integration automatically captures listing details, product images, and metadata as you browse. Seamlessly integrates with your browsing workflow to identify banned products in real-time.
       </p>
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
-      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Mobile App Integration</h3>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-mobile-screen-button"></i></div>
+      <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Mobile App Integration</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Native mobile apps for iOS and Android enable field teams to photograph products, scan barcodes, and instantly check against banned product databases. Perfect for regulatory inspectors and compliance officers.
       </p>
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
-      <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Advanced AI Models</h3>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-robot"></i></div>
+      <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Advanced AI Models</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Custom AI models trained on your specific product categories and banned product patterns. Improved accuracy for specialized industries, custom risk scoring, and predictive banned product detection before formal announcements.
       </p>
@@ -303,37 +303,37 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
 
 <div class="features-grid">
   <div class="feature-item">
-    <div class="feature-icon">🏛️</div>
+    <div class="feature-icon"><i class="fas fa-landmark"></i></div>
     <h4>Regulatory Agencies</h4>
     <p>Automate banned product monitoring across your jurisdiction. Replace manual searches with scheduled investigations. Generate compliance reports for oversight committees.</p>
   </div>
 
   <div class="feature-item">
-    <div class="feature-icon">🏭</div>
+    <div class="feature-icon"><i class="fas fa-industry"></i></div>
     <h4>Manufacturers & Importers</h4>
     <p>Monitor for unauthorized sales of your banned products. Track takedown effectiveness. Maintain compliance documentation for regulators.</p>
   </div>
 
   <div class="feature-item">
-    <div class="feature-icon">🏪</div>
+    <div class="feature-icon"><i class="fas fa-store"></i></div>
     <h4>Retailers & Sellers</h4>
     <p>Verify product compliance before listing. Prevent banned product inventory from reaching consumers. Protect your brand reputation and avoid regulatory penalties.</p>
   </div>
 
   <div class="feature-item">
-    <div class="feature-icon">🤝</div>
+    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
     <h4>Non-Profits</h4>
     <p>Maximize limited resources with automated monitoring. Focus on HIGH-risk banned products that pose the greatest danger. Generate reports for donors and stakeholders.</p>
   </div>
 
   <div class="feature-item">
-    <div class="feature-icon">⏱️</div>
+    <div class="feature-icon"><i class="fas fa-hourglass"></i></div>
     <h4>Save 20+ Hours Per Week</h4>
     <p>Eliminate repetitive manual searches across multiple marketplaces. Automate your entire banned product workflow from import to takedown.</p>
   </div>
 
   <div class="feature-item">
-    <div class="feature-icon">📊</div>
+    <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
     <h4>Risk-Based Prioritization</h4>
     <p>Automated risk classification helps you focus on HIGH-risk banned products first. Allocate resources effectively and improve banned product detection rates.</p>
   </div>
