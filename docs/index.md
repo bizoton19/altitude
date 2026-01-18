@@ -59,7 +59,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 Altitude streamlines your entire banned product management process from detection to takedown:
 
-<div class="workflow-section" style="margin: 4rem 0;">
+<div class="workflow-section">
   <div class="workflow-step">
     <div class="workflow-number">1</div>
     <div class="workflow-content">
