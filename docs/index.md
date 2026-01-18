@@ -156,10 +156,10 @@ Altitude is currently available as an open source platform. Get started today wi
   </div>
 </div>
 
-## Coming Soon: Premium Features
+## Coming Soon: Future Roadmap
 
 <div class="premium-features-section" style="margin: 4rem auto; padding: 3rem 2rem; background: var(--color-card-bg); border: 2px solid var(--color-text-primary); border-radius: 8px; max-width: 1200px;">
-  <h2 style="text-align: left; margin-bottom: 2rem; font-family: 'Inter', sans-serif; font-weight: 600;">Premium Features Roadmap</h2>
+  <h2 style="text-align: left; margin-bottom: 2rem; font-family: 'Inter', sans-serif; font-weight: 600;">Future Roadmap</h2>
   <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
     The following premium features are planned for future releases. These capabilities will enable even more powerful banned product detection and management workflows.
   </p>

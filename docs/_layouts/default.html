@@ -166,10 +166,29 @@
     }
 
     main > h1,
-    main > h3,
-    main > p:not(.hero-subtitle):not(.tagline),
-    main > ul,
-    main > ol {
+    main > h3 {
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    /* Paragraphs and lists directly following h2 should align with h2 width */
+    main > h2 + p,
+    main > h2 + ul,
+    main > h2 + ol {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    /* Other paragraphs and lists maintain 900px */
+    main > p:not(.hero-subtitle):not(.tagline):not(main > h2 + p),
+    main > ul:not(main > h2 + ul),
+    main > ol:not(main > h2 + ol) {
       max-width: 900px;
       margin-left: auto;
       margin-right: auto;
@@ -185,6 +204,17 @@
       padding-left: 2rem;
       padding-right: 2rem;
       text-align: left;
+    }
+
+    /* Paragraphs and lists directly following h2 should align with h2 (1200px) */
+    main > h2 + p,
+    main > h2 + ul,
+    main > h2 + ol {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
     }
 
     /* Full-width hero sections */
