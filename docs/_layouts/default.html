@@ -622,6 +622,7 @@
       color: var(--color-text-primary);
       letter-spacing: -0.02em;
       line-height: 1.3;
+      text-align: left;
     }
 
     h3 {
@@ -1045,7 +1046,7 @@
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      background: var(--color-text-primary);
+      background: rgb(113, 130, 255);
       color: var(--color-bg-primary);
       display: flex;
       align-items: center;
@@ -1106,6 +1107,15 @@
 
     .premium-feature-card:hover {
       border-color: var(--color-text-primary);
+    }
+
+    /* Duotone effect for premium feature icons using CSS */
+    .premium-feature-card i.fad {
+      background: linear-gradient(135deg, rgb(113, 130, 255) 0%, rgb(173, 185, 255) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 0.5px rgb(113, 130, 255));
     }
 
     /* ============================================

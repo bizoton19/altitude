@@ -159,14 +159,14 @@ Altitude is currently available as an open source platform. Get started today wi
 ## Coming Soon: Premium Features
 
 <div class="premium-features-section" style="margin: 4rem auto; padding: 3rem 2rem; background: var(--color-card-bg); border: 2px solid var(--color-text-primary); border-radius: 8px; max-width: 1200px;">
-  <h2 style="text-align: center; margin-bottom: 2rem; font-family: 'Inter', sans-serif; font-weight: 600;">Premium Features Roadmap</h2>
+  <h2 style="text-align: left; margin-bottom: 2rem; font-family: 'Inter', sans-serif; font-weight: 600;">Premium Features Roadmap</h2>
   <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
     The following premium features are planned for future releases. These capabilities will enable even more powerful banned product detection and management workflows.
   </p>
 
   <div class="premium-features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-globe"></i></div>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-globe" style="background: linear-gradient(135deg, rgb(113, 130, 255) 0%, rgb(173, 185, 255) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i></div>
       <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Public Submission API</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Enable anyone to submit potential banned product listings via HTTP API. Perfect for consumer watchdogs, regulatory tip lines, and community reporting. All submissions enter a queue for review and classification.
@@ -174,7 +174,7 @@ Altitude is currently available as an open source platform. Get started today wi
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-vr-cardboard"></i></div>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-vr-cardboard" style="background: linear-gradient(135deg, rgb(113, 130, 255) 0%, rgb(173, 185, 255) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i></div>
       <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Meta Glasses Integration</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Browse marketplace listings through Meta glasses and instantly identify potential banned products. AI-powered visual recognition sends suspected items directly to Altitude's review queue for rapid verification and classification.
@@ -182,7 +182,7 @@ Altitude is currently available as an open source platform. Get started today wi
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-plug"></i></div>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-plug" style="background: linear-gradient(135deg, rgb(113, 130, 255) 0%, rgb(173, 185, 255) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i></div>
       <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Browser Extension</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         One-click browser extension captures marketplace listings and sends them to Altitude API for instant banned product checking. Works with Chrome, Firefox, Safari, and Edge. Perfect for compliance teams browsing marketplaces manually.
@@ -190,7 +190,7 @@ Altitude is currently available as an open source platform. Get started today wi
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-earth-americas"></i></div>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-earth-americas" style="background: linear-gradient(135deg, rgb(113, 130, 255) 0%, rgb(173, 185, 255) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i></div>
       <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Browser Context Integration</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Advanced browser context integration automatically captures listing details, product images, and metadata as you browse. Seamlessly integrates with your browsing workflow to identify banned products in real-time.
@@ -198,7 +198,7 @@ Altitude is currently available as an open source platform. Get started today wi
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-mobile-screen-button"></i></div>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-mobile-screen-button" style="background: linear-gradient(135deg, rgb(113, 130, 255) 0%, rgb(173, 185, 255) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i></div>
       <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Mobile App Integration</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Native mobile apps for iOS and Android enable field teams to photograph products, scan barcodes, and instantly check against banned product databases. Perfect for regulatory inspectors and compliance officers.
@@ -206,7 +206,7 @@ Altitude is currently available as an open source platform. Get started today wi
     </div>
 
     <div class="premium-feature-card">
-      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-robot"></i></div>
+      <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-robot" style="background: linear-gradient(135deg, rgb(113, 130, 255) 0%, rgb(173, 185, 255) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i></div>
       <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Advanced AI Models</h3>
       <p style="color: var(--color-text-secondary); line-height: 1.7; margin: 0;">
         Custom AI models trained on your specific product categories and banned product patterns. Improved accuracy for specialized industries, custom risk scoring, and predictive banned product detection before formal announcements.
