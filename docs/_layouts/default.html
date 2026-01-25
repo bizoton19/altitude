@@ -685,6 +685,17 @@
       color: var(--color-text-primary);
     }
 
+    /* Numbered lists aligned with h2 titles */
+    main > h2 + div ol,
+    main > h2 + p + div ol {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      text-align: left;
+    }
+
     li {
       margin-bottom: 0.5rem;
     }
@@ -1062,6 +1073,9 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
 
     .workflow-step {
@@ -1127,7 +1141,21 @@
       }
 
       .premium-features-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        padding: 0 1rem !important;
+        max-width: 100% !important;
+      }
+
+      .premium-feature-card {
+        min-width: 0;
+        overflow: hidden;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .premium-features-section {
+        padding: 2rem 1rem !important;
       }
     }
 
@@ -1345,9 +1373,157 @@
         text-align: center;
       }
     }
+    /* ============================================
+       GDPR CONSENT POPUP
+       ============================================ */
+    #gdpr-consent {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--color-card-bg);
+      border-top: 1px solid var(--color-glass-border);
+      padding: 1.5rem 2rem;
+      z-index: 10000;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    #gdpr-consent.show {
+      display: block;
+    }
+
+    #gdpr-consent-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    #gdpr-consent-text {
+      flex: 1;
+      min-width: 300px;
+      color: var(--color-text-primary);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    #gdpr-consent-text a {
+      color: var(--color-primary);
+      text-decoration: underline;
+    }
+
+    #gdpr-consent-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .gdpr-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .gdpr-btn-accept {
+      background: var(--color-text-primary);
+      color: var(--color-bg-primary);
+    }
+
+    .gdpr-btn-accept:hover {
+      background: var(--color-text-secondary);
+    }
+
+    .gdpr-btn-decline {
+      background: var(--color-bg-secondary);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-glass-border);
+    }
+
+    .gdpr-btn-decline:hover {
+      background: var(--color-glass-border);
+    }
+
+    @media (max-width: 768px) {
+      #gdpr-consent {
+        padding: 1rem;
+      }
+
+      #gdpr-consent-content {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #gdpr-consent-buttons {
+        justify-content: stretch;
+      }
+
+      .gdpr-btn {
+        flex: 1;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- GDPR Consent Popup -->
+  <div id="gdpr-consent">
+    <div id="gdpr-consent-content">
+      <div id="gdpr-consent-text">
+        We use cookies and similar technologies to enhance your experience, analyze usage, and improve our services. By clicking "Accept", you consent to our use of cookies as described in our <a href="{{ '/privacy.html' | relative_url }}">Privacy Policy</a> and agree to our <a href="{{ '/terms.html' | relative_url }}">Terms of Use</a>.
+      </div>
+      <div id="gdpr-consent-buttons">
+        <button class="gdpr-btn gdpr-btn-accept" id="gdpr-accept">Accept</button>
+        <button class="gdpr-btn gdpr-btn-decline" id="gdpr-decline">Decline</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // GDPR Consent Management
+    (function() {
+      const GDPR_CONSENT_KEY = 'gdpr-consent-given';
+      const GDPR_DECLINED_KEY = 'gdpr-consent-declined';
+      
+      const consentPopup = document.getElementById('gdpr-consent');
+      const acceptBtn = document.getElementById('gdpr-accept');
+      const declineBtn = document.getElementById('gdpr-decline');
+      
+      // Check if user has already given consent
+      const consentGiven = localStorage.getItem(GDPR_CONSENT_KEY);
+      const consentDeclined = localStorage.getItem(GDPR_DECLINED_KEY);
+      
+      if (!consentGiven && !consentDeclined) {
+        // Show popup if consent hasn't been given or declined
+        consentPopup.classList.add('show');
+        
+        // Prevent body scroll when popup is visible
+        document.body.style.paddingBottom = consentPopup.offsetHeight + 'px';
+      }
+      
+      // Accept button handler
+      acceptBtn.addEventListener('click', function() {
+        localStorage.setItem(GDPR_CONSENT_KEY, 'true');
+        localStorage.removeItem(GDPR_DECLINED_KEY);
+        consentPopup.classList.remove('show');
+        document.body.style.paddingBottom = '';
+      });
+      
+      // Decline button handler
+      declineBtn.addEventListener('click', function() {
+        localStorage.setItem(GDPR_DECLINED_KEY, 'true');
+        localStorage.removeItem(GDPR_CONSENT_KEY);
+        consentPopup.classList.remove('show');
+        document.body.style.paddingBottom = '';
+      });
+    })();
+  </script>
   <!-- Theme Toggle -->
   <div class="theme-toggle" role="group" aria-label="Theme selector">
     <button class="theme-btn" data-theme-value="light" title="Light theme" aria-label="Light theme">☀️</button>
@@ -1370,10 +1546,10 @@
       <nav id="mainNav">
         <a href="{{ site.baseurl }}/#features">Features</a>
         <a href="{{ site.baseurl }}/#benefits">Benefits</a>
-        <a href="{{ site.baseurl }}/#getting-started">Getting Started</a>
-        <a href="{{ '/wiki/Home.html' | relative_url }}">Wiki</a>
+        <a href="{{ '/contact.html' | relative_url }}">Getting Started</a>
+        <a href="{{ '/contact.html' | relative_url }}">Wiki</a>
         <a href="{{ '/contact.html' | relative_url }}">Contact</a>
-        <a href="{{ '/api.html' | relative_url }}">API Docs</a>
+        <a href="{{ '/contact.html' | relative_url }}">API Docs</a>
       </nav>
     </header>
 
@@ -1394,30 +1570,30 @@
         <div class="footer-section">
           <h4>Products</h4>
           <ul>
-            <li><a href="{{ '/wiki/Home.html' | relative_url }}">Automated Monitoring</a></li>
-            <li><a href="{{ '/wiki/Home.html' | relative_url }}">Enterprise Platform</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">Automated Monitoring</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">Enterprise Platform</a></li>
             <li><a href="{{ '/contact.html' | relative_url }}">Custom Deployment</a></li>
-            <li><a href="{{ '/api.html' | relative_url }}">API Access</a></li>
-            <li><a href="{{ '/wiki/Home.html' | relative_url }}">MCP Integration</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">API Access</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">MCP Integration</a></li>
           </ul>
         </div>
 
         <div class="footer-section">
           <h4>Solutions</h4>
           <ul>
-            <li><a href="{{ '/wiki/Listings.html' | relative_url }}">Marketplace Monitoring</a></li>
-            <li><a href="{{ '/wiki/Understanding-Risk-Levels.html' | relative_url }}">Risk Classification</a></li>
-            <li><a href="{{ '/wiki/Settings.html' | relative_url }}">Compliance & Auditing</a></li>
-            <li><a href="{{ '/wiki/Home.html' | relative_url }}">Visual Search</a></li>
-            <li><a href="{{ '/wiki/Investigations.html' | relative_url }}">Scheduled Investigations</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">Marketplace Monitoring</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">Risk Classification</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">Compliance & Auditing</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">Visual Search</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">Scheduled Investigations</a></li>
           </ul>
         </div>
 
         <div class="footer-section">
           <h4>Resources</h4>
           <ul>
-            <li><a href="{{ '/wiki/Home.html' | relative_url }}">Wiki</a></li>
-            <li><a href="{{ '/api.html' | relative_url }}">API Documentation</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">Wiki</a></li>
+            <li><a href="{{ '/contact.html' | relative_url }}">API Documentation</a></li>
             <li><a href="https://github.com/bizoton19/altitude" target="_blank">GitHub Repository</a></li>
             <li><a href="{{ '/contact.html' | relative_url }}">Contact Support</a></li>
           </ul>
@@ -1445,8 +1621,8 @@
         <p>&copy; {{ site.title }} 2024-2026. All rights reserved.</p>
         <div class="footer-bottom-links">
           <a href="https://github.com/bizoton19/altitude" target="_blank">GitHub</a>
-          <a href="{{ '/contact.html' | relative_url }}">Privacy Policy</a>
-          <a href="{{ '/contact.html' | relative_url }}">Terms of Service</a>
+          <a href="{{ '/privacy.html' | relative_url }}">Privacy Policy</a>
+          <a href="{{ '/terms.html' | relative_url }}">Terms of Service</a>
         </div>
       </div>
     </footer>

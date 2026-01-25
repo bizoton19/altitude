@@ -11,12 +11,12 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     importers, retailers, and non-profits use Altitude to replace hours of manual searches with intelligent automation.
   </p>
   <div class="hero-cta">
-    <a href="{{ '/wiki/Home.html' | relative_url }}" class="btn-primary">Get Started</a>
+    <a href="{{ '/contact.html' | relative_url }}" class="btn-primary">Get Started</a>
     <a href="https://github.com/bizoton19/altitude" target="_blank" class="btn-secondary">Open Source</a>
   </div>
 </div>
 
-## Who Uses Altitude?
+## What is  Altitude?
 
 <div class="audience-section" style="margin: 3rem 0; text-align: center;">
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 2rem 0;">
@@ -72,7 +72,7 @@ Altitude streamlines your entire banned product management process from detectio
     <div class="workflow-number">2</div>
     <div class="workflow-content">
       <h3>Investigate Marketplaces</h3>
-      <p>Schedule automated investigations across eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari, and more. Set daily, weekly, or monthly scans that run automatically. The system searches for banned products using intelligent matching algorithms and visual search capabilities.</p>
+      <p>Schedule automated AI powered investigations across marketplaces like  eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari, and more. Set daily, weekly, or monthly scans that run automatically. The system searches for banned products using intelligent matching algorithms and visual search capabilities.</p>
     </div>
   </div>
 
@@ -103,7 +103,7 @@ Altitude is currently available as an open source platform. Get started today wi
       <h3>Automated Monitoring</h3>
       <p class="product-subtitle">Core banned product management workflow</p>
     </div>
-    <a href="{{ '/wiki/Investigations.html' | relative_url }}" class="product-cta">Get Started</a>
+    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Get Started</a>
     <ul class="product-features">
       <li>Import banned products from FDA, NHTSA feeds</li>
       <li>Automated marketplace investigations</li>
@@ -124,7 +124,7 @@ Altitude is currently available as an open source platform. Get started today wi
       <h3>API & Integrations</h3>
       <p class="product-subtitle">Programmatic access and automation</p>
     </div>
-      <a href="{{ '/api.html' | relative_url }}" class="product-cta">View API Docs</a>
+      <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Get Started</a>
     <ul class="product-features">
       <li>RESTful API for all operations</li>
       <li>Model Context Protocol (MCP) server integration</li>
@@ -142,7 +142,7 @@ Altitude is currently available as an open source platform. Get started today wi
       <h3>Risk Management</h3>
       <p class="product-subtitle">Intelligent prioritization and classification</p>
     </div>
-    <a href="{{ '/wiki/Home.html' | relative_url }}" class="product-cta">Learn More</a>
+    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Learn More</a>
     <ul class="product-features">
       <li>Automatic risk classification based on injuries, deaths, units affected</li>
       <li>Hazard-based prioritization (fire, electrocution, choking, etc.)</li>
@@ -164,7 +164,7 @@ Altitude is currently available as an open source platform. Get started today wi
     The following premium features are planned for future releases. These capabilities will enable even more powerful banned product detection and management workflows.
   </p>
 
-  <div class="premium-features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+  <div class="premium-features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
     <div class="premium-feature-card">
       <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fas fa-globe" style="background: linear-gradient(135deg, rgb(113, 130, 255) 0%, rgb(173, 185, 255) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i></div>
       <h3 style="font-family: 'Inter', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text-primary);">Public Submission API</h3>
@@ -224,6 +224,7 @@ Altitude is currently available as an open source platform. Get started today wi
 
 ## Why Organizations Choose Altitude
 
+<!-- Testimonials section commented out - replaced with key benefits below
 <div class="testimonials-grid">
   <div class="testimonial-card">
     <div class="testimonial-content">
@@ -277,6 +278,45 @@ Altitude is currently available as an open source platform. Get started today wi
       <p class="testimonial-company">Program Manager, Federal Regulatory Agency</p>
       <p class="testimonial-date">Aug 19, 2024</p>
     </div>
+  </div>
+</div>
+-->
+
+<div class="features-grid" style="margin-top: 2rem;">
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+    <h4>Save 30+ Hours Per Week</h4>
+    <p>Automate entire workflow from import to takedown. Reclaim entire workdays while improving banned product detection rates.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-search"></i></div>
+    <h4>Discover Hidden Listings</h4>
+    <p>Automated investigations find listings you never would have discovered manually. Risk classification helps prioritize which banned products need immediate attention.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+    <h4>Complete Workflow Solution</h4>
+    <p>Import → investigate → notify → takedown workflow. Verify product compliance before listing and quickly identify banned product inventory.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+    <h4>Focus on HIGH-Risk Products</h4>
+    <p>Automated risk classification means you focus limited resources on HIGH-risk banned products that pose the greatest danger to consumers.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-clipboard-check"></i></div>
+    <h4>Ensure Compliance</h4>
+    <p>Automated investigations help catch banned products that might slip through manual checks. Takedown tracking ensures you maintain compliance.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+    <h4>Measurable Time Savings</h4>
+    <p>Reclaim 25+ hours per week previously spent on manual marketplace searches. Complete workflow automation allows teams to focus on enforcement and consumer protection.</p>
   </div>
 </div>
 
@@ -343,9 +383,11 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
 
 Altitude is available as an open source platform. Get started today:
 
-1. **Import Banned Products** — Connect to FDA, NHTSA feeds or import manually via CSV/JSON
-2. **Configure Investigations** — Select marketplaces and set schedule (daily, weekly, monthly)
-3. **Manage Risk** — Use automated risk classification to prioritize HIGH-risk items
-4. **Notify & Takedown** — Receive alerts, export reports, and track takedown effectiveness
+<ol style="text-align: left; padding-left: 2rem; max-width: 1200px; margin: 1.5rem auto; padding-left: 2rem; padding-right: 2rem;">
+  <li style="margin-bottom: 1rem;"><strong>Import Banned Products</strong> — Connect to FDA, NHTSA feeds or import manually via CSV/JSON</li>
+  <li style="margin-bottom: 1rem;"><strong>Configure Investigations</strong> — Select marketplaces and set schedule (daily, weekly, monthly)</li>
+  <li style="margin-bottom: 1rem;"><strong>Manage Risk</strong> — Use automated risk classification to prioritize HIGH-risk items</li>
+  <li style="margin-bottom: 1rem;"><strong>Notify & Takedown</strong> — Receive alerts, export reports, and track takedown effectiveness</li>
+</ol>
 
-[Get Started]({{ '/wiki/Home.html' | relative_url }}) · [View on GitHub](https://github.com/bizoton19/altitude) · [API Documentation]({{ '/api.html' | relative_url }}) · [Contact Us]({{ '/contact.html' | relative_url }})
+[Get Started]({{ '/contact.html' | relative_url }}) · [View on GitHub](https://github.com/bizoton19/altitude) · [API Documentation]({{ '/contact.html' | relative_url }}) · [Contact Us]({{ '/contact.html' | relative_url }})
