@@ -14,7 +14,7 @@ Have questions about Altitude? Need help setting up investigations? Want to sugg
     <input type="hidden" name="_captcha" value="false">
     <input type="hidden" name="_template" value="table">
     <input type="hidden" name="_autoresponse" value="Thank you for contacting Altitude! We've received your message and will get back to you soon.">
-    <input type="hidden" name="_next" value="https://bizoton19.github.io/altitude/contact.html?success=true">
+    <input type="hidden" name="_next" value="{{ '/contact.html?success=true' | relative_url | prepend: site.url }}">
     
     <div style="margin-bottom: 1.5rem;">
       <label for="name" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
@@ -39,6 +39,33 @@ Have questions about Altitude? Need help setting up investigations? Want to sugg
         name="email" 
         required
         style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; box-sizing: border-box;"
+      >
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+      <label for="phone" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
+        Phone Number
+      </label>
+      <input 
+        type="tel" 
+        id="phone" 
+        name="phone" 
+        style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; box-sizing: border-box;"
+        placeholder="Optional"
+      >
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+      <label for="website" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
+        Organization Website <span style="color: var(--color-risk-high);">*</span>
+      </label>
+      <input 
+        type="url" 
+        id="website" 
+        name="website" 
+        required
+        style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; box-sizing: border-box;"
+        placeholder="https://example.com"
       >
     </div>
 
@@ -96,10 +123,7 @@ Have questions about Altitude? Need help setting up investigations? Want to sugg
   </div>
 </div>
 
-## Alternative Contact Methods
 
-- **Email:** [asalomon@bilomax.com](mailto:asalomon@bilomax.com)
-- **GitHub Issues:** [Report issues or request features](https://github.com/bizoton19/altitude/issues)
 
 <script>
 // Handle form submission

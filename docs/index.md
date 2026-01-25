@@ -12,7 +12,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </p>
   <div class="hero-cta">
     <a href="{{ '/contact.html' | relative_url }}" class="btn-primary">Get Started</a>
-    <a href="https://github.com/bizoton19/altitude" target="_blank" class="btn-secondary">Open Source</a>
+    <a href="{{ '/contact.html' | relative_url }}" class="btn-secondary">Open Source</a>
   </div>
 </div>
 
@@ -390,4 +390,4 @@ Altitude is available as an open source platform. Get started today:
   <li style="margin-bottom: 1rem;"><strong>Notify & Takedown</strong> — Receive alerts, export reports, and track takedown effectiveness</li>
 </ol>
 
-[Get Started]({{ '/contact.html' | relative_url }}) · [View on GitHub](https://github.com/bizoton19/altitude) · [API Documentation]({{ '/contact.html' | relative_url }}) · [Contact Us]({{ '/contact.html' | relative_url }})
+[Get Started]({{ '/contact.html' | relative_url }}) · [API Documentation]({{ '/contact.html' | relative_url }}) · [Contact Us]({{ '/contact.html' | relative_url }})
