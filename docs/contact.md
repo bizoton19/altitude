@@ -9,75 +9,75 @@ permalink: /contact.html
 
 Have questions about Altitude? Need help setting up investigations? Want to suggest a feature? We'd love to hear from you!
 
-<div class="glass-panel" style="max-width: 600px; margin: 2rem auto;">
+<div class="glass-panel contact-panel">
   <form id="contact-form" action="https://formsubmit.co/asalomon@bilomax.com" method="POST" target="_self">
     <input type="hidden" name="_captcha" value="false">
     <input type="hidden" name="_template" value="table">
     <input type="hidden" name="_autoresponse" value="Thank you for contacting Altitude! We've received your message and will get back to you soon.">
     <input type="hidden" name="_next" value="{{ '/contact.html?success=true' | relative_url | prepend: site.url }}">
     
-    <div style="margin-bottom: 1.5rem;">
-      <label for="name" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
-        Name <span style="color: var(--color-risk-high);">*</span>
+    <div class="form-field">
+      <label for="name" class="form-label">
+        Name <span class="required">*</span>
       </label>
       <input 
         type="text" 
         id="name" 
         name="name" 
         required
-        style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; box-sizing: border-box;"
+        class="form-input"
       >
     </div>
 
-    <div style="margin-bottom: 1.5rem;">
-      <label for="email" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
-        Email <span style="color: var(--color-risk-high);">*</span>
+    <div class="form-field">
+      <label for="email" class="form-label">
+        Email <span class="required">*</span>
       </label>
       <input 
         type="email" 
         id="email" 
         name="email" 
         required
-        style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; box-sizing: border-box;"
+        class="form-input"
       >
     </div>
 
-    <div style="margin-bottom: 1.5rem;">
-      <label for="phone" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
+    <div class="form-field">
+      <label for="phone" class="form-label">
         Phone Number
       </label>
       <input 
         type="tel" 
         id="phone" 
         name="phone" 
-        style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; box-sizing: border-box;"
+        class="form-input"
         placeholder="Optional"
       >
     </div>
 
-    <div style="margin-bottom: 1.5rem;">
-      <label for="website" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
-        Organization Website <span style="color: var(--color-risk-high);">*</span>
+    <div class="form-field">
+      <label for="website" class="form-label">
+        Organization Website <span class="required">*</span>
       </label>
       <input 
         type="url" 
         id="website" 
         name="website" 
         required
-        style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; box-sizing: border-box;"
+        class="form-input"
         placeholder="https://example.com"
       >
     </div>
 
-    <div style="margin-bottom: 1.5rem;">
-      <label for="subject_select" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
-        Subject <span style="color: var(--color-risk-high);">*</span>
+    <div class="form-field">
+      <label for="subject_select" class="form-label">
+        Subject <span class="required">*</span>
       </label>
       <select 
         id="subject_select" 
         name="_subject" 
         required
-        style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; box-sizing: border-box;"
+        class="form-select"
       >
         <option value="Altitude Contact: General Question">General Question</option>
         <option value="Altitude Contact: Technical Support">Technical Support</option>
@@ -88,16 +88,16 @@ Have questions about Altitude? Need help setting up investigations? Want to sugg
       </select>
     </div>
 
-    <div style="margin-bottom: 1.5rem;">
-      <label for="message" style="display: block; margin-bottom: 0.5rem; color: var(--color-text-primary); font-weight: 500;">
-        Message <span style="color: var(--color-risk-high);">*</span>
+    <div class="form-field">
+      <label for="message" class="form-label">
+        Message <span class="required">*</span>
       </label>
       <textarea 
         id="message" 
         name="message" 
         rows="6" 
         required
-        style="width: 100%; padding: 0.75rem; background: var(--color-glass-bg); border: 1px solid var(--color-glass-border); border-radius: 8px; color: var(--color-text-primary); font-size: 1rem; resize: vertical; font-family: inherit; box-sizing: border-box;"
+        class="form-textarea"
         placeholder="Tell us how we can help..."
       ></textarea>
     </div>
@@ -105,21 +105,20 @@ Have questions about Altitude? Need help setting up investigations? Want to sugg
     <button 
       type="submit"
       id="submit-btn"
-      class="cta-button"
-      style="width: 100%; margin-top: 1rem;"
+      class="cta-button btn-block"
     >
       Send Message
     </button>
   </form>
 
-  <div id="form-success" style="display: none; margin-top: 1.5rem; padding: 1rem; background: rgba(0, 255, 136, 0.15); border: 1px solid var(--color-risk-low); border-radius: 8px; color: var(--color-risk-low); text-align: center;">
+  <div id="form-success" class="form-alert success" style="display: none;">
     <strong>✅ Message sent successfully!</strong><br>
     We'll get back to you soon.
   </div>
 
-  <div id="form-error" style="display: none; margin-top: 1.5rem; padding: 1rem; background: rgba(255, 51, 102, 0.15); border: 1px solid var(--color-risk-high); border-radius: 8px; color: var(--color-risk-high); text-align: center;">
+  <div id="form-error" class="form-alert error" style="display: none;">
     <strong>❌ Error sending message.</strong><br>
-    Please try again or email us directly at <a href="mailto:asalomon@bilomax.com" style="color: var(--color-accent-cyan);">asalomon@bilomax.com</a>
+    Please try again or email us directly at <a href="mailto:asalomon@bilomax.com" class="form-note-link">asalomon@bilomax.com</a>
   </div>
 </div>
 
