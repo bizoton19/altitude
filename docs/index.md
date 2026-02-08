@@ -22,32 +22,6 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
 </div>
 
-<div class="logo-strip">
-  <span>Federal Agencies</span>
-  <span>State Regulators</span>
-  <span>Manufacturers</span>
-  <span>Retailers</span>
-  <span>Non‑Profits</span>
-</div>
-
-<div class="stats-grid">
-  <div class="stat-card">
-    <div class="stat-label">Time Saved</div>
-    <div class="stat-value">20+ hours/week</div>
-    <p>Replace manual searches with automated investigations.</p>
-  </div>
-  <div class="stat-card">
-    <div class="stat-label">Marketplaces</div>
-    <div class="stat-value">6+ sources</div>
-    <p>eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari.</p>
-  </div>
-  <div class="stat-card">
-    <div class="stat-label">Coverage</div>
-    <div class="stat-value">Import → Takedown</div>
-    <p>Complete workflow with risk classification and reporting.</p>
-  </div>
-</div>
-
 
 <div class="split-section section-surface">
   <div>
@@ -70,7 +44,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <h2>Complete Monitoring Workflow</h2>
 
-<div class="workflow-section section-surface">
+<div class="workflow-section section-surface full-bleed">
   <div class="workflow-dag" id="workflowDag"></div>
 
   <div class="workflow-mobile">
@@ -111,7 +85,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 	      <div class="workflow-title">Deterministic automation first, AI agents when adaptation is needed</div>
 	      <div class="workflow-duo">
 	        <div class="workflow-pill"><strong>Deterministic pipeline:</strong> scheduled scans and trained classifiers handle the predictable work. If a site layout or data format changes, agents adapt and continue the investigation.</div>
-	        <div class="workflow-pill"><strong>Human command:</strong> analysts can investigate directly, supervise agents, and override results when confidence is low (with notes and audit trail).</div>
+	        <div class="workflow-pill"><strong>Human in the loop:</strong> analysts can investigate directly, supervise agents, or override investigation and risk classification results (especially when confidence is low) with notes and audit trail.</div>
 	      </div>
 	    </div>
 	  </div>

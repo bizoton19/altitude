@@ -143,40 +143,6 @@ main > ol {
   padding-right: 1.5rem;
 }
 
-.theme-toggle {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
-  z-index: 1000;
-  display: flex;
-  gap: 0.25rem;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.2rem;
-  box-shadow: var(--shadow-soft);
-}
-
-.theme-btn {
-  background: transparent;
-  border: none;
-  padding: 0.4rem 0.65rem;
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  color: var(--ink);
-  transition: background 0.2s ease;
-}
-
-.theme-btn:hover {
-  background: var(--bg-3);
-}
-
-.theme-btn.active {
-  background: var(--accent);
-  color: #fff;
-}
-
 header {
   text-align: left;
   padding: 2.6rem clamp(1.5rem, 3vw, 3rem);
@@ -404,6 +370,14 @@ p {
   padding: 3rem clamp(1.5rem, 3vw, 3rem);
   margin: 3rem auto;
   box-shadow: var(--shadow-soft);
+}
+
+.section-surface.full-bleed {
+  background: var(--bg-3);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 3rem 0;
 }
 
 .section-surface .section-lede {
@@ -1715,7 +1689,7 @@ footer {
     display: flex;
   }
 
-  nav {
+  #mainNav {
     position: fixed;
     inset: 0;
     background: var(--bg);
@@ -1724,13 +1698,17 @@ footer {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 1000;
+    visibility: hidden;
+    pointer-events: none;
   }
 
-  nav.active {
+  #mainNav.active {
     transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
   }
 
-  nav a {
+  #mainNav a {
     font-size: 1.05rem;
   }
 
@@ -1859,13 +1837,6 @@ header,
       });
     })();
   </script>
-  <!-- Theme Toggle -->
-  <div class="theme-toggle" role="group" aria-label="Theme selector">
-    <button class="theme-btn" data-theme-value="light" title="Light theme" aria-label="Light theme">☀️</button>
-    <button class="theme-btn" data-theme-value="auto" title="System theme" aria-label="System theme">🔄</button>
-    <button class="theme-btn" data-theme-value="dark" title="Dark theme" aria-label="Dark theme">🌙</button>
-  </div>
-
   <div class="container">
     <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
       <span></span>
@@ -1955,48 +1926,12 @@ header,
     </footer>
   </div>
 
-  <script>
-    // Theme management
-    const themeButtons = document.querySelectorAll('.theme-btn');
-    const html = document.documentElement;
+	  <script>
+	    // Theme: stay in auto mode (device setting) and avoid UI controls.
 
-    function getStoredTheme() {
-      return localStorage.getItem('altitude-docs-theme') || 'auto';
-    }
-
-    function setTheme(theme) {
-      html.setAttribute('data-theme', theme);
-      localStorage.setItem('altitude-docs-theme', theme);
-      
-      themeButtons.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.themeValue === theme);
-      });
-    }
-
-    setTheme(getStoredTheme());
-
-    themeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        setTheme(btn.dataset.themeValue);
-      });
-    });
-
-    // Safari compatibility: older versions don't support addEventListener on MediaQueryList.
-    const colorSchemeMql = window.matchMedia('(prefers-color-scheme: dark)');
-    const onColorSchemeChange = () => {
-      if (getStoredTheme() === 'auto') {
-        html.setAttribute('data-theme', 'auto');
-      }
-    };
-    if (colorSchemeMql.addEventListener) {
-      colorSchemeMql.addEventListener('change', onColorSchemeChange);
-    } else if (colorSchemeMql.addListener) {
-      colorSchemeMql.addListener(onColorSchemeChange);
-    }
-
-    // Mobile Menu Toggle
-    const menuToggle = document.getElementById('menuToggle');
-    const mainNav = document.getElementById('mainNav');
+	    // Mobile Menu Toggle
+	    const menuToggle = document.getElementById('menuToggle');
+	    const mainNav = document.getElementById('mainNav');
 
     if (menuToggle && mainNav) {
       const toggleMenu = () => {
