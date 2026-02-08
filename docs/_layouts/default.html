@@ -307,7 +307,7 @@ nav a:hover {
   height: auto;
   border-radius: 16px;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg);
 }
 
 .hero-cta {
@@ -339,7 +339,7 @@ nav a:hover {
 }
 
 .btn-secondary {
-  background: #fff;
+  background: var(--bg);
   color: var(--ink);
 }
 
@@ -453,43 +453,15 @@ p {
   stroke: var(--border-strong);
 }
 
+/* Keep the full DAG on desktop and swap to a vertical stack on small screens. */
 @media (max-width: 700px) {
-  
-.workflow-mobile {
-  display: none;
-  margin-top: 2rem;
-  border-top: 1px solid var(--border);
-  padding-top: 1.5rem;
-}
+  .workflow-dag {
+    display: none;
+  }
 
-.workflow-mobile .workflow-mobile-step {
-  padding: 1.1rem 1.2rem;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: var(--shadow-soft);
-  margin-bottom: 1rem;
-}
-
-.workflow-mobile .workflow-mobile-step h4 {
-  margin: 0 0 0.35rem;
-}
-
-.workflow-mobile .workflow-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--accent-strong);
-  background: var(--accent-soft);
-  border-radius: 999px;
-  padding: 0.3rem 0.6rem;
-  margin-top: 0.6rem;
-}
-
-.workflow-dag { display: none; }
+  .workflow-mobile {
+    display: block;
+  }
 }
 
 .section-kicker {
@@ -714,7 +686,7 @@ pre {
   padding: 1.1rem 1.2rem;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--bg-2);
   box-shadow: var(--shadow-soft);
   margin-bottom: 1rem;
 }
@@ -819,7 +791,7 @@ pre {
   padding: 1.1rem 1.2rem;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--bg-2);
   box-shadow: var(--shadow-soft);
   margin-bottom: 1rem;
 }
@@ -953,8 +925,161 @@ pre {
   color: var(--muted);
 }
 
+.risk-viz {
+  position: relative;
+  margin: 2rem auto 3rem;
+  max-width: 1040px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--bg-2);
+  box-shadow: var(--shadow-soft);
+  padding: 1.25rem;
+  overflow: hidden;
+}
+
+.risk-viz svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.risk-tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  left: 1.25rem;
+  top: 1.25rem;
+}
+
+.risk-tooltip.show {
+  opacity: 1;
+}
+
+.risk-tooltip-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 0.95rem 1rem;
+  width: min(520px, calc(100vw - 3rem));
+}
+
+.risk-tooltip-title {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  margin-bottom: 0.55rem;
+  color: var(--ink);
+}
+
+.risk-tooltip-body {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.risk-tooltip-body strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.risk-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  margin-top: 0.75rem;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.rf-link {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.rf-link.active {
+  stroke: var(--accent);
+}
+
+.rf-node {
+  fill: var(--bg-2);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+
+.rf-node.active {
+  stroke: var(--accent);
+}
+
+.rf-label {
+  font-family: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  fill: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.risk-bucket {
+  fill: var(--bg-2);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+
+.risk-bucket.low {
+  stroke: #2aa86f;
+}
+
+.risk-bucket.medium {
+  stroke: #d39b3b;
+}
+
+.risk-bucket.high {
+  stroke: #e06b2d;
+}
+
+.risk-bucket.critical {
+  stroke: #d24a4a;
+}
+
+.risk-bucket-label {
+  font-family: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.risk-bucket-sub {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.risk-product {
+  filter: drop-shadow(0 8px 12px rgba(15, 23, 42, 0.12));
+}
+
+@media (max-width: 600px) {
+  .risk-viz {
+    padding: 1rem;
+  }
+}
+
 .roadmap-section {
   margin: 4rem auto;
+}
+
+.roadmap-section.section-surface {
+  background: var(--bg-3);
 }
 
 .roadmap-grid {
@@ -1053,7 +1178,7 @@ pre {
   padding: 1rem 1.1rem 1rem 1.1rem;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--bg-2);
   min-height: 120px;
 }
 
@@ -1114,7 +1239,7 @@ pre {
   place-items: center;
   color: var(--muted);
   font-size: 0.8rem;
-  background: #fff;
+  background: var(--bg-2);
 }
 
 .workflow-badge {
