@@ -5,18 +5,46 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 ---
 
 <div class="hero-section">
-  <h1 class="hero-title">AI Powered Banned Product Monitoring</h1>
-  <p class="hero-subtitle">
-    Streamline your banned product workflow with automated marketplace monitoring. Federal and state agencies, manufacturers, 
-    importers, retailers, and non-profits use Altitude to replace hours of manual searches with intelligent automation.
-  </p>
-  <div class="hero-cta">
-    <a href="{{ '/contact.html' | relative_url }}" class="btn-primary">Get Started</a>
-    <a href="{{ '/contact.html' | relative_url }}" class="btn-secondary">Open Source</a>
+  <div>
+    <div class="section-kicker">Altitude Docs</div>
+    <h1 class="hero-title">AI-Powered Banned Product Monitoring</h1>
+    <p class="hero-subtitle">
+      Streamline your banned product workflow with automated marketplace monitoring. Federal and state agencies, manufacturers,
+      importers, retailers, and non-profits use Altitude to replace hours of manual searches with intelligent automation.
+    </p>
+    <div class="hero-cta">
+      <a href="{{ '/contact.html' | relative_url }}" class="btn-primary">Get Started</a>
+      <a href="{{ '/contact.html' | relative_url }}" class="btn-secondary">Open Source</a>
+    </div>
+  </div>
+  <div class="hero-media">
+    <img src="{{ '/assets/images/hero-abstract.svg' | relative_url }}" alt="Monitoring dashboard illustration">
   </div>
 </div>
 
-## What is  Altitude?
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Time Saved</div>
+    <div class="stat-value">20+ hours/week</div>
+    <p>Replace manual searches with automated investigations.</p>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Marketplaces</div>
+    <div class="stat-value">6+ sources</div>
+    <p>eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari.</p>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Coverage</div>
+    <div class="stat-value">Import → Takedown</div>
+    <p>Complete workflow with risk classification and reporting.</p>
+  </div>
+</div>
+
+<div class="highlight-banner">
+  Altitude is open source and self-hostable. Deploy the full workflow and scale with API integrations.
+</div>
+
+<h2>Who Altitude Serves</h2>
 
 <div class="audience-section">
   <div class="audience-grid">
@@ -55,11 +83,13 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
 </div>
 
-## The Complete Monitoring Workflow
-
-Altitude streamlines your entire banned product management process from detection to takedown:
+<h2>Complete Monitoring Workflow</h2>
 
 <div class="workflow-section">
+  <div class="workflow-visual">
+    <img src="{{ '/assets/images/workflow-map.svg' | relative_url }}" alt="Workflow map">
+  </div>
+
   <div class="workflow-step">
     <div class="workflow-number">1</div>
     <div class="workflow-content">
@@ -72,7 +102,7 @@ Altitude streamlines your entire banned product management process from detectio
     <div class="workflow-number">2</div>
     <div class="workflow-content">
       <h3>Investigate Marketplaces</h3>
-      <p>Schedule automated AI powered investigations across marketplaces like  eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari, and more. Set daily, weekly, or monthly scans that run automatically. The system searches for banned products using intelligent matching algorithms and visual search capabilities.</p>
+      <p>Schedule automated AI powered investigations across marketplaces like eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari, and more. Set daily, weekly, or monthly scans that run automatically. The system searches for banned products using intelligent matching algorithms and visual search capabilities.</p>
     </div>
   </div>
 
@@ -93,9 +123,7 @@ Altitude streamlines your entire banned product management process from detectio
   </div>
 </div>
 
-## Current Open Source Features
-
-Altitude is currently available as an open source platform. Get started today with these core features:
+<h2>Current Open Source Features</h2>
 
 <div class="products-grid">
   <div class="product-card">
@@ -124,7 +152,7 @@ Altitude is currently available as an open source platform. Get started today wi
       <h3>API & Integrations</h3>
       <p class="product-subtitle">Programmatic access and automation</p>
     </div>
-      <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Get Started</a>
+    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Get Started</a>
     <ul class="product-features">
       <li>RESTful API for all operations</li>
       <li>Model Context Protocol (MCP) server integration</li>
@@ -156,10 +184,68 @@ Altitude is currently available as an open source platform. Get started today wi
   </div>
 </div>
 
-## Coming Soon: Future Roadmap
+<h2>Why Organizations Choose Altitude</h2>
+
+<div class="features-grid spaced">
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+    <h4>Save 30+ Hours Per Week</h4>
+    <p>Automate entire workflow from import to takedown. Reclaim entire workdays while improving banned product detection rates.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-search"></i></div>
+    <h4>Discover Hidden Listings</h4>
+    <p>Automated investigations find listings you never would have discovered manually. Risk classification helps prioritize which banned products need immediate attention.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+    <h4>Complete Workflow Solution</h4>
+    <p>Import → investigate → notify → takedown workflow. Verify product compliance before listing and quickly identify banned product inventory.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+    <h4>Focus on HIGH-Risk Products</h4>
+    <p>Automated risk classification means you focus limited resources on HIGH-risk banned products that pose the greatest danger to consumers.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-clipboard-check"></i></div>
+    <h4>Ensure Compliance</h4>
+    <p>Automated investigations help catch banned products that might slip through manual checks. Takedown tracking ensures you maintain compliance.</p>
+  </div>
+
+  <div class="feature-item">
+    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+    <h4>Measurable Time Savings</h4>
+    <p>Reclaim 25+ hours per week previously spent on manual marketplace searches. Complete workflow automation allows teams to focus on enforcement and consumer protection.</p>
+  </div>
+</div>
+
+<h2>Risk Classification You Can Act On</h2>
+
+**Altitude automatically classifies every banned product by risk level:**
+
+### <span class="risk-badge risk-high">● HIGH RISK</span>
+Banned products with deaths, serious injuries, or 10,000+ units affected. Hazards include fire, electrocution, choking, lead poisoning, strangulation. **Action:** Schedule daily investigations immediately.
+
+### <span class="risk-badge risk-medium">● MEDIUM RISK</span>
+Banned products with minor injuries or 1,000-10,000 units affected. Hazards include cuts, burns, falls, tip-over. **Action:** Weekly or biweekly investigations usually sufficient.
+
+### <span class="risk-badge risk-low">● LOW RISK</span>
+Banned products with no injuries and fewer than 1,000 units affected. Minor defects, labeling issues. **Action:** Monthly investigations or manual searches when needed.
+
+**Risk classification helps you:**
+- Prioritize your team's limited time on HIGH-risk banned products
+- Allocate resources effectively across your banned product management program
+- Generate risk-based reports for regulatory oversight
+- Focus enforcement efforts where they matter most
+
+<h2>Future Roadmap</h2>
 
 <div class="premium-features-section">
-  <h2>Future Roadmap</h2>
   <p class="section-lede">
     The following premium features are planned for future releases. These capabilities will enable even more powerful banned product detection and management workflows.
   </p>
@@ -222,166 +308,7 @@ Altitude is currently available as an open source platform. Get started today wi
   </div>
 </div>
 
-## Why Organizations Choose Altitude
-
-<!-- Testimonials section commented out - replaced with key benefits below
-<div class="testimonials-grid">
-  <div class="testimonial-card">
-    <div class="testimonial-content">
-      <p class="testimonial-quote">"As a state regulatory agency, we were spending 30+ hours per week manually searching marketplaces for banned products. Altitude automated our entire workflow—from import to takedown. We've reclaimed entire workdays while improving our banned product detection rates."</p>
-      <p class="testimonial-author">Sarah Chen</p>
-      <p class="testimonial-company">Director of Consumer Protection, State Agency</p>
-      <p class="testimonial-date">Jan 16, 2025</p>
-    </div>
-  </div>
-
-  <div class="testimonial-card">
-    <div class="testimonial-content">
-      <p class="testimonial-quote">"Our manufacturing company needed to monitor unauthorized sales of our banned products. Altitude's automated investigations found listings we never would have discovered manually. The risk classification helps us prioritize which banned products need immediate attention."</p>
-      <p class="testimonial-author">Michael Rodriguez</p>
-      <p class="testimonial-company">Compliance Director, Manufacturing Corp</p>
-      <p class="testimonial-date">Dec 27, 2024</p>
-    </div>
-  </div>
-
-  <div class="testimonial-card">
-    <div class="testimonial-content">
-      <p class="testimonial-quote">"The import → investigate → notify → takedown workflow is exactly what our retail organization needed. We can now verify product compliance before listing and quickly identify if any banned product inventory makes it to our marketplace listings."</p>
-      <p class="testimonial-author">Jennifer Park</p>
-      <p class="testimonial-company">Operations Lead, Retail Chain</p>
-      <p class="testimonial-date">Dec 21, 2024</p>
-    </div>
-  </div>
-
-  <div class="testimonial-card">
-    <div class="testimonial-content">
-      <p class="testimonial-quote">"Our non-profit consumer safety organization uses Altitude to monitor multiple marketplaces simultaneously. The automated risk classification means we focus our limited resources on HIGH-risk banned products that pose the greatest danger to consumers."</p>
-      <p class="testimonial-author">David Kim</p>
-      <p class="testimonial-company">Executive Director, Consumer Safety Non-Profit</p>
-      <p class="testimonial-date">Aug 12, 2024</p>
-    </div>
-  </div>
-
-  <div class="testimonial-card">
-    <div class="testimonial-content">
-      <p class="testimonial-quote">"As an importer, we needed to ensure compliance before products hit the market. Altitude's automated investigations help us catch banned products that might slip through manual checks. The takedown tracking feature ensures we maintain compliance."</p>
-      <p class="testimonial-author">Lisa Thompson</p>
-      <p class="testimonial-company">Compliance Manager, Import Company</p>
-      <p class="testimonial-date">Dec 23, 2024</p>
-    </div>
-  </div>
-
-  <div class="testimonial-card">
-    <div class="testimonial-content">
-      <p class="testimonial-quote">"The time savings are measurable: our federal agency reclaimed 25+ hours per week previously spent on manual marketplace searches. The complete workflow from import to takedown is now fully automated, allowing our team to focus on enforcement and consumer protection."</p>
-      <p class="testimonial-author">Robert Martinez</p>
-      <p class="testimonial-company">Program Manager, Federal Regulatory Agency</p>
-      <p class="testimonial-date">Aug 19, 2024</p>
-    </div>
-  </div>
-</div>
--->
-
-<div class="features-grid spaced">
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-clock"></i></div>
-    <h4>Save 30+ Hours Per Week</h4>
-    <p>Automate entire workflow from import to takedown. Reclaim entire workdays while improving banned product detection rates.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-search"></i></div>
-    <h4>Discover Hidden Listings</h4>
-    <p>Automated investigations find listings you never would have discovered manually. Risk classification helps prioritize which banned products need immediate attention.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
-    <h4>Complete Workflow Solution</h4>
-    <p>Import → investigate → notify → takedown workflow. Verify product compliance before listing and quickly identify banned product inventory.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-    <h4>Focus on HIGH-Risk Products</h4>
-    <p>Automated risk classification means you focus limited resources on HIGH-risk banned products that pose the greatest danger to consumers.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-clipboard-check"></i></div>
-    <h4>Ensure Compliance</h4>
-    <p>Automated investigations help catch banned products that might slip through manual checks. Takedown tracking ensures you maintain compliance.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-    <h4>Measurable Time Savings</h4>
-    <p>Reclaim 25+ hours per week previously spent on manual marketplace searches. Complete workflow automation allows teams to focus on enforcement and consumer protection.</p>
-  </div>
-</div>
-
-## Manage Risk Effectively with Automated Classification
-
-**Altitude automatically classifies every banned product by risk level:**
-
-### <span class="risk-badge risk-high">● HIGH RISK</span>
-Banned products with deaths, serious injuries, or 10,000+ units affected. Hazards include fire, electrocution, choking, lead poisoning, strangulation. **Action:** Schedule daily investigations immediately.
-
-### <span class="risk-badge risk-medium">● MEDIUM RISK</span>
-Banned products with minor injuries or 1,000-10,000 units affected. Hazards include cuts, burns, falls, tip-over. **Action:** Weekly or biweekly investigations usually sufficient.
-
-### <span class="risk-badge risk-low">● LOW RISK</span>
-Banned products with no injuries and fewer than 1,000 units affected. Minor defects, labeling issues. **Action:** Monthly investigations or manual searches when needed.
-
-**Risk classification helps you:**
-- Prioritize your team's limited time on HIGH-risk banned products
-- Allocate resources effectively across your banned product management program
-- Generate risk-based reports for regulatory oversight
-- Focus enforcement efforts where they matter most
-
-## Key Benefits by Organization Type
-
-<div class="features-grid">
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-landmark"></i></div>
-    <h4>Regulatory Agencies</h4>
-    <p>Automate banned product monitoring across your jurisdiction. Replace manual searches with scheduled investigations. Generate compliance reports for oversight committees.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-industry"></i></div>
-    <h4>Manufacturers & Importers</h4>
-    <p>Monitor for unauthorized sales of your banned products. Track takedown effectiveness. Maintain compliance documentation for regulators.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-store"></i></div>
-    <h4>Retailers & Sellers</h4>
-    <p>Verify product compliance before listing. Prevent banned product inventory from reaching consumers. Protect your brand reputation and avoid regulatory penalties.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-handshake"></i></div>
-    <h4>Non-Profits</h4>
-    <p>Maximize limited resources with automated monitoring. Focus on HIGH-risk banned products that pose the greatest danger. Generate reports for donors and stakeholders.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-hourglass"></i></div>
-    <h4>Save 20+ Hours Per Week</h4>
-    <p>Eliminate repetitive manual searches across multiple marketplaces. Automate your entire banned product workflow from import to takedown.</p>
-  </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
-    <h4>Risk-Based Prioritization</h4>
-    <p>Automated risk classification helps you focus on HIGH-risk banned products first. Allocate resources effectively and improve banned product detection rates.</p>
-  </div>
-</div>
-
-## Getting Started with Open Source
-
-Altitude is available as an open source platform. Get started today:
+<h2>Getting Started with Open Source</h2>
 
 <ol class="steps-list">
   <li><strong>Import Banned Products</strong> — Connect to FDA, NHTSA feeds or import manually via CSV/JSON</li>

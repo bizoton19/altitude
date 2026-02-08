@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="260" viewBox="0 0 840 260" role="img" aria-label="Workflow map">
+  <rect width="840" height="260" fill="#ffffff" />
+  <g fill="#f5f7f9" stroke="#e0e3e7" stroke-width="2">
+    <rect x="40" y="70" width="180" height="120" rx="16" />
+    <rect x="250" y="70" width="180" height="120" rx="16" />
+    <rect x="460" y="70" width="180" height="120" rx="16" />
+    <rect x="670" y="70" width="130" height="120" rx="16" />
+  </g>
+  <g stroke="#1a73e8" stroke-width="3" fill="none">
+    <line x1="220" y1="130" x2="250" y2="130" />
+    <line x1="430" y1="130" x2="460" y2="130" />
+    <line x1="640" y1="130" x2="670" y2="130" />
+  </g>
+  <g fill="#1a73e8">
+    <circle cx="220" cy="130" r="5" />
+    <circle cx="430" cy="130" r="5" />
+    <circle cx="640" cy="130" r="5" />
+  </g>
+  <g fill="#202124" font-family="Roboto, Arial, sans-serif" font-size="16" font-weight="600">
+    <text x="70" y="130">Import</text>
+    <text x="290" y="130">Investigate</text>
+    <text x="500" y="130">Notify</text>
+    <text x="695" y="130">Takedown</text>
+  </g>
+</svg>
