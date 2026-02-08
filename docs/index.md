@@ -74,39 +74,52 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 <h2>Complete Monitoring Workflow</h2>
 
 <div class="workflow-section">
-  <div class="workflow-visual">
-    <img src="{{ '/assets/images/workflow-map.svg' | relative_url }}" alt="Workflow map">
-  </div>
+  <div class="workflow-diagram">
+    <div class="workflow-rail"></div>
+    <div class="workflow-pulse"></div>
+    <div class="workflow-branch">AI Risk Loop</div>
 
-  <div class="workflow-step">
-    <div class="workflow-number">1</div>
-    <div class="workflow-content">
-      <h3>Import Banned Products</h3>
-      <p>Automatically import banned product data from FDA, NHTSA, and other regulatory sources. Manual imports via CSV or JSON also supported. All banned products are automatically classified by risk level (HIGH, MEDIUM, LOW) based on injuries, deaths, units affected, and hazard types.</p>
+    <div class="workflow-node">
+      <strong>Import & Normalize</strong>
+      <p>Pull recall data from FDA, NHTSA, and state feeds. Standardize product identifiers.</p>
+      <div class="workflow-badge">AI Risk Classifier</div>
+    </div>
+
+    <div class="workflow-node">
+      <strong>Investigate Marketplaces</strong>
+      <p>Schedule scans across major platforms using AI matching and visual search.</p>
+      <div class="workflow-badge">AI Agent Delegation</div>
+    </div>
+
+    <div class="workflow-node">
+      <strong>Human + AI Review</strong>
+      <p>Analysts supervise agents, verify evidence, and reprioritize based on severity.</p>
+      <div class="workflow-badge">Human Oversight</div>
+    </div>
+
+    <div class="workflow-node">
+      <strong>Notify & Takedown</strong>
+      <p>Export evidence, issue takedowns, and track compliance outcomes.</p>
+      <div class="workflow-badge">Audit Trail</div>
     </div>
   </div>
 
-  <div class="workflow-step">
-    <div class="workflow-number">2</div>
-    <div class="workflow-content">
-      <h3>Investigate Marketplaces</h3>
-      <p>Schedule automated AI powered investigations across marketplaces like eBay, Amazon, Facebook Marketplace, Craigslist, OfferUp, Mercari, and more. Set daily, weekly, or monthly scans that run automatically. The system searches for banned products using intelligent matching algorithms and visual search capabilities.</p>
+  <div class="workflow-stage">
+    <div class="workflow-label">Parallel Loop</div>
+    <div>
+      <div class="workflow-title">AI risk classification runs during ingestion</div>
+      <p>As new recalls arrive, models score severity, hazards, and units affected—feeding priority queues before investigations begin.</p>
     </div>
   </div>
 
-  <div class="workflow-step">
-    <div class="workflow-number">3</div>
-    <div class="workflow-content">
-      <h3>Notify & Manage Risk</h3>
-      <p>Receive real-time notifications when banned products are found. Prioritize HIGH-risk items first. Risk classification helps you focus your team's limited time on banned products with the highest potential for harm. Export detailed reports for compliance documentation and regulatory filings.</p>
-    </div>
-  </div>
-
-  <div class="workflow-step">
-    <div class="workflow-number">4</div>
-    <div class="workflow-content">
-      <h3>Takedown & Compliance</h3>
-      <p>Export listings data to initiate marketplace takedown requests. Generate compliance-ready reports for regulators. Track takedown effectiveness with follow-up investigations. Maintain audit trails for regulatory compliance and internal record-keeping.</p>
+  <div class="workflow-stage">
+    <div class="workflow-label">Delegation</div>
+    <div>
+      <div class="workflow-title">AI agents investigate alongside human analysts</div>
+      <div class="workflow-duo">
+        <div class="workflow-pill">Agents handle broad marketplace scanning, evidence capture, and similarity matching.</div>
+        <div class="workflow-pill">Humans supervise, validate, and coordinate takedown actions based on risk.</div>
+      </div>
     </div>
   </div>
 </div>
