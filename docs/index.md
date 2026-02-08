@@ -779,7 +779,7 @@ Altitude classifies imported banned products across a low‑to‑high hazard spe
     <div class="roadmap-card blue">
       <div class="icon-chip"><i class="fas fa-camera"></i></div>
       <h3>Mobile Field Toolkit</h3>
-      <p><strong>On‑site scanning</strong> for inspectors: photo capture, barcode checks, and instant risk matching.</p>
+      <p><strong>On-site scanning</strong> for inspectors: photo capture, barcode checks, AI glasses support, and instant risk matching.</p>
     </div>
   </div>
 
