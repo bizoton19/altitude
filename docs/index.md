@@ -741,13 +741,13 @@ Altitude classifies imported banned products across a low‑to‑high hazard spe
     <div class="roadmap-card blue">
       <div class="icon-chip"><i class="fas fa-bullhorn"></i></div>
       <h3>Public Submission API</h3>
-      <p><strong>Open intake</strong> for external tip lines and watchdog reporting, routed into the review queue with audit trails.</p>
+      <p><strong>Can be enabled:</strong> open intake for external tip lines and watchdog reporting, routed into the review queue with audit trails.</p>
     </div>
 
     <div class="roadmap-card blue">
       <div class="icon-chip"><i class="fas fa-search"></i></div>
       <h3>Browser Extension</h3>
-      <p><strong>One‑click capture</strong> while browsing marketplaces, sending evidence directly into takedown workflows.</p>
+      <p><strong>Can be enabled:</strong> one‑click capture while browsing marketplaces, sending evidence directly into takedown workflows.</p>
     </div>
 
     <div class="roadmap-card blue">
