@@ -37,8 +37,8 @@
 
 [data-theme="dark"] {
   --bg: #0b0d11;
-  --bg-2: #151a22;
-  --bg-3: #202734;
+  --bg-2: #161c24;
+  --bg-3: #242e3c;
   --ink: #e7ecf2;
   --ink-strong: #ffffff;
   --muted: #c2c9d1;
@@ -57,8 +57,8 @@
 @media (prefers-color-scheme: dark) {
   [data-theme="auto"] {
     --bg: #0b0d11;
-    --bg-2: #151a22;
-    --bg-3: #202734;
+    --bg-2: #161c24;
+    --bg-3: #242e3c;
     --ink: #e7ecf2;
     --ink-strong: #ffffff;
     --muted: #c2c9d1;
@@ -426,6 +426,18 @@ p {
   border: 1px solid var(--border-strong);
 }
 
+[data-theme="dark"] .roadmap-card,
+[data-theme="auto"] .roadmap-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border-strong);
+}
+
+[data-theme="dark"] .dag-node,
+[data-theme="auto"] .dag-node {
+  fill: var(--bg-2);
+  stroke: var(--border-strong);
+}
+
 @media (max-width: 700px) {
   
 .workflow-mobile {
@@ -529,20 +541,26 @@ pre {
 }
 
 
-.contact-hero {
-  max-width: 720px;
+
+.contact-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
   margin: 2rem auto 1.5rem;
-  border-radius: 18px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--bg-2);
-  box-shadow: var(--shadow-soft);
+  max-width: 720px;
 }
 
-.contact-hero img {
-  display: block;
-  width: 100%;
-  height: auto;
+.contact-icon-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  background: var(--bg-2);
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+}
+
+.contact-icon-card .icon-chip {
+  margin-bottom: 0.5rem;
 }
 
 .contact-panel {

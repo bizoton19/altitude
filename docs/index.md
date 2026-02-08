@@ -387,13 +387,13 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
       <p><strong>Open intake</strong> for external tip lines and watchdog reporting, routed into the review queue with audit trails.</p>
     </div>
 
-    <div class="roadmap-card green">
+    <div class="roadmap-card blue">
       <div class="icon-chip"><i class="fas fa-search"></i></div>
       <h3>Browser Extension</h3>
       <p><strong>One‑click capture</strong> while browsing marketplaces, sending evidence directly into takedown workflows.</p>
     </div>
 
-    <div class="roadmap-card amber">
+    <div class="roadmap-card blue">
       <div class="icon-chip"><i class="fas fa-camera"></i></div>
       <h3>Mobile Field Toolkit</h3>
       <p><strong>On‑site scanning</strong> for inspectors: photo capture, barcode checks, and instant risk matching.</p>

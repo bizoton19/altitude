@@ -10,9 +10,24 @@ permalink: /contact.html
 Have questions about Altitude? Need help setting up investigations? Want to suggest a feature? We'd love to hear from you!
 
 
-<div class="contact-hero">
-  <img src="{{ '/assets/images/hero-abstract.svg' | relative_url }}" alt="Monitoring dashboard illustration">
+<div class="contact-icons">
+  <div class="contact-icon-card">
+    <div class="icon-chip"><i class="fas fa-headset"></i></div>
+    <h4>Support</h4>
+    <p>Implementation help and platform guidance.</p>
+  </div>
+  <div class="contact-icon-card">
+    <div class="icon-chip"><i class="fas fa-clipboard-check"></i></div>
+    <h4>Compliance</h4>
+    <p>Evidence capture and audit‑ready reporting.</p>
+  </div>
+  <div class="contact-icon-card">
+    <div class="icon-chip"><i class="fas fa-plug"></i></div>
+    <h4>Integrations</h4>
+    <p>API access, MCP server, and webhooks.</p>
+  </div>
 </div>
+
 <div class="glass-panel contact-panel">
   <form id="contact-form" action="https://formsubmit.co/asalomon@bilomax.com" method="POST" target="_self">
     <input type="hidden" name="_captcha" value="false">
