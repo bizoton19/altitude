@@ -73,6 +73,30 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 <div class="workflow-section section-surface">
   <div class="workflow-dag" id="workflowDag"></div>
 
+  <div class="workflow-mobile">
+    <div class="workflow-mobile-step">
+      <h4>Import & Normalize</h4>
+      <p>Standardize banned product data, deduplicate sources, and prepare ingestion queues.</p>
+      <div class="workflow-chip">AI Risk Classifier</div>
+    </div>
+    <div class="workflow-mobile-step">
+      <h4>Investigate Marketplaces</h4>
+      <p>AI matching and visual search across primary marketplaces, scheduled by risk.</p>
+      <div class="workflow-chip">Agent Delegation</div>
+    </div>
+    <div class="workflow-mobile-step">
+      <h4>Human + AI Review</h4>
+      <p>Analysts supervise, validate, and reprioritize based on severity.</p>
+      <div class="workflow-chip">Human Oversight</div>
+    </div>
+    <div class="workflow-mobile-step">
+      <h4>Notify & Takedown</h4>
+      <p>Export evidence, issue takedowns, and log compliance outcomes.</p>
+      <div class="workflow-chip">Audit Trail</div>
+    </div>
+  </div>
+
+
   <div class="workflow-stage">
     <div class="workflow-label">Parallel Loop</div>
     <div>
