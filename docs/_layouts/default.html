@@ -723,39 +723,85 @@ pre {
   text-transform: uppercase;
 }
 
-.dag-expand {
-  font-size: 11px;
-  fill: var(--accent-strong);
-  text-decoration: underline;
-  cursor: pointer;
+
+.dag-tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-.roadmap-scroll {
+.dag-tooltip.show {
+  opacity: 1;
+}
+
+.dag-tooltip-card {
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 0.85rem 1rem;
+  width: 240px;
+}
+
+.dag-tooltip-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+.dag-tooltip-text {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.roadmap-section {
+  margin: 4rem auto;
+}
+
+.roadmap-grid {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(240px, 320px);
-  gap: 1.5rem;
-  overflow-x: auto;
-  padding: 0.5rem 0 1.5rem;
-  scroll-snap-type: x mandatory;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.75rem;
+  padding: 0 1.5rem;
 }
 
-.roadmap-scroll > .premium-feature-card {
-  scroll-snap-align: start;
+.roadmap-card {
+  padding: 1.8rem;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
 }
 
-.roadmap-scroll::-webkit-scrollbar {
-  height: 8px;
+.roadmap-card h3 {
+  font-family: "Source Serif 4", "Times New Roman", serif;
+  font-size: 1.3rem;
+  margin-bottom: 0.65rem;
 }
 
-.roadmap-scroll::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 999px;
+.roadmap-card p {
+  margin: 0;
+  font-size: 0.98rem;
 }
 
-.roadmap-scroll::-webkit-scrollbar-track {
-  background: var(--bg-3);
-  border-radius: 999px;
+.roadmap-card strong {
+  font-weight: 700;
+}
+
+.roadmap-card.blue {
+  background: #e9f1ff;
+}
+
+.roadmap-card.green {
+  background: #e8f5ea;
+}
+
+.roadmap-card.amber {
+  background: #fff4e5;
+}
+
+.roadmap-card.pink {
+  background: #fdebf1;
 }
 
 @keyframes dash {

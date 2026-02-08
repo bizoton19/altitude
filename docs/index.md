@@ -148,6 +148,14 @@ description: Automated banned product monitoring for regulatory agencies, manufa
       takedown: { x: 860, y: 140 }
     };
 
+    const tooltip = d3.select(container)
+      .append('div')
+      .attr('class', 'dag-tooltip');
+
+    tooltip.append('div')
+      .attr('class', 'dag-tooltip-card')
+      .html('<div class="dag-tooltip-title"></div><div class="dag-tooltip-text"></div>');
+
     const linkGroup = svg.append('g');
     linkGroup.selectAll('path')
       .data(data.links)
@@ -168,40 +176,24 @@ description: Automated banned product monitoring for regulatory agencies, manufa
       .enter()
       .append('g')
       .attr('transform', d => `translate(${positions[d.id].x - 90}, ${positions[d.id].y - 36})`)
-      .style('cursor', 'pointer')
-      .on('click', function(event, d) {
-        const expanded = d3.select(this).classed('expanded');
-        d3.selectAll('.dag-detail').remove();
-        d3.selectAll('.dag-node').classed('highlight', false);
-        if (!expanded) {
-          d3.select(this).classed('expanded', true);
-          d3.select(this).select('rect').classed('highlight', true);
-          const detail = svg.append('g')
-            .attr('class', 'dag-detail')
-            .attr('transform', `translate(${positions[d.id].x - 120}, ${positions[d.id].y + 50})`);
-          detail.append('rect')
-            .attr('width', 240)
-            .attr('height', 64)
-            .attr('rx', 12)
-            .attr('fill', '#ffffff')
-            .attr('stroke', '#c8cdd4');
-          detail.append('text')
-            .attr('x', 12)
-            .attr('y', 24)
-            .attr('class', 'dag-label')
-            .text(d.label);
-          detail.append('text')
-            .attr('x', 12)
-            .attr('y', 44)
-            .attr('class', 'dag-subtitle')
-            .text(d.details);
-        } else {
-          d3.select(this).classed('expanded', false);
-        }
+      .on('mouseenter', function(event, d) {
+        d3.select(this).select('rect').classed('highlight', true);
+        tooltip.classed('show', true);
+        tooltip.select('.dag-tooltip-title').text(d.label);
+        tooltip.select('.dag-tooltip-text').text(d.details);
+      })
+      .on('mousemove', function(event) {
+        const bounds = container.getBoundingClientRect();
+        tooltip.style('left', `${event.clientX - bounds.left + 16}px`);
+        tooltip.style('top', `${event.clientY - bounds.top + 16}px`);
+      })
+      .on('mouseleave', function() {
+        d3.select(this).select('rect').classed('highlight', false);
+        tooltip.classed('show', false);
       });
 
     node.append('rect')
-      .attr('class', d => `dag-node ${d.type === 'loop' ? 'highlight' : ''} state-${d.state}`)
+      .attr('class', d => `dag-node state-${d.state}`)
       .attr('width', 180)
       .attr('height', 72)
       .attr('rx', 12);
@@ -218,17 +210,11 @@ description: Automated banned product monitoring for regulatory agencies, manufa
       .attr('y', 48)
       .text(d => d.subtitle);
 
-    node.append('text')
-      .attr('class', 'dag-expand')
-      .attr('x', 16)
-      .attr('y', 64)
-      .text('Click to expand');
-
     node.filter(d => d.type === 'loop' || d.type === 'branch')
       .append('rect')
       .attr('class', 'dag-pill')
       .attr('x', 16)
-      .attr('y', 68)
+      .attr('y', 52)
       .attr('width', 120)
       .attr('height', 16)
       .attr('rx', 999);
@@ -237,10 +223,11 @@ description: Automated banned product monitoring for regulatory agencies, manufa
       .append('text')
       .attr('class', 'dag-pill-text')
       .attr('x', 24)
-      .attr('y', 80)
+      .attr('y', 64)
       .text(d => (d.type === 'loop' ? 'Feedback Loop' : 'Parallel'));
   })();
 </script>
+
 
 <h2>Product Capabilities</h2>
 
@@ -365,34 +352,30 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
 
 <h2>Roadmap Priorities</h2>
 
-<div class="premium-features-section">
+<div class="roadmap-section">
   <p class="section-lede">
     We’re building toward deeper automation, broader capture, and better field intelligence. These are the next capabilities on deck.
   </p>
 
-  <div class="premium-features-grid roadmap-scroll">
-    <div class="premium-feature-card">
-      <div class="premium-feature-icon"><i class="fas fa-globe"></i></div>
+  <div class="roadmap-grid">
+    <div class="roadmap-card blue">
       <h3>Public Submission API</h3>
-      <p>Enable external tip lines to submit suspected banned listings directly into Altitude’s review queue.</p>
+      <p><strong>Open intake</strong> for external tip lines and watchdog reporting, routed into the review queue with audit trails.</p>
     </div>
 
-    <div class="premium-feature-card">
-      <div class="premium-feature-icon"><i class="fas fa-plug"></i></div>
+    <div class="roadmap-card green">
       <h3>Browser Extension</h3>
-      <p>Capture listings during manual review and push evidence into takedown workflows in one click.</p>
+      <p><strong>One‑click capture</strong> while browsing marketplaces, sending evidence directly into takedown workflows.</p>
     </div>
 
-    <div class="premium-feature-card">
-      <div class="premium-feature-icon"><i class="fas fa-mobile-screen-button"></i></div>
+    <div class="roadmap-card amber">
       <h3>Mobile Field Toolkit</h3>
-      <p>Photograph, scan, and classify products in the field with instant risk matching.</p>
+      <p><strong>On‑site scanning</strong> for inspectors: photo capture, barcode checks, and instant risk matching.</p>
     </div>
 
-    <div class="premium-feature-card">
-      <div class="premium-feature-icon"><i class="fas fa-robot"></i></div>
+    <div class="roadmap-card pink">
       <h3>Advanced AI Models</h3>
-      <p>Specialized models for category-specific risk detection and proactive banned product detection.</p>
+      <p><strong>Category‑specific models</strong> tuned for proactive detection and specialized hazard profiles.</p>
     </div>
   </div>
 
