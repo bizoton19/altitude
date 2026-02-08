@@ -6,20 +6,28 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <div class="hero-section">
   <div>
-    <div class="section-kicker">Altitude Docs</div>
-    <h1 class="hero-title">AI-Powered Banned Product Monitoring</h1>
+    <div class="section-kicker">Altitude Platform</div>
+    <h1 class="hero-title">Banned Product Monitoring, Automated End‑to‑End</h1>
     <p class="hero-subtitle">
-      Streamline your banned product workflow with automated marketplace monitoring. Federal and state agencies, manufacturers,
-      importers, retailers, and non-profits use Altitude to replace hours of manual searches with intelligent automation.
+      Altitude turns scattered regulatory data into a coordinated monitoring workflow. Import recall data, scan marketplaces,
+      prioritize risk, and export compliance-ready reports—without the manual search grind.
     </p>
     <div class="hero-cta">
-      <a href="{{ '/contact.html' | relative_url }}" class="btn-primary">Get Started</a>
-      <a href="{{ '/contact.html' | relative_url }}" class="btn-secondary">Open Source</a>
+      <a href="{{ '/contact.html' | relative_url }}" class="btn-primary">Request Access</a>
+      <a href="{{ '/contact.html' | relative_url }}" class="btn-secondary">View API Docs</a>
     </div>
   </div>
   <div class="hero-media">
     <img src="{{ '/assets/images/hero-abstract.svg' | relative_url }}" alt="Monitoring dashboard illustration">
   </div>
+</div>
+
+<div class="logo-strip">
+  <span>Federal Agencies</span>
+  <span>State Regulators</span>
+  <span>Manufacturers</span>
+  <span>Retailers</span>
+  <span>Non‑Profits</span>
 </div>
 
 <div class="stats-grid">
@@ -44,42 +52,22 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   Altitude is open source and self-hostable. Deploy the full workflow and scale with API integrations.
 </div>
 
-<h2>Who Altitude Serves</h2>
-
-<div class="audience-section">
-  <div class="audience-grid">
-    <div class="audience-card">
-      <div class="audience-icon">
-        <img src="{{ '/assets/logos/fda.svg' | relative_url }}" alt="Federal & State Regulatory Agencies" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="audience-fallback"><i class="fas fa-landmark"></i></div>
-      </div>
-      <h4>Federal & State Regulatory Agencies</h4>
-      <p>FDA, NHTSA, and state consumer protection agencies monitoring banned products across marketplaces</p>
-    </div>
-    <div class="audience-card">
-      <div class="audience-icon">
-        <img src="{{ '/assets/logos/manufacturer.svg' | relative_url }}" alt="Manufacturers & Importers" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="audience-fallback"><i class="fas fa-industry"></i></div>
-      </div>
-      <h4>Manufacturers & Importers</h4>
-      <p>Monitor marketplaces for unauthorized sales of banned products and ensure compliance</p>
-    </div>
-    <div class="audience-card">
-      <div class="audience-icon">
-        <img src="{{ '/assets/logos/retailer.svg' | relative_url }}" alt="Retailers & Private Sellers" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="audience-fallback"><i class="fas fa-store"></i></div>
-      </div>
-      <h4>Retailers & Private Sellers</h4>
-      <p>Verify product compliance before listing and prevent selling banned product inventory</p>
-    </div>
-    <div class="audience-card">
-      <div class="audience-icon">
-        <img src="{{ '/assets/logos/nonprofit.svg' | relative_url }}" alt="Non-Profit Organizations" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="audience-fallback"><i class="fas fa-handshake"></i></div>
-      </div>
-      <h4>Non-Profit Organizations</h4>
-      <p>Consumer safety advocates and watchdog groups protecting consumers from banned products</p>
-    </div>
+<div class="split-section">
+  <div>
+    <div class="section-kicker">Product</div>
+    <h2>One platform, four critical workflows</h2>
+    <p>
+      Altitude brings compliance, investigation, and enforcement into a single workspace. Each workflow is designed to reduce
+      manual triage and help teams focus on the highest-risk products first.
+    </p>
+  </div>
+  <div class="split-card">
+    <ul class="split-list">
+      <li>Import structured recall data from FDA, NHTSA, and state feeds.</li>
+      <li>Schedule marketplace investigations across major platforms.</li>
+      <li>Trigger alerts and risk classification as listings appear.</li>
+      <li>Export takedown-ready evidence and compliance reports.</li>
+    </ul>
   </div>
 </div>
 
@@ -123,104 +111,86 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
 </div>
 
-<h2>Current Open Source Features</h2>
+<h2>Product Capabilities</h2>
 
-<div class="products-grid">
-  <div class="product-card">
-    <div class="product-header">
-      <h3>Automated Monitoring</h3>
-      <p class="product-subtitle">Core banned product management workflow</p>
-    </div>
-    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Get Started</a>
-    <ul class="product-features">
-      <li>Import banned products from FDA, NHTSA feeds</li>
-      <li>Automated marketplace investigations</li>
-      <li>AI-powered risk classification (HIGH/MEDIUM/LOW)</li>
-      <li>Real-time email notifications</li>
-      <li>Export compliance-ready reports (CSV, JSON, PDF)</li>
-      <li>Multi-marketplace coverage (eBay, Amazon, Facebook, etc.)</li>
-      <li>Schedule daily, weekly, monthly investigations</li>
-      <li>Complete workflow: Import → Investigate → Notify → Takedown</li>
-      <li>Save 20+ hours per week vs manual searches</li>
-      <li>Open source and self-hostable</li>
-    </ul>
+<div class="feature-row">
+  <div>
+    <h3>Automated Monitoring</h3>
+    <p>Continuously scan marketplaces with configurable cadence, visual search, and keyword matching.</p>
   </div>
-
-  <div class="product-card featured">
-    <div class="product-badge">Available Now</div>
-    <div class="product-header">
-      <h3>API & Integrations</h3>
-      <p class="product-subtitle">Programmatic access and automation</p>
-    </div>
-    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Get Started</a>
-    <ul class="product-features">
-      <li>RESTful API for all operations</li>
-      <li>Model Context Protocol (MCP) server integration</li>
-      <li>Webhook support for real-time updates</li>
-      <li>Python SDK and CLI tools</li>
-      <li>Custom marketplace integrations</li>
-      <li>Batch import and export capabilities</li>
-      <li>Integration with existing compliance systems</li>
-      <li>Developer-friendly documentation</li>
-    </ul>
-  </div>
-
-  <div class="product-card">
-    <div class="product-header">
-      <h3>Risk Management</h3>
-      <p class="product-subtitle">Intelligent prioritization and classification</p>
-    </div>
-    <a href="{{ '/contact.html' | relative_url }}" class="product-cta">Learn More</a>
-    <ul class="product-features">
-      <li>Automatic risk classification based on injuries, deaths, units affected</li>
-      <li>Hazard-based prioritization (fire, electrocution, choking, etc.)</li>
-      <li>Risk-based investigation scheduling</li>
-      <li>High-risk banned product alerts and notifications</li>
-      <li>Risk analytics and reporting dashboards</li>
-      <li>Custom risk scoring models</li>
-      <li>Focus team time on HIGH-risk items first</li>
-      <li>Compliance-ready risk documentation</li>
+  <div>
+    <ul>
+      <li>Daily, weekly, or monthly investigations</li>
+      <li>Marketplace coverage across major platforms</li>
+      <li>Automated listing discovery and evidence capture</li>
     </ul>
   </div>
 </div>
 
-<h2>Why Organizations Choose Altitude</h2>
-
-<div class="features-grid spaced">
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-clock"></i></div>
-    <h4>Save 30+ Hours Per Week</h4>
-    <p>Automate entire workflow from import to takedown. Reclaim entire workdays while improving banned product detection rates.</p>
+<div class="feature-row">
+  <div>
+    <h3>Risk Intelligence</h3>
+    <p>Rank banned products by severity so teams can act on high-risk items first.</p>
   </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-search"></i></div>
-    <h4>Discover Hidden Listings</h4>
-    <p>Automated investigations find listings you never would have discovered manually. Risk classification helps prioritize which banned products need immediate attention.</p>
+  <div>
+    <ul>
+      <li>Automated HIGH/MEDIUM/LOW classification</li>
+      <li>Hazard-based prioritization</li>
+      <li>Risk analytics and exportable reports</li>
+    </ul>
   </div>
+</div>
 
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
-    <h4>Complete Workflow Solution</h4>
-    <p>Import → investigate → notify → takedown workflow. Verify product compliance before listing and quickly identify banned product inventory.</p>
+<div class="feature-row">
+  <div>
+    <h3>API & Integrations</h3>
+    <p>Connect Altitude to internal systems, automation scripts, or compliance workflows.</p>
   </div>
-
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-    <h4>Focus on HIGH-Risk Products</h4>
-    <p>Automated risk classification means you focus limited resources on HIGH-risk banned products that pose the greatest danger to consumers.</p>
+  <div>
+    <ul>
+      <li>REST API and MCP server support</li>
+      <li>Webhook-based notifications</li>
+      <li>Batch import/export pipelines</li>
+    </ul>
   </div>
+</div>
 
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-clipboard-check"></i></div>
-    <h4>Ensure Compliance</h4>
-    <p>Automated investigations help catch banned products that might slip through manual checks. Takedown tracking ensures you maintain compliance.</p>
-  </div>
+<h2>Who Altitude Serves</h2>
 
-  <div class="feature-item">
-    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-    <h4>Measurable Time Savings</h4>
-    <p>Reclaim 25+ hours per week previously spent on manual marketplace searches. Complete workflow automation allows teams to focus on enforcement and consumer protection.</p>
+<div class="audience-section">
+  <div class="audience-grid">
+    <div class="audience-card">
+      <div class="audience-icon">
+        <img src="{{ '/assets/logos/fda.svg' | relative_url }}" alt="Federal & State Regulatory Agencies" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="audience-fallback"><i class="fas fa-landmark"></i></div>
+      </div>
+      <h4>Federal & State Regulatory Agencies</h4>
+      <p>FDA, NHTSA, and state consumer protection agencies monitoring banned products across marketplaces</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-icon">
+        <img src="{{ '/assets/logos/manufacturer.svg' | relative_url }}" alt="Manufacturers & Importers" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="audience-fallback"><i class="fas fa-industry"></i></div>
+      </div>
+      <h4>Manufacturers & Importers</h4>
+      <p>Monitor marketplaces for unauthorized sales of banned products and ensure compliance</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-icon">
+        <img src="{{ '/assets/logos/retailer.svg' | relative_url }}" alt="Retailers & Private Sellers" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="audience-fallback"><i class="fas fa-store"></i></div>
+      </div>
+      <h4>Retailers & Private Sellers</h4>
+      <p>Verify product compliance before listing and prevent selling banned product inventory</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-icon">
+        <img src="{{ '/assets/logos/nonprofit.svg' | relative_url }}" alt="Non-Profit Organizations" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="audience-fallback"><i class="fas fa-handshake"></i></div>
+      </div>
+      <h4>Non-Profit Organizations</h4>
+      <p>Consumer safety advocates and watchdog groups protecting consumers from banned products</p>
+    </div>
   </div>
 </div>
 

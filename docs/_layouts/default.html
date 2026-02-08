@@ -20,17 +20,17 @@
   --bg: #ffffff;
   --bg-2: #f7f8f9;
   --bg-3: #eef1f4;
-  --ink: #1f2328;
-  --ink-strong: #0d1117;
+  --ink: #1b1f24;
+  --ink-strong: #0a0c10;
   --muted: #4f5b66;
   --accent: #1a73e8;
   --accent-strong: #1557b0;
   --accent-soft: rgba(26, 115, 232, 0.08);
   --accent-3: #d93025;
-  --border: #e2e6ea;
-  --border-strong: #c7cdd3;
-  --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  --shadow-soft: 0 6px 16px rgba(15, 23, 42, 0.06);
+  --border: #e1e5ea;
+  --border-strong: #c8cdd4;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 8px 20px rgba(15, 23, 42, 0.06);
   --code-bg: #f4f6f8;
   --code-text: #1f2328;
 }
@@ -65,7 +65,7 @@
     --accent: #8ab4f8;
     --accent-strong: #6fa4f6;
     --accent-soft: rgba(138, 180, 248, 0.14);
-  --accent-3: #f28b82;
+    --accent-3: #f28b82;
     --border: #27303a;
     --border-strong: #3a4654;
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -120,7 +120,7 @@ main > h3,
 main > p,
 main > ul,
 main > ol {
-  max-width: 980px;
+  max-width: 1040px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -170,9 +170,9 @@ main > ol {
 
 header {
   text-align: left;
-  padding: 2.8rem clamp(1.5rem, 3vw, 3rem);
+  padding: 2.6rem clamp(1.5rem, 3vw, 3rem);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 18px;
   background: var(--bg-2);
   box-shadow: var(--shadow);
 }
@@ -271,12 +271,12 @@ nav a:hover {
   gap: 2.5rem;
   align-items: center;
   padding: 3.5rem clamp(1.5rem, 4vw, 3.5rem);
-  margin: 3.5rem auto;
+  margin: 3.5rem auto 2.5rem;
   border: 1px solid var(--border);
   border-radius: 20px;
   background: var(--bg-2);
   box-shadow: var(--shadow);
-  max-width: 1100px;
+  max-width: 1120px;
 }
 
 .hero-title {
@@ -389,7 +389,7 @@ p {
 
 .section-kicker {
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   font-size: 0.75rem;
   color: var(--muted);
   margin-bottom: 0.75rem;
@@ -430,7 +430,7 @@ pre {
   border: 1px solid var(--border);
 }
 
-.glass-panel,
+.panel,
 .audience-card,
 .workflow-step,
 .product-card,
@@ -438,14 +438,15 @@ pre {
 .premium-feature-card,
 .testimonial-card,
 .stat-card,
-.summary-card {
-  background: var(--bg-2);
+.summary-card,
+.split-card {
+  background: #fff;
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: var(--shadow-soft);
 }
 
-.glass-panel {
+.panel {
   padding: 2rem;
 }
 
@@ -481,6 +482,56 @@ pre {
   font-size: 1.8rem;
   font-weight: 600;
   margin: 0.35rem 0;
+}
+
+.logo-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem 0;
+  color: var(--muted);
+}
+
+.logo-strip span {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.split-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  align-items: center;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+}
+
+.split-card {
+  padding: 1.8rem;
+}
+
+.split-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.split-list li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.split-list li::before {
+  content: "•";
+  color: var(--accent);
+  font-weight: 700;
+  margin-top: 0.1rem;
 }
 
 .audience-section {
@@ -653,7 +704,31 @@ pre {
 .feature-icon {
   font-size: 2.2rem;
   margin-bottom: 1rem;
-  color: var(--accent-2);
+  color: var(--accent-strong);
+}
+
+.feature-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem;
+  max-width: 1040px;
+}
+
+.feature-row + .feature-row {
+  border-top: 1px solid var(--border);
+  padding-top: 2.5rem;
+}
+
+.feature-row h3 {
+  margin-top: 0;
+}
+
+.feature-row ul {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
 }
 
 .risk-badge {
@@ -907,7 +982,12 @@ footer {
     flex-direction: column;
   }
 
-  .hero-section {
+  .hero-section,
+  .split-section {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-row {
     grid-template-columns: 1fr;
   }
 }
@@ -954,7 +1034,8 @@ header,
 .feature-item,
 .premium-feature-card,
 .stat-card,
-.summary-card {
+.summary-card,
+.split-card {
   animation: riseIn 0.4s ease forwards;
 }
 
