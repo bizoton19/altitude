@@ -9,7 +9,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     <div class="section-kicker">Altitude Platform</div>
     <h1 class="hero-title">Banned Product Monitoring, Automated End‑to‑End</h1>
     <p class="hero-subtitle">
-      Altitude turns scattered regulatory data into a coordinated monitoring workflow. Import recall data, scan marketplaces,
+      Altitude turns scattered regulatory data into a coordinated monitoring workflow. Import banned product data, scan marketplaces,
       prioritize risk, and export compliance-ready reports—without the manual search grind.
     </p>
     <div class="hero-cta">
@@ -63,7 +63,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
   <div class="split-card">
     <ul class="split-list">
-      <li>Import structured recall data from FDA, NHTSA, and state feeds.</li>
+      <li>Import structured banned product data from FDA, NHTSA, and state feeds.</li>
       <li>Schedule marketplace investigations across major platforms.</li>
       <li>Trigger alerts and risk classification as listings appear.</li>
       <li>Export takedown-ready evidence and compliance reports.</li>
@@ -74,41 +74,13 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 <h2>Complete Monitoring Workflow</h2>
 
 <div class="workflow-section">
-  <div class="workflow-diagram">
-    <div class="workflow-rail"></div>
-    <div class="workflow-pulse"></div>
-    <div class="workflow-branch">AI Risk Loop</div>
-
-    <div class="workflow-node">
-      <strong>Import & Normalize</strong>
-      <p>Pull recall data from FDA, NHTSA, and state feeds. Standardize product identifiers.</p>
-      <div class="workflow-badge">AI Risk Classifier</div>
-    </div>
-
-    <div class="workflow-node">
-      <strong>Investigate Marketplaces</strong>
-      <p>Schedule scans across major platforms using AI matching and visual search.</p>
-      <div class="workflow-badge">AI Agent Delegation</div>
-    </div>
-
-    <div class="workflow-node">
-      <strong>Human + AI Review</strong>
-      <p>Analysts supervise agents, verify evidence, and reprioritize based on severity.</p>
-      <div class="workflow-badge">Human Oversight</div>
-    </div>
-
-    <div class="workflow-node">
-      <strong>Notify & Takedown</strong>
-      <p>Export evidence, issue takedowns, and track compliance outcomes.</p>
-      <div class="workflow-badge">Audit Trail</div>
-    </div>
-  </div>
+  <div class="workflow-dag" id="workflowDag"></div>
 
   <div class="workflow-stage">
     <div class="workflow-label">Parallel Loop</div>
     <div>
       <div class="workflow-title">AI risk classification runs during ingestion</div>
-      <p>As new recalls arrive, models score severity, hazards, and units affected—feeding priority queues before investigations begin.</p>
+      <p>As new banned products arrive, models score severity, hazards, and units affected—feeding priority queues before investigations begin.</p>
     </div>
   </div>
 
@@ -123,6 +95,104 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     </div>
   </div>
 </div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+  (function() {
+    const data = {
+      nodes: [
+        { id: 'import', label: 'Import & Normalize', subtitle: 'Banned product ingestion' },
+        { id: 'risk', label: 'AI Risk Classifier', subtitle: 'Severity + hazard scoring', type: 'loop' },
+        { id: 'investigate', label: 'Investigate Marketplaces', subtitle: 'AI matching + visual search' },
+        { id: 'agents', label: 'AI Agent Delegation', subtitle: 'Parallel investigations', type: 'branch' },
+        { id: 'review', label: 'Human + AI Review', subtitle: 'Supervision + reprioritization' },
+        { id: 'takedown', label: 'Notify & Takedown', subtitle: 'Evidence + compliance export' }
+      ],
+      links: [
+        { source: 'import', target: 'risk', type: 'active' },
+        { source: 'import', target: 'investigate', type: 'main' },
+        { source: 'risk', target: 'import', type: 'loop' },
+        { source: 'investigate', target: 'agents', type: 'active' },
+        { source: 'agents', target: 'review', type: 'main' },
+        { source: 'review', target: 'takedown', type: 'main' }
+      ]
+    };
+
+    const container = document.getElementById('workflowDag');
+    if (!container || !window.d3) return;
+
+    const width = Math.min(container.clientWidth, 1000);
+    const height = 320;
+    const svg = d3.select(container)
+      .append('svg')
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('role', 'img')
+      .attr('aria-label', 'Workflow DAG showing AI risk loop and agent delegation');
+
+    const positions = {
+      import: { x: 80, y: 120 },
+      risk: { x: 80, y: 40 },
+      investigate: { x: 320, y: 120 },
+      agents: { x: 560, y: 60 },
+      review: { x: 560, y: 190 },
+      takedown: { x: 820, y: 120 }
+    };
+
+    const linkGroup = svg.append('g');
+    linkGroup.selectAll('path')
+      .data(data.links)
+      .enter()
+      .append('path')
+      .attr('class', d => `dag-link ${d.type === 'active' ? 'active' : ''}`)
+      .attr('d', d => {
+        const s = positions[d.source];
+        const t = positions[d.target];
+        const midX = (s.x + t.x) / 2;
+        return `M ${s.x} ${s.y} C ${midX} ${s.y}, ${midX} ${t.y}, ${t.x} ${t.y}`;
+      });
+
+    const nodeGroup = svg.append('g');
+    const node = nodeGroup.selectAll('g')
+      .data(data.nodes)
+      .enter()
+      .append('g')
+      .attr('transform', d => `translate(${positions[d.id].x - 90}, ${positions[d.id].y - 36})`);
+
+    node.append('rect')
+      .attr('class', d => `dag-node ${d.type === 'loop' ? 'highlight' : ''}`)
+      .attr('width', 180)
+      .attr('height', 72)
+      .attr('rx', 12);
+
+    node.append('text')
+      .attr('class', 'dag-label')
+      .attr('x', 16)
+      .attr('y', 28)
+      .text(d => d.label);
+
+    node.append('text')
+      .attr('class', 'dag-subtitle')
+      .attr('x', 16)
+      .attr('y', 48)
+      .text(d => d.subtitle);
+
+    node.filter(d => d.type === 'loop' || d.type === 'branch')
+      .append('rect')
+      .attr('class', 'dag-pill')
+      .attr('x', 16)
+      .attr('y', 54)
+      .attr('width', 120)
+      .attr('height', 16)
+      .attr('rx', 999);
+
+    node.filter(d => d.type === 'loop' || d.type === 'branch')
+      .append('text')
+      .attr('class', 'dag-pill-text')
+      .attr('x', 24)
+      .attr('y', 66)
+      .text(d => (d.type === 'loop' ? 'Feedback Loop' : 'Parallel'));
+  })();
+</script>
 
 <h2>Product Capabilities</h2>
 
@@ -177,7 +247,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
   <div>
     <ul>
-      <li>Federal and state recall ingestion</li>
+      <li>Federal and state banned product ingestion</li>
       <li>Evidence capture for enforcement</li>
       <li>Compliance-ready reporting</li>
     </ul>
@@ -274,7 +344,7 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
     <div class="premium-feature-card">
       <div class="premium-feature-icon"><i class="fas fa-robot"></i></div>
       <h3>Advanced AI Models</h3>
-      <p>Specialized models for category-specific risk detection and proactive recall detection.</p>
+      <p>Specialized models for category-specific risk detection and proactive banned product detection.</p>
     </div>
   </div>
 

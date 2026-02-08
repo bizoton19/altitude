@@ -574,6 +574,82 @@ pre {
 }
 
 
+.workflow-dag {
+  margin: 2.5rem auto 3rem;
+  max-width: 1040px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--bg-2);
+  box-shadow: var(--shadow-soft);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.workflow-dag svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dag-link {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+  animation: dash 6s linear infinite;
+}
+
+.dag-link.active {
+  stroke: var(--accent);
+  stroke-dasharray: 10 6;
+}
+
+.dag-node {
+  fill: #fff;
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+  rx: 12;
+  ry: 12;
+  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.08));
+}
+
+.dag-node.highlight {
+  stroke: var(--accent);
+}
+
+.dag-label {
+  font-family: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dag-subtitle {
+  font-size: 11px;
+  fill: var(--muted);
+}
+
+.dag-pill {
+  fill: var(--accent-soft);
+  stroke: none;
+  rx: 999;
+  ry: 999;
+}
+
+.dag-pill-text {
+  font-size: 10px;
+  fill: var(--accent-strong);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -80;
+  }
+}
+
+
 .workflow-stage {
   display: grid;
   grid-template-columns: 140px 1fr;
