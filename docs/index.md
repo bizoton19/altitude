@@ -7,7 +7,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 <div class="hero-section">
   <div>
     <div class="section-kicker">Altitude Platform</div>
-    <h1 class="hero-title">Banned Product Monitoring, Automated End‑to‑End</h1>
+    <h1 class="hero-title">AI Powered Banned Product Monitoring</h1>
     <p class="hero-subtitle">
       Altitude turns scattered regulatory data into a coordinated monitoring workflow. Import banned product data, scan marketplaces,
       prioritize risk, and export compliance-ready reports—without the manual search grind.
@@ -49,7 +49,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 </div>
 
 
-<div class="split-section">
+<div class="split-section section-surface">
   <div>
     <div class="section-kicker">Product</div>
     <h2>One platform, four critical workflows</h2>
@@ -70,7 +70,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <h2>Complete Monitoring Workflow</h2>
 
-<div class="workflow-section">
+<div class="workflow-section section-surface">
   <div class="workflow-dag" id="workflowDag"></div>
 
   <div class="workflow-stage">
@@ -233,6 +233,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <div class="feature-row">
   <div>
+    <div class="icon-chip"><i class="fas fa-radar"></i></div>
     <h3>Automated Monitoring</h3>
     <p>Continuously scan marketplaces with configurable cadence, visual search, and keyword matching.</p>
   </div>
@@ -247,6 +248,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <div class="feature-row">
   <div>
+    <div class="icon-chip"><i class="fas fa-triangle-exclamation"></i></div>
     <h3>Risk Intelligence</h3>
     <p>Rank banned products by severity so teams can act on high-risk items first.</p>
   </div>
@@ -261,6 +263,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <div class="feature-row">
   <div>
+    <div class="icon-chip"><i class="fas fa-plug-circle-bolt"></i></div>
     <h3>API & Integrations</h3>
     <p>Connect Altitude to internal systems, automation scripts, or compliance workflows.</p>
   </div>
@@ -352,28 +355,28 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
 
 <h2>Roadmap Priorities</h2>
 
-<div class="roadmap-section">
-  <p class="section-lede">
-    We’re building toward deeper automation, broader capture, and better field intelligence. These are the next capabilities on deck.
-  </p>
-
+<div class="section-surface roadmap-section">
   <div class="roadmap-grid">
     <div class="roadmap-card blue">
+      <div class="icon-chip"><i class="fas fa-bullhorn"></i></div>
       <h3>Public Submission API</h3>
       <p><strong>Open intake</strong> for external tip lines and watchdog reporting, routed into the review queue with audit trails.</p>
     </div>
 
     <div class="roadmap-card green">
+      <div class="icon-chip"><i class="fas fa-search"></i></div>
       <h3>Browser Extension</h3>
       <p><strong>One‑click capture</strong> while browsing marketplaces, sending evidence directly into takedown workflows.</p>
     </div>
 
     <div class="roadmap-card amber">
+      <div class="icon-chip"><i class="fas fa-camera"></i></div>
       <h3>Mobile Field Toolkit</h3>
       <p><strong>On‑site scanning</strong> for inspectors: photo capture, barcode checks, and instant risk matching.</p>
     </div>
 
     <div class="roadmap-card pink">
+      <div class="icon-chip"><i class="fas fa-brain"></i></div>
       <h3>Advanced AI Models</h3>
       <p><strong>Category‑specific models</strong> tuned for proactive detection and specialized hazard profiles.</p>
     </div>

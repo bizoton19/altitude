@@ -36,40 +36,40 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0f1115;
-  --bg-2: #141820;
-  --bg-3: #1b2230;
+  --bg: #0b0d11;
+  --bg-2: #151a22;
+  --bg-3: #202734;
   --ink: #e7ecf2;
   --ink-strong: #ffffff;
-  --muted: #b0b7c0;
+  --muted: #c2c9d1;
   --accent: #8ab4f8;
   --accent-strong: #6fa4f6;
   --accent-soft: rgba(138, 180, 248, 0.14);
   --accent-3: #f28b82;
-  --border: #27303a;
-  --border-strong: #3a4654;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.28);
+  --border: #2d3745;
+  --border-strong: #445265;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.35);
   --code-bg: #151a22;
   --code-text: #e7ecf2;
 }
 
 @media (prefers-color-scheme: dark) {
   [data-theme="auto"] {
-    --bg: #0f1115;
-    --bg-2: #141820;
-    --bg-3: #1b2230;
+    --bg: #0b0d11;
+    --bg-2: #151a22;
+    --bg-3: #202734;
     --ink: #e7ecf2;
     --ink-strong: #ffffff;
-    --muted: #b0b7c0;
+    --muted: #c2c9d1;
     --accent: #8ab4f8;
     --accent-strong: #6fa4f6;
     --accent-soft: rgba(138, 180, 248, 0.14);
     --accent-3: #f28b82;
-    --border: #27303a;
-    --border-strong: #3a4654;
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.28);
+    --border: #2d3745;
+    --border-strong: #445265;
+    --shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.35);
     --code-bg: #151a22;
     --code-text: #e7ecf2;
   }
@@ -385,6 +385,47 @@ p {
   max-width: 720px;
   margin: 0 auto 2.5rem;
   color: var(--muted);
+}
+
+
+.section-surface {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3rem clamp(1.5rem, 3vw, 3rem);
+  margin: 3rem auto;
+  box-shadow: var(--shadow-soft);
+}
+
+.section-surface .section-lede {
+  margin-bottom: 2rem;
+}
+
+.icon-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+[data-theme="dark"] .roadmap-card,
+[data-theme="auto"] .roadmap-card {
+  color: var(--ink);
+}
+
+.roadmap-card.blue { background: #e5efff; }
+.roadmap-card.green { background: #e6f4ea; }
+.roadmap-card.amber { background: #fff4e5; }
+.roadmap-card.pink { background: #fdebf1; }
+
+@media (max-width: 700px) {
+  .workflow-dag { display: none; }
 }
 
 .section-kicker {
