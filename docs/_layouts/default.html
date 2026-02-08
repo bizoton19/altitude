@@ -1919,8 +1919,6 @@ header,
         <p>&copy; {{ site.title }} 2024-2026. All rights reserved.</p>
         <div class="footer-bottom-links">
           <a href="{{ '/contact.html' | relative_url }}">Contact</a>
-          <a href="{{ '/privacy.html' | relative_url }}">Privacy Policy</a>
-          <a href="{{ '/terms.html' | relative_url }}">Terms of Service</a>
         </div>
       </div>
     </footer>
@@ -1952,11 +1950,18 @@ header,
       });
     });
 
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    // Safari compatibility: older versions don't support addEventListener on MediaQueryList.
+    const colorSchemeMql = window.matchMedia('(prefers-color-scheme: dark)');
+    const onColorSchemeChange = () => {
       if (getStoredTheme() === 'auto') {
         html.setAttribute('data-theme', 'auto');
       }
-    });
+    };
+    if (colorSchemeMql.addEventListener) {
+      colorSchemeMql.addEventListener('change', onColorSchemeChange);
+    } else if (colorSchemeMql.addListener) {
+      colorSchemeMql.addListener(onColorSchemeChange);
+    }
 
     // Mobile Menu Toggle
     const menuToggle = document.getElementById('menuToggle');
