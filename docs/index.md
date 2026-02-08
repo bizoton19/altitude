@@ -157,40 +157,59 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <h2>Who Altitude Serves</h2>
 
-<div class="audience-section">
-  <div class="audience-grid">
-    <div class="audience-card">
-      <div class="audience-icon">
-        <img src="{{ '/assets/logos/fda.svg' | relative_url }}" alt="Federal & State Regulatory Agencies" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="audience-fallback"><i class="fas fa-landmark"></i></div>
-      </div>
-      <h4>Federal & State Regulatory Agencies</h4>
-      <p>FDA, NHTSA, and state consumer protection agencies monitoring banned products across marketplaces</p>
-    </div>
-    <div class="audience-card">
-      <div class="audience-icon">
-        <img src="{{ '/assets/logos/manufacturer.svg' | relative_url }}" alt="Manufacturers & Importers" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="audience-fallback"><i class="fas fa-industry"></i></div>
-      </div>
-      <h4>Manufacturers & Importers</h4>
-      <p>Monitor marketplaces for unauthorized sales of banned products and ensure compliance</p>
-    </div>
-    <div class="audience-card">
-      <div class="audience-icon">
-        <img src="{{ '/assets/logos/retailer.svg' | relative_url }}" alt="Retailers & Private Sellers" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="audience-fallback"><i class="fas fa-store"></i></div>
-      </div>
-      <h4>Retailers & Private Sellers</h4>
-      <p>Verify product compliance before listing and prevent selling banned product inventory</p>
-    </div>
-    <div class="audience-card">
-      <div class="audience-icon">
-        <img src="{{ '/assets/logos/nonprofit.svg' | relative_url }}" alt="Non-Profit Organizations" class="audience-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="audience-fallback"><i class="fas fa-handshake"></i></div>
-      </div>
-      <h4>Non-Profit Organizations</h4>
-      <p>Consumer safety advocates and watchdog groups protecting consumers from banned products</p>
-    </div>
+<div class="feature-row">
+  <div>
+    <h3>Regulatory Agencies</h3>
+    <p>Coordinate banned product surveillance across jurisdictions with a single, auditable workflow.</p>
+  </div>
+  <div>
+    <ul>
+      <li>Federal and state recall ingestion</li>
+      <li>Evidence capture for enforcement</li>
+      <li>Compliance-ready reporting</li>
+    </ul>
+  </div>
+</div>
+
+<div class="feature-row">
+  <div>
+    <h3>Manufacturers & Importers</h3>
+    <p>Detect unauthorized listings and prove corrective actions with structured audit trails.</p>
+  </div>
+  <div>
+    <ul>
+      <li>Marketplace scan scheduling</li>
+      <li>Takedown tracking and escalation</li>
+      <li>Risk-based prioritization</li>
+    </ul>
+  </div>
+</div>
+
+<div class="feature-row">
+  <div>
+    <h3>Retailers & Marketplaces</h3>
+    <p>Prevent non-compliant inventory from reaching customers and reduce exposure.</p>
+  </div>
+  <div>
+    <ul>
+      <li>Bulk listing review</li>
+      <li>Automated alerting for high-risk items</li>
+      <li>Operational handoff to compliance teams</li>
+    </ul>
+  </div>
+</div>
+
+<div class="feature-row">
+  <div>
+    <h3>Non‑Profits & Watchdogs</h3>
+    <p>Expand monitoring capacity without expanding headcount.</p>
+  </div>
+  <div>
+    <ul>
+      <li>Multi-marketplace visibility</li>
+      <li>Shareable reports for stakeholders</li>
+      <li>Trend insights over time</li>
+    </ul>
   </div>
 </div>
 
@@ -213,78 +232,44 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
 - Generate risk-based reports for regulatory oversight
 - Focus enforcement efforts where they matter most
 
-<h2>Future Roadmap</h2>
+<h2>Roadmap Priorities</h2>
 
 <div class="premium-features-section">
   <p class="section-lede">
-    The following premium features are planned for future releases. These capabilities will enable even more powerful banned product detection and management workflows.
+    We’re building toward deeper automation, broader capture, and better field intelligence. These are the next capabilities on deck.
   </p>
 
   <div class="premium-features-grid">
     <div class="premium-feature-card">
       <div class="premium-feature-icon"><i class="fas fa-globe"></i></div>
       <h3>Public Submission API</h3>
-      <p>
-        Enable anyone to submit potential banned product listings via HTTP API. Perfect for consumer watchdogs, regulatory tip lines, and community reporting. All submissions enter a queue for review and classification.
-      </p>
-    </div>
-
-    <div class="premium-feature-card">
-      <div class="premium-feature-icon"><i class="fas fa-vr-cardboard"></i></div>
-      <h3>Meta Glasses Integration</h3>
-      <p>
-        Browse marketplace listings through Meta glasses and instantly identify potential banned products. AI-powered visual recognition sends suspected items directly to Altitude's review queue for rapid verification and classification.
-      </p>
+      <p>Enable external tip lines to submit suspected banned listings directly into Altitude’s review queue.</p>
     </div>
 
     <div class="premium-feature-card">
       <div class="premium-feature-icon"><i class="fas fa-plug"></i></div>
       <h3>Browser Extension</h3>
-      <p>
-        One-click browser extension captures marketplace listings and sends them to Altitude API for instant banned product checking. Works with Chrome, Firefox, Safari, and Edge. Perfect for compliance teams browsing marketplaces manually.
-      </p>
-    </div>
-
-    <div class="premium-feature-card">
-      <div class="premium-feature-icon"><i class="fas fa-earth-americas"></i></div>
-      <h3>Browser Context Integration</h3>
-      <p>
-        Advanced browser context integration automatically captures listing details, product images, and metadata as you browse. Seamlessly integrates with your browsing workflow to identify banned products in real-time.
-      </p>
+      <p>Capture listings during manual review and push evidence into takedown workflows in one click.</p>
     </div>
 
     <div class="premium-feature-card">
       <div class="premium-feature-icon"><i class="fas fa-mobile-screen-button"></i></div>
-      <h3>Mobile App Integration</h3>
-      <p>
-        Native mobile apps for iOS and Android enable field teams to photograph products, scan barcodes, and instantly check against banned product databases. Perfect for regulatory inspectors and compliance officers.
-      </p>
+      <h3>Mobile Field Toolkit</h3>
+      <p>Photograph, scan, and classify products in the field with instant risk matching.</p>
     </div>
 
     <div class="premium-feature-card">
       <div class="premium-feature-icon"><i class="fas fa-robot"></i></div>
       <h3>Advanced AI Models</h3>
-      <p>
-        Custom AI models trained on your specific product categories and banned product patterns. Improved accuracy for specialized industries, custom risk scoring, and predictive banned product detection before formal announcements.
-      </p>
+      <p>Specialized models for category-specific risk detection and proactive recall detection.</p>
     </div>
   </div>
 
   <div class="premium-features-cta">
     <p>
-      Interested in early access to premium features or have feature requests?
+      Interested in early access or shaping the roadmap?
     </p>
     <a href="{{ '/contact.html' | relative_url }}" class="btn-primary">Contact Us</a>
   </div>
 </div>
 
-<h2>Getting Started with Open Source</h2>
-
-<ol class="steps-list">
-  <li><strong>Import Banned Products</strong> — Connect to FDA, NHTSA feeds or import manually via CSV/JSON</li>
-  <li><strong>Configure Investigations</strong> — Select marketplaces and set schedule (daily, weekly, monthly)</li>
-  <li><strong>Manage Risk</strong> — Use automated risk classification to prioritize HIGH-risk items</li>
-  <li><strong>Notify & Takedown</strong> — Receive alerts, export reports, and track takedown effectiveness</li>
-</ol>
-
-[Get Started]({{ '/contact.html' | relative_url }}) · [API Documentation]({{ '/contact.html' | relative_url }}) · [Contact Us]({{ '/contact.html' | relative_url }})
