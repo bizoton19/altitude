@@ -105,30 +105,30 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     </div>
   </div>
 
-  <div class="workflow-stage">
-    <div class="workflow-label">Delegation</div>
-    <div>
-      <div class="workflow-title">AI agents investigate with human command</div>
-      <div class="workflow-duo">
-        <div class="workflow-pill">Agents run broad marketplace scans, capture evidence, and surface matches for review.</div>
-        <div class="workflow-pill">Analysts direct agent focus, validate findings, and coordinate takedown actions by risk.</div>
-      </div>
-    </div>
-  </div>
+	  <div class="workflow-stage">
+	    <div class="workflow-label">Delegation</div>
+	    <div>
+	      <div class="workflow-title">Deterministic automation first, AI agents when adaptation is needed</div>
+	      <div class="workflow-duo">
+	        <div class="workflow-pill"><strong>Deterministic pipeline:</strong> scheduled scans and trained classifiers handle the predictable work. If a site layout or data format changes, agents adapt and continue the investigation.</div>
+	        <div class="workflow-pill"><strong>Human command:</strong> analysts can investigate directly, supervise agents, and override results when confidence is low (with notes and audit trail).</div>
+	      </div>
+	    </div>
+	  </div>
 </div>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
   (function() {
-    const data = {
-      nodes: [
-        { id: 'import', label: 'Import & Normalize', subtitle: 'Banned product ingestion', state: 'green', details: 'Normalize identifiers, deduplicate sources, and prepare ingestion queue.' },
-        { id: 'risk', label: 'AI Risk Classifier', subtitle: 'Severity + hazard scoring', type: 'loop', state: 'yellow', details: 'Scores risk, flags high-severity hazards, feeds priority queues.' },
-        { id: 'investigate', label: 'Investigate Marketplaces', subtitle: 'AI matching + visual search', state: 'yellow', details: 'Marketplace crawls, similarity matching, and listing capture.' },
-        { id: 'agents', label: 'AI Agent Delegation', subtitle: 'Parallel investigations', type: 'branch', state: 'green', details: 'Agents run targeted investigations with human supervision.' },
-        { id: 'review', label: 'Human + AI Review', subtitle: 'Supervision + reprioritization', state: 'yellow', details: 'Analysts validate evidence and reprioritize by severity.' },
-        { id: 'takedown', label: 'Notify & Takedown', subtitle: 'Evidence + compliance export', state: 'red', details: 'Issue takedowns, notify stakeholders, archive audit trail.' }
-      ],
+	    const data = {
+	      nodes: [
+	        { id: 'import', label: 'Import & Normalize', subtitle: 'Banned product ingestion', state: 'green', details: 'Normalize identifiers, deduplicate sources, and prepare ingestion queue.' },
+	        { id: 'risk', label: 'AI Risk Classifier', subtitle: 'Severity + hazard scoring', type: 'loop', state: 'yellow', details: 'Scores risk, flags high-severity hazards, feeds priority queues.' },
+	        { id: 'investigate', label: 'Investigate Marketplaces', subtitle: 'Deterministic scans', state: 'yellow', details: 'Scheduled investigations across marketplaces using matching, visual search, and fixed success criteria.' },
+	        { id: 'agents', label: 'AI Agent Delegation', subtitle: 'Adaptive fallback', type: 'branch', state: 'green', details: 'Agents step in when sites change or ambiguity appears, adapting extraction and reasoning under human supervision.' },
+	        { id: 'review', label: 'Human + AI Review', subtitle: 'Supervision + reprioritization', state: 'yellow', details: 'Analysts validate evidence and reprioritize by severity.' },
+	        { id: 'takedown', label: 'Notify & Takedown', subtitle: 'Evidence + compliance export', state: 'red', details: 'Issue takedowns, notify stakeholders, archive audit trail.' }
+	      ],
       links: [
         { source: 'import', target: 'risk', type: 'active' },
         { source: 'import', target: 'investigate', type: 'main' },
@@ -367,7 +367,7 @@ Altitude classifies imported banned products across a low‑to‑high hazard spe
     <div class="risk-tooltip-card">
       <div class="risk-tooltip-title" id="riskVizTooltipTitle">Classifying…</div>
       <div class="risk-tooltip-body" id="riskVizTooltipBody">Ingesting banned products and scoring hazard risk.</div>
-      <div class="risk-chip" id="riskVizTooltipChip">Random Forest Model</div>
+      <div class="risk-chip" id="riskVizTooltipChip">AI Model</div>
     </div>
   </div>
 </div>
@@ -498,7 +498,7 @@ Altitude classifies imported banned products across a low‑to‑high hazard spe
       .attr('class', 'rf-label')
       .attr('x', layout.forest.x)
       .attr('y', layout.forest.y - 18)
-      .text('Random Forest Model');
+      .text('AI Model');
 
     svg
       .append('rect')
