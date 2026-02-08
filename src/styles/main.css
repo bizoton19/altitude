@@ -1,4 +1,7 @@
 /* Import Glass Theme */
 @import './glass-theme.css';
 
+/* Import Pipeline Canvas Styles */
+@import './pipeline.css';
+
 /* Additional app-specific styles can go here */

@@ -19,6 +19,7 @@ import InvestigationDetailPage from './pages/InvestigationDetailPage'
 import SettingsPage from './pages/SettingsPage'
 import ListingsPage from './pages/ListingsPage'
 import ReviewQueuePage from './pages/ReviewQueuePage'
+import PipelinePage from './pages/PipelinePage'
 
 const router = createBrowserRouter([
   // Public routes
@@ -84,6 +85,16 @@ const router = createBrowserRouter([
       {
         path: 'settings/:section',
         element: <SettingsPage />
+      },
+      
+      // Pipeline Builder
+      {
+        path: 'pipeline',
+        element: <PipelinePage />
+      },
+      {
+        path: 'pipeline/:id',
+        element: <PipelinePage />
       },
       
       // Fallback

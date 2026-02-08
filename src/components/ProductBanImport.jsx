@@ -474,6 +474,30 @@ function ProductBanImport() {
         >
           🔌 REST API
         </button>
+        
+        {/* Visual Pipeline Builder Link */}
+        <a
+          href="/pipeline"
+          style={{
+            marginLeft: 'auto',
+            padding: 'var(--space-sm) var(--space-md)',
+            fontSize: '13px',
+            fontWeight: '500',
+            background: 'rgba(191, 0, 255, 0.1)',
+            border: '1px solid var(--neon-purple)',
+            color: 'var(--neon-purple)',
+            borderRadius: 'var(--radius-sm)',
+            cursor: 'pointer',
+            transition: 'all var(--transition-fast)',
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-xs)'
+          }}
+        >
+          <i className="fas fa-project-diagram"></i>
+          Visual Pipeline Builder
+        </a>
       </div>
 
       {/* File Import Section */}

@@ -13,13 +13,17 @@
   },
   "dependencies": {
     "@uswds/uswds": "^3.7.0",
+    "canvg": "^4.0.3",
+    "dompurify": "^3.3.1",
     "firebase": "^10.14.1",
+    "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.30.2"
   },
   "devDependencies": {
+    "@rollup/rollup-darwin-x64": "^4.57.1",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
