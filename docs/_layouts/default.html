@@ -432,6 +432,21 @@ p {
   border: 1px solid var(--border-strong);
 }
 
+[data-theme="dark"] .roadmap-card.blue,
+[data-theme="auto"] .roadmap-card.blue {
+  border-color: #2f6fed;
+}
+
+[data-theme="dark"] .roadmap-card.green,
+[data-theme="auto"] .roadmap-card.green {
+  border-color: #2aa86f;
+}
+
+[data-theme="dark"] .roadmap-card.amber,
+[data-theme="auto"] .roadmap-card.amber {
+  border-color: #d39b3b;
+}
+
 [data-theme="dark"] .dag-node,
 [data-theme="auto"] .dag-node {
   fill: var(--bg-2);
@@ -1126,7 +1141,7 @@ pre {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 0.9rem 1rem;
-  background: #fff;
+  background: var(--bg-2);
   font-size: 0.9rem;
 }
 

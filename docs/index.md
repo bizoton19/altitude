@@ -108,10 +108,10 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   <div class="workflow-stage">
     <div class="workflow-label">Delegation</div>
     <div>
-      <div class="workflow-title">AI agents investigate alongside human analysts</div>
+      <div class="workflow-title">AI agents investigate with human command</div>
       <div class="workflow-duo">
-        <div class="workflow-pill">Agents handle broad marketplace scanning, evidence capture, and similarity matching.</div>
-        <div class="workflow-pill">Humans supervise, validate, and coordinate takedown actions based on risk.</div>
+        <div class="workflow-pill">Agents run broad marketplace scans, capture evidence, and surface matches for review.</div>
+        <div class="workflow-pill">Analysts direct agent focus, validate findings, and coordinate takedown actions by risk.</div>
       </div>
     </div>
   </div>
