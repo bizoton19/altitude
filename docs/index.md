@@ -274,7 +274,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
 </div>
 
-<h2>Who Altitude Serves</h2>
+<h2>Altitude's Target Audience</h2>
 
 <div class="feature-row">
   <div>
@@ -283,7 +283,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
   <div>
     <ul>
-      <li>Federal and state banned product ingestion</li>
+      <li>Banned product ingestion</li>
       <li>Evidence capture for enforcement</li>
       <li>Compliance-ready reporting</li>
     </ul>
