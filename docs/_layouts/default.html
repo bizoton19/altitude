@@ -643,6 +643,121 @@ pre {
   text-transform: uppercase;
 }
 
+
+.workflow-dag {
+  overflow: hidden;
+}
+
+.workflow-dag svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dag-link {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+  animation: dash 6s linear infinite;
+}
+
+.dag-link.active {
+  stroke: var(--accent);
+  stroke-dasharray: 10 6;
+}
+
+.dag-link.loop {
+  stroke: var(--accent-strong);
+}
+
+.dag-node {
+  fill: #fff;
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+  rx: 12;
+  ry: 12;
+  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.08));
+  transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+.dag-node.highlight {
+  stroke: var(--accent);
+}
+
+.dag-node.state-green {
+  stroke: #1b8f4b;
+}
+
+.dag-node.state-yellow {
+  stroke: #c88712;
+}
+
+.dag-node.state-red {
+  stroke: #c62828;
+}
+
+.dag-label {
+  font-family: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dag-subtitle {
+  font-size: 11px;
+  fill: var(--muted);
+}
+
+.dag-pill {
+  fill: var(--accent-soft);
+  stroke: none;
+  rx: 999;
+  ry: 999;
+}
+
+.dag-pill-text {
+  font-size: 10px;
+  fill: var(--accent-strong);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dag-expand {
+  font-size: 11px;
+  fill: var(--accent-strong);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.roadmap-scroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 320px);
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0 1.5rem;
+  scroll-snap-type: x mandatory;
+}
+
+.roadmap-scroll > .premium-feature-card {
+  scroll-snap-align: start;
+}
+
+.roadmap-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.roadmap-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+}
+
+.roadmap-scroll::-webkit-scrollbar-track {
+  background: var(--bg-3);
+  border-radius: 999px;
+}
+
 @keyframes dash {
   to {
     stroke-dashoffset: -80;

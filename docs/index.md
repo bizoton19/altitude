@@ -48,9 +48,6 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   </div>
 </div>
 
-<div class="highlight-banner">
-  Altitude is open source and self-hostable. Deploy the full workflow and scale with API integrations.
-</div>
 
 <div class="split-section">
   <div>
@@ -101,12 +98,12 @@ description: Automated banned product monitoring for regulatory agencies, manufa
   (function() {
     const data = {
       nodes: [
-        { id: 'import', label: 'Import & Normalize', subtitle: 'Banned product ingestion' },
-        { id: 'risk', label: 'AI Risk Classifier', subtitle: 'Severity + hazard scoring', type: 'loop' },
-        { id: 'investigate', label: 'Investigate Marketplaces', subtitle: 'AI matching + visual search' },
-        { id: 'agents', label: 'AI Agent Delegation', subtitle: 'Parallel investigations', type: 'branch' },
-        { id: 'review', label: 'Human + AI Review', subtitle: 'Supervision + reprioritization' },
-        { id: 'takedown', label: 'Notify & Takedown', subtitle: 'Evidence + compliance export' }
+        { id: 'import', label: 'Import & Normalize', subtitle: 'Banned product ingestion', state: 'green', details: 'Normalize identifiers, deduplicate sources, and prepare ingestion queue.' },
+        { id: 'risk', label: 'AI Risk Classifier', subtitle: 'Severity + hazard scoring', type: 'loop', state: 'yellow', details: 'Scores risk, flags high-severity hazards, feeds priority queues.' },
+        { id: 'investigate', label: 'Investigate Marketplaces', subtitle: 'AI matching + visual search', state: 'yellow', details: 'Marketplace crawls, similarity matching, and listing capture.' },
+        { id: 'agents', label: 'AI Agent Delegation', subtitle: 'Parallel investigations', type: 'branch', state: 'green', details: 'Agents run targeted investigations with human supervision.' },
+        { id: 'review', label: 'Human + AI Review', subtitle: 'Supervision + reprioritization', state: 'yellow', details: 'Analysts validate evidence and reprioritize by severity.' },
+        { id: 'takedown', label: 'Notify & Takedown', subtitle: 'Evidence + compliance export', state: 'red', details: 'Issue takedowns, notify stakeholders, archive audit trail.' }
       ],
       links: [
         { source: 'import', target: 'risk', type: 'active' },
@@ -122,20 +119,33 @@ description: Automated banned product monitoring for regulatory agencies, manufa
     if (!container || !window.d3) return;
 
     const width = Math.min(container.clientWidth, 1000);
-    const height = 320;
+    const height = 360;
     const svg = d3.select(container)
       .append('svg')
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr('role', 'img')
       .attr('aria-label', 'Workflow DAG showing AI risk loop and agent delegation');
 
+    const defs = svg.append('defs');
+    defs.append('marker')
+      .attr('id', 'arrow')
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 10)
+      .attr('refY', 0)
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M0,-5L10,0L0,5')
+      .attr('fill', '#8a96a3');
+
     const positions = {
-      import: { x: 80, y: 120 },
-      risk: { x: 80, y: 40 },
-      investigate: { x: 320, y: 120 },
-      agents: { x: 560, y: 60 },
-      review: { x: 560, y: 190 },
-      takedown: { x: 820, y: 120 }
+      import: { x: 90, y: 140 },
+      risk: { x: 90, y: 50 },
+      investigate: { x: 340, y: 140 },
+      agents: { x: 590, y: 70 },
+      review: { x: 590, y: 220 },
+      takedown: { x: 860, y: 140 }
     };
 
     const linkGroup = svg.append('g');
@@ -143,7 +153,8 @@ description: Automated banned product monitoring for regulatory agencies, manufa
       .data(data.links)
       .enter()
       .append('path')
-      .attr('class', d => `dag-link ${d.type === 'active' ? 'active' : ''}`)
+      .attr('class', d => `dag-link ${d.type === 'active' ? 'active' : ''} ${d.type === 'loop' ? 'loop' : ''}`)
+      .attr('marker-end', 'url(#arrow)')
       .attr('d', d => {
         const s = positions[d.source];
         const t = positions[d.target];
@@ -156,10 +167,41 @@ description: Automated banned product monitoring for regulatory agencies, manufa
       .data(data.nodes)
       .enter()
       .append('g')
-      .attr('transform', d => `translate(${positions[d.id].x - 90}, ${positions[d.id].y - 36})`);
+      .attr('transform', d => `translate(${positions[d.id].x - 90}, ${positions[d.id].y - 36})`)
+      .style('cursor', 'pointer')
+      .on('click', function(event, d) {
+        const expanded = d3.select(this).classed('expanded');
+        d3.selectAll('.dag-detail').remove();
+        d3.selectAll('.dag-node').classed('highlight', false);
+        if (!expanded) {
+          d3.select(this).classed('expanded', true);
+          d3.select(this).select('rect').classed('highlight', true);
+          const detail = svg.append('g')
+            .attr('class', 'dag-detail')
+            .attr('transform', `translate(${positions[d.id].x - 120}, ${positions[d.id].y + 50})`);
+          detail.append('rect')
+            .attr('width', 240)
+            .attr('height', 64)
+            .attr('rx', 12)
+            .attr('fill', '#ffffff')
+            .attr('stroke', '#c8cdd4');
+          detail.append('text')
+            .attr('x', 12)
+            .attr('y', 24)
+            .attr('class', 'dag-label')
+            .text(d.label);
+          detail.append('text')
+            .attr('x', 12)
+            .attr('y', 44)
+            .attr('class', 'dag-subtitle')
+            .text(d.details);
+        } else {
+          d3.select(this).classed('expanded', false);
+        }
+      });
 
     node.append('rect')
-      .attr('class', d => `dag-node ${d.type === 'loop' ? 'highlight' : ''}`)
+      .attr('class', d => `dag-node ${d.type === 'loop' ? 'highlight' : ''} state-${d.state}`)
       .attr('width', 180)
       .attr('height', 72)
       .attr('rx', 12);
@@ -176,11 +218,17 @@ description: Automated banned product monitoring for regulatory agencies, manufa
       .attr('y', 48)
       .text(d => d.subtitle);
 
+    node.append('text')
+      .attr('class', 'dag-expand')
+      .attr('x', 16)
+      .attr('y', 64)
+      .text('Click to expand');
+
     node.filter(d => d.type === 'loop' || d.type === 'branch')
       .append('rect')
       .attr('class', 'dag-pill')
       .attr('x', 16)
-      .attr('y', 54)
+      .attr('y', 68)
       .attr('width', 120)
       .attr('height', 16)
       .attr('rx', 999);
@@ -189,7 +237,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
       .append('text')
       .attr('class', 'dag-pill-text')
       .attr('x', 24)
-      .attr('y', 66)
+      .attr('y', 80)
       .text(d => (d.type === 'loop' ? 'Feedback Loop' : 'Parallel'));
   })();
 </script>
@@ -322,7 +370,7 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
     We’re building toward deeper automation, broader capture, and better field intelligence. These are the next capabilities on deck.
   </p>
 
-  <div class="premium-features-grid">
+  <div class="premium-features-grid roadmap-scroll">
     <div class="premium-feature-card">
       <div class="premium-feature-icon"><i class="fas fa-globe"></i></div>
       <h3>Public Submission API</h3>
