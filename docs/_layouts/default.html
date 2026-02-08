@@ -397,39 +397,6 @@ p {
   margin-bottom: 0.8rem;
 }
 
-[data-theme="dark"] .roadmap-card,
-[data-theme="auto"] .roadmap-card {
-  color: var(--ink);
-}
-
-.roadmap-card.blue,
-.roadmap-card.green,
-.roadmap-card.amber {
-  background: var(--bg-2);
-  border: 1px solid var(--border-strong);
-}
-
-[data-theme="dark"] .roadmap-card,
-[data-theme="auto"] .roadmap-card {
-  background: var(--bg-2);
-  border: 1px solid var(--border-strong);
-}
-
-[data-theme="dark"] .roadmap-card.blue,
-[data-theme="auto"] .roadmap-card.blue {
-  border-color: #2f6fed;
-}
-
-[data-theme="dark"] .roadmap-card.green,
-[data-theme="auto"] .roadmap-card.green {
-  border-color: #2aa86f;
-}
-
-[data-theme="dark"] .roadmap-card.amber,
-[data-theme="auto"] .roadmap-card.amber {
-  border-color: #d39b3b;
-}
-
 [data-theme="dark"] .dag-node,
 [data-theme="auto"] .dag-node {
   fill: var(--bg-2);
@@ -1096,47 +1063,71 @@ pre {
 
 .roadmap-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.roadmap-inner {
+  max-width: 1040px;
+  margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 .roadmap-card {
-  padding: 1.8rem;
+  padding: 2.25rem;
   border-radius: 18px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   box-shadow: var(--shadow-soft);
+  background: var(--bg-2);
+  color: var(--ink);
+  border-top-width: 4px;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.roadmap-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
 .roadmap-card h3 {
   font-family: "Source Serif 4", "Times New Roman", serif;
-  font-size: 1.3rem;
+  font-size: 1.45rem;
   margin-bottom: 0.65rem;
 }
 
 .roadmap-card p {
   margin: 0;
-  font-size: 0.98rem;
+  font-size: 1.02rem;
+  line-height: 1.6;
 }
 
 .roadmap-card strong {
   font-weight: 700;
+  color: var(--ink);
 }
 
-.roadmap-card.blue {
-  background: var(--bg-2);
+.roadmap-card.roadmap-accent-blue {
+  border-top-color: var(--accent);
 }
 
-.roadmap-card.green {
-  background: var(--bg-2);
+.roadmap-card.roadmap-accent-amber {
+  border-top-color: #d39b3b;
 }
 
-.roadmap-card.amber {
-  background: var(--bg-2);
+.roadmap-card.roadmap-accent-green {
+  border-top-color: #2aa86f;
 }
 
-.roadmap-card.pink {
-  background: var(--bg-2);
+@media (max-width: 1020px) {
+  .roadmap-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .roadmap-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @keyframes dash {

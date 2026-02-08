@@ -737,20 +737,21 @@ Altitude classifies imported banned products across a low‑to‑high hazard spe
 <h2>Roadmap Priorities</h2>
 
 <div class="section-surface roadmap-section full-bleed">
+  <div class="roadmap-inner">
   <div class="roadmap-grid">
-    <div class="roadmap-card blue">
+    <div class="roadmap-card roadmap-accent-blue">
       <div class="icon-chip"><i class="fas fa-bullhorn"></i></div>
       <h3>Public Submission API</h3>
       <p><strong>Can be enabled:</strong> open intake for external tip lines and watchdog reporting, routed into the review queue with audit trails.</p>
     </div>
 
-    <div class="roadmap-card blue">
+    <div class="roadmap-card roadmap-accent-amber">
       <div class="icon-chip"><i class="fas fa-search"></i></div>
       <h3>Browser Extension</h3>
       <p><strong>Can be enabled:</strong> one‑click capture while browsing marketplaces, sending evidence directly into takedown workflows.</p>
     </div>
 
-    <div class="roadmap-card blue">
+    <div class="roadmap-card roadmap-accent-green">
       <div class="icon-chip"><i class="fas fa-camera"></i></div>
       <h3>Mobile Field Toolkit</h3>
       <p><strong>On-site scanning</strong> for inspectors: photo capture, barcode checks, AI glasses support, and instant risk matching.</p>
@@ -762,5 +763,6 @@ Altitude classifies imported banned products across a low‑to‑high hazard spe
       Interested in early access or shaping the roadmap?
     </p>
     <a href="{{ '/contact.html' | relative_url }}" class="btn-primary">Contact Us</a>
+  </div>
   </div>
 </div>
