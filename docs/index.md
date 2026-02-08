@@ -360,22 +360,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <h2>Risk Classification You Can Act On</h2>
 
-**Altitude automatically classifies every banned product by risk level:**
-
-### <span class="risk-badge risk-high">● HIGH RISK</span>
-Banned products with deaths, serious injuries, or 10,000+ units affected. Hazards include fire, electrocution, choking, lead poisoning, strangulation. **Action:** Schedule daily investigations immediately.
-
-### <span class="risk-badge risk-medium">● MEDIUM RISK</span>
-Banned products with minor injuries or 1,000-10,000 units affected. Hazards include cuts, burns, falls, tip-over. **Action:** Weekly or biweekly investigations usually sufficient.
-
-### <span class="risk-badge risk-low">● LOW RISK</span>
-Banned products with no injuries and fewer than 1,000 units affected. Minor defects, labeling issues. **Action:** Monthly investigations or manual searches when needed.
-
-**Risk classification helps you:**
-- Prioritize your team's limited time on HIGH-risk banned products
-- Allocate resources effectively across your banned product management program
-- Generate risk-based reports for regulatory oversight
-- Focus enforcement efforts where they matter most
+Altitude classifies imported banned products across a low‑to‑high hazard spectrum using the most accurate AI models available, factoring in severity signals, hazards, and units affected. The result is a prioritized queue that aligns investigations and takedown actions to the highest‑risk products first while keeping lower‑risk items visible and auditable.
 
 <h2>Roadmap Priorities</h2>
 
