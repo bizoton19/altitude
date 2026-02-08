@@ -362,7 +362,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 Altitude classifies imported banned products across a low‑to‑high hazard spectrum using the most accurate AI models available, factoring in severity signals, hazards, and units affected. The result is a prioritized queue that aligns investigations and takedown actions to the highest‑risk products first while keeping lower‑risk items visible and auditable.
 
-<div class="risk-viz" id="riskViz">
+<div class="risk-viz full-bleed" id="riskViz">
   <div class="risk-tooltip" id="riskVizTooltip" aria-hidden="true">
     <div class="risk-tooltip-card">
       <div class="risk-tooltip-title" id="riskVizTooltipTitle">Classifying…</div>
@@ -762,7 +762,7 @@ Altitude classifies imported banned products across a low‑to‑high hazard spe
 
 <h2>Roadmap Priorities</h2>
 
-<div class="section-surface roadmap-section">
+<div class="section-surface roadmap-section full-bleed">
   <div class="roadmap-grid">
     <div class="roadmap-card blue">
       <div class="icon-chip"><i class="fas fa-bullhorn"></i></div>

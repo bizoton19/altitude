@@ -107,6 +107,15 @@ body::after {
   padding: 2.5rem clamp(1.25rem, 3vw, 3rem);
 }
 
+.full-bleed {
+  width: 100vw;
+  max-width: none !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  border-radius: 0 !important;
+  overflow-x: hidden;
+}
+
 main {
   width: 100%;
   max-width: 100%;
@@ -937,6 +946,13 @@ pre {
   overflow: hidden;
 }
 
+.risk-viz.full-bleed {
+  margin: 2.5rem 0 3rem;
+  border: 0;
+  box-shadow: none;
+  padding: 2rem clamp(1.25rem, 3vw, 3rem);
+}
+
 .risk-viz svg {
   width: 100%;
   height: auto;
@@ -1071,6 +1087,12 @@ pre {
 @media (max-width: 600px) {
   .risk-viz {
     padding: 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .risk-viz {
+    display: none;
   }
 }
 
@@ -1565,6 +1587,15 @@ footer {
   background: var(--bg-2);
 }
 
+.site-footer {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  border-radius: 0;
+  padding-left: clamp(1.25rem, 3vw, 3rem);
+  padding-right: clamp(1.25rem, 3vw, 3rem);
+}
+
 .footer-content {
   max-width: 1200px;
   margin: 0 auto 3rem;
@@ -1861,7 +1892,7 @@ header,
       {{ content }}
     </main>
 
-    <footer>
+    <footer class="site-footer">
       <div class="footer-content">
         <div class="footer-brand">
           <div class="footer-brand-header">
