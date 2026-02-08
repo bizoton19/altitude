@@ -594,9 +594,9 @@ Altitude classifies imported banned products across a low‑to‑high hazard spe
 
     const treeOrigins = [
       { x: 70, y: 28 },
-      { x: 155, y: 28 },
-      { x: 240, y: 28 },
-      { x: 325, y: 28 }
+      { x: 150, y: 28 },
+      { x: 230, y: 28 },
+      { x: 272, y: 28 }
     ];
 
     treeOrigins.forEach((o, idx) => {
