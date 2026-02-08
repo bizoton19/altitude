@@ -257,7 +257,7 @@ description: Automated banned product monitoring for regulatory agencies, manufa
 
 <div class="feature-row">
   <div>
-    <div class="icon-chip"><i class="fas fa-radar"></i></div>
+    <div class="icon-chip"><i class="fas fa-satellite-dish"></i></div>
     <h3>Automated Monitoring</h3>
     <p>Continuously scan marketplaces with configurable cadence, visual search, and keyword matching.</p>
   </div>
@@ -397,12 +397,6 @@ Banned products with no injuries and fewer than 1,000 units affected. Minor defe
       <div class="icon-chip"><i class="fas fa-camera"></i></div>
       <h3>Mobile Field Toolkit</h3>
       <p><strong>On‑site scanning</strong> for inspectors: photo capture, barcode checks, and instant risk matching.</p>
-    </div>
-
-    <div class="roadmap-card pink">
-      <div class="icon-chip"><i class="fas fa-brain"></i></div>
-      <h3>Advanced AI Models</h3>
-      <p><strong>Category‑specific models</strong> tuned for proactive detection and specialized hazard profiles.</p>
     </div>
   </div>
 

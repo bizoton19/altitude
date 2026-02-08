@@ -419,10 +419,12 @@ p {
   color: var(--ink);
 }
 
-.roadmap-card.blue { background: #e5efff; }
-.roadmap-card.green { background: #e6f4ea; }
-.roadmap-card.amber { background: #fff4e5; }
-.roadmap-card.pink { background: #fdebf1; }
+.roadmap-card.blue,
+.roadmap-card.green,
+.roadmap-card.amber {
+  background: var(--bg-2);
+  border: 1px solid var(--border-strong);
+}
 
 @media (max-width: 700px) {
   
@@ -516,7 +518,7 @@ pre {
 .stat-card,
 .summary-card,
 .split-card {
-  background: #fff;
+  background: var(--bg-2);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: var(--shadow-soft);
@@ -899,7 +901,7 @@ pre {
 }
 
 .dag-tooltip-card {
-  background: #fff;
+  background: var(--bg-2);
   border: 1px solid var(--border-strong);
   border-radius: 12px;
   box-shadow: var(--shadow);
@@ -1355,7 +1357,7 @@ form {
 .form-textarea {
   width: 100%;
   padding: 0.75rem 0.9rem;
-  background: #fff;
+  background: var(--bg-2);
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--ink);
