@@ -55,6 +55,32 @@ AsyncSessionLocal = async_sessionmaker(
 Base = declarative_base()
 
 
+def _sqlite_apply_migrations(sync_conn):
+    """
+    SQLite: add columns missing from older DB files.
+    SQLAlchemy create_all() does not ALTER existing tables, so new ORM fields
+    must be added explicitly for local/dev SQLite databases.
+    """
+    from sqlalchemy import inspect, text
+
+    insp = inspect(sync_conn)
+    if "organizations" not in insp.get_table_names():
+        return
+
+    existing = {c["name"] for c in insp.get_columns("organizations")}
+    # Keep in sync with OrganizationDB in app.db.models
+    additions = [
+        ("product_bans_count", "INTEGER DEFAULT 0"),
+        ("last_product_ban_date", "DATETIME"),
+        ("voluntary_recalls_count", "INTEGER DEFAULT 0"),
+        ("joint_recalls_count", "INTEGER DEFAULT 0"),
+    ]
+    for col_name, ddl in additions:
+        if col_name not in existing:
+            sync_conn.execute(text(f"ALTER TABLE organizations ADD COLUMN {col_name} {ddl}"))
+            logger.info("SQLite migration: added organizations.%s", col_name)
+
+
 async def get_session():
     """
     Dependency function to get database session.
@@ -81,6 +107,8 @@ async def init_database():
     async with engine.begin() as conn:
         # Create all tables
         await conn.run_sync(Base.metadata.create_all)
+        if "sqlite" in database_url:
+            await conn.run_sync(_sqlite_apply_migrations)
         logger.info("Database tables created successfully")
 
 
