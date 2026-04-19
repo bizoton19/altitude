@@ -26,7 +26,7 @@ else
 # Google Cloud SQL Configuration
 # ⚠️ IMPORTANT: Replace these values with your actual Cloud SQL instance details
 # DO NOT commit this file with real credentials to version control
-CLOUD_SQL_INSTANCE=your-project-id:your-region:your-instance-id
+CLOUD_SQL_INSTANCE=your-project-id:your-region:altitudedb1
 CLOUD_SQL_DATABASE=altitude
 CLOUD_SQL_USER=your_username
 CLOUD_SQL_PASSWORD=your_password_here
@@ -55,7 +55,7 @@ echo ""
 echo "📋 Next steps:"
 echo "1. Verify the .env file has the correct Cloud SQL credentials"
 echo "2. If running locally, you may need to use Cloud SQL Proxy:"
-echo "   cloud_sql_proxy -instances=YOUR_PROJECT_ID:YOUR_REGION:YOUR_INSTANCE_ID=tcp:5432"
+echo "   cloud_sql_proxy -instances=YOUR_PROJECT_ID:YOUR_REGION:altitudedb1=tcp:5432"
 echo "3. If running on GCP, ensure the service account has Cloud SQL Client role"
 echo "4. Start your backend server - the database schema will be created automatically"
 echo ""

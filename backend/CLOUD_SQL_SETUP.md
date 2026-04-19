@@ -4,7 +4,8 @@ This guide explains how to configure Altitude to use Google Cloud SQL (PostgreSQ
 
 ## Connection Details
 
-- **Instance**: `YOUR_PROJECT_ID:YOUR_REGION:YOUR_INSTANCE_ID`
+- **Instance connection name** (GCP Cloud SQL): `YOUR_PROJECT_ID:YOUR_REGION:altitudedb1`  
+  The **instance ID** is `altitudedb1`; replace `YOUR_PROJECT_ID` and `YOUR_REGION` with your GCP project and region.
 - **Database**: `altitude`
 - **Username**: `your_username`
 - **Password**: `your_password_here` (set in `.env` file, not in this file)
@@ -28,7 +29,7 @@ This script will:
 
 ```bash
 # Google Cloud SQL Configuration
-CLOUD_SQL_INSTANCE=your-project-id:your-region:your-instance-id
+CLOUD_SQL_INSTANCE=your-project-id:your-region:altitudedb1
 CLOUD_SQL_DATABASE=altitude
 CLOUD_SQL_USER=your_username
 CLOUD_SQL_PASSWORD=your_password_here
@@ -69,7 +70,7 @@ When running locally, you can use Cloud SQL Proxy or direct IP connection:
 
 2. **Start the proxy**:
    ```bash
-   cloud_sql_proxy -instances=YOUR_PROJECT_ID:YOUR_REGION:YOUR_INSTANCE_ID=tcp:5432
+   cloud_sql_proxy -instances=YOUR_PROJECT_ID:YOUR_REGION:altitudedb1=tcp:5432
    ```
 
 3. **Update `.env`**:

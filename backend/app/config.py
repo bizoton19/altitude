@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite+aiosqlite:///./altitude.db"
     
     # Google Cloud SQL settings (optional, can override DATABASE_URL)
-    CLOUD_SQL_INSTANCE: str = ""  # Format: PROJECT:REGION:INSTANCE
+    CLOUD_SQL_INSTANCE: str = ""  # Format: PROJECT:REGION:INSTANCE_ID (instance ID is e.g. altitudedb1)
     CLOUD_SQL_DATABASE: str = "postgres"  # Default PostgreSQL database name
     CLOUD_SQL_USER: str = ""
     CLOUD_SQL_PASSWORD: str = ""
