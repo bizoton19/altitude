@@ -67,7 +67,7 @@ function AppContent() {
         setBackendOnline(isOnline)
         
         if (!isOnline) {
-          setError('Backend server is not running. Start it with: cd backend && python run.py')
+          setError('Backend server is not running. Start it from the repo: cd backend && ./run.sh — or pnpm run backend. For Postgres on Google Cloud SQL, configure backend/.env and use pnpm run backend:cloudsql (see backend/CLOUD_SQL_SETUP.md).')
           setLoading(false)
           return
         }

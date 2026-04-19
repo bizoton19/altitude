@@ -5,6 +5,16 @@
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
+/** Origin for non-/api routes (e.g. GET /health). Uses URL.origin so /api path does not affect host/port. */
+export function getApiOrigin() {
+  const raw = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api').trim()
+  try {
+    return new URL(raw).origin
+  } catch {
+    return 'http://localhost:8000'
+  }
+}
+
 /**
  * Generic fetch wrapper with error handling
  */
@@ -740,7 +750,7 @@ export async function testRiskClassification(violation) {
  */
 export async function checkHealth() {
   try {
-    const response = await fetch(`${API_BASE_URL.replace('/api', '')}/health`);
+    const response = await fetch(`${getApiOrigin()}/health`, { method: 'GET' });
     return response.ok;
   } catch {
     return false;
