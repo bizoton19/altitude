@@ -1,39 +1,71 @@
 # Google Cloud SQL Setup Guide
 
-This guide explains how to configure Altitude to use Google Cloud SQL (PostgreSQL).
+Use **Google Cloud SQL (PostgreSQL)** for the API database. The app builds the connection string from `CLOUD_SQL_*` variables in `backend/.env` (see [`app/config.py`](app/config.py)).
 
-## Connection Details
+**Without** those variables, the default is **SQLite** (`./altitude.db`) via `DATABASE_URL` — fine for quick local work, not for matching production.
 
-- **Instance connection name** (GCP Cloud SQL): `YOUR_PROJECT_ID:YOUR_REGION:altitudedb1`  
-  The **instance ID** is `altitudedb1`; replace `YOUR_PROJECT_ID` and `YOUR_REGION` with your GCP project and region.
-- **Database**: `altitude`
-- **Username**: `your_username`
-- **Password**: `your_password_here` (set in `.env` file, not in this file)
+## Run the API with Google Cloud SQL
 
-## Local PostgreSQL (Docker, not SQLite)
+### 1. Configure `backend/.env`
 
-From the **repository root**, start Postgres (matches [`docker-compose.yml`](../docker-compose.yml): user `altitude`, database `altitude`, port `5432`):
+Set at least (use your real project, region, user, and password):
 
-```bash
-docker compose up -d postgres
+```env
+# Instance connection name (GCP console → Cloud SQL → your instance → "Connection name")
+CLOUD_SQL_INSTANCE=YOUR_PROJECT_ID:YOUR_REGION:altitudedb1
+CLOUD_SQL_DATABASE=altitude
+CLOUD_SQL_USER=your_username
+CLOUD_SQL_PASSWORD=your_password_here
 ```
 
-Then run the API against Postgres (clears Cloud SQL env overrides so `DATABASE_URL` wins):
+### 2. Choose how the app reaches Cloud SQL
+
+**On GCP** (Cloud Run, GKE, Compute Engine with the Cloud SQL connector / Unix socket):
+
+```env
+CLOUD_SQL_USE_UNIX_SOCKET=true
+```
+
+**On your laptop** (Cloud SQL Auth Proxy listening on `localhost:5432`):
+
+```env
+CLOUD_SQL_USE_UNIX_SOCKET=false
+CLOUD_SQL_HOST=127.0.0.1
+CLOUD_SQL_PORT=5432
+```
+
+Start the proxy in another terminal (instance ID example: `altitudedb1`):
+
+```bash
+cloud-sql-proxy --port 5432 "YOUR_PROJECT_ID:YOUR_REGION:altitudedb1"
+```
+
+(Older binaries used `cloud_sql_proxy -instances=...=tcp:5432` — same idea.)
+
+### 3. Start the backend
 
 ```bash
 cd backend
-./run_postgres_local.sh
+./run_cloud_sql.sh
 ```
 
-Or from the repo root: `pnpm run backend:postgres`
-
-Override the URL if needed:
+From the repo root:
 
 ```bash
-DATABASE_URL=postgresql+asyncpg://user:pass@127.0.0.1:5432/altitude ./run_postgres_local.sh
+pnpm run backend:cloudsql
 ```
 
-## Quick Setup
+This checks that `CLOUD_SQL_INSTANCE`, `CLOUD_SQL_USER`, and `CLOUD_SQL_PASSWORD` are set, then runs the API the same way as `./run.sh` but makes the intent explicit.
+
+**Note:** Do not set `DATABASE_URL` to SQLite in `.env` if you want Postgres — either remove `DATABASE_URL` or rely on Cloud SQL: when the three `CLOUD_SQL_*` values above are present, [`app/config.py`](app/config.py) overrides `DATABASE_URL` to the Postgres URL.
+
+## Connection details (reference)
+
+- **Instance connection name**: `YOUR_PROJECT_ID:YOUR_REGION:altitudedb1` (instance ID **`altitudedb1`** is the Postgres instance name in GCP).
+- **Database**: create `altitude` in Cloud SQL if needed, and set `CLOUD_SQL_DATABASE=altitude`.
+- **Credentials**: only in `.env` or your secret manager — never commit them.
+
+## Quick Setup (interactive template)
 
 ### Option 1: Using the Setup Script (Recommended)
 
@@ -189,6 +221,10 @@ On first startup, the application automatically seeds:
 3. **Backups**: Ensure Cloud SQL automated backups are enabled
 4. **Monitoring**: Set up Cloud SQL monitoring and alerts
 5. **Secrets Management**: Consider using Google Secret Manager for passwords in production
+
+## Alternative: local Postgres in Docker (not Cloud SQL)
+
+For offline development without GCP, you can use [`docker-compose.yml`](../docker-compose.yml) and [`run_postgres_local.sh`](run_postgres_local.sh) — see that script and `pnpm run backend:postgres`. That path uses `DATABASE_URL` and clears `CLOUD_SQL_*` so the app does not use Cloud SQL.
 
 ## Additional Resources
 
