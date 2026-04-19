@@ -77,6 +77,10 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "uploads")
     UPLOAD_MAX_SIZE_MB: int = 1024  # 1GB default max file size
     
+    # Local development: stable seeded org for SQLite + DEBUG (see ensure_default_organization)
+    LOCAL_SEED_ORGANIZATION_ID: str = "regulatory_agency-local-dev"
+    LOCAL_SEED_ORGANIZATION_EMAIL: str = "dev@localhost"
+    
     class Config:
         env_file = ".env"
         case_sensitive = True

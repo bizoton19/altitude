@@ -1272,40 +1272,47 @@ def parse_cpsc_to_violation(data: dict, index: int = 0) -> Optional[ProductBan]:
 
 # Organization service functions
 async def ensure_default_organization(session: AsyncSession):
-    """Ensure a default organization exists for local development."""
+    """
+    Seed a stable local organization when DEBUG and SQLite.
+
+    Uses LOCAL_SEED_ORGANIZATION_ID so GET /organizations/me/current always
+    resolves without manual registration during local testing.
+    """
     try:
-        # Check if any organization exists
-        result = await session.execute(select(OrganizationDB).limit(1))
-        existing = result.scalar_one_or_none()
-        
-        if not existing:
-            # Create a default development organization
-            org_id = f"{OrganizationType.REGULATORY_AGENCY.value}-dev-{uuid.uuid4().hex[:8]}"
-            default_org = Organization(
-                organization_id=org_id,
-                organization_type=OrganizationType.REGULATORY_AGENCY,
-                name="Development Organization",
-                legal_name="Development Organization",
-                acronym="DEV",
-                contact_email="dev@localhost",
-                contact_name="Development Team",
-                country="US",
-                status=OrganizationStatus.ACTIVE,
-                verified=True,
-                import_methods=["file_upload", "api"],
-                violations_count=0,
-                voluntary_recalls_count=0,
-                joint_recalls_count=0,
-            )
-            db_org = organization_to_db(default_org)
-            session.add(db_org)
-            await session.commit()
-            print(f"Default development organization created: {org_id}")
-        else:
-            print(f"Organization already exists: {existing.organization_id}")
+        if not settings.DEBUG or "sqlite" not in settings.get_database_url():
+            return
+
+        seed_id = settings.LOCAL_SEED_ORGANIZATION_ID
+        result = await session.execute(
+            select(OrganizationDB).where(OrganizationDB.organization_id == seed_id)
+        )
+        if result.scalar_one_or_none():
+            print(f"Local seed organization present: {seed_id}")
+            return
+
+        default_org = Organization(
+            organization_id=seed_id,
+            organization_type=OrganizationType.REGULATORY_AGENCY,
+            name="Local Development (CPSC)",
+            legal_name="Local Development Agency",
+            acronym="LOCAL",
+            contact_email=settings.LOCAL_SEED_ORGANIZATION_EMAIL,
+            contact_name="Local Developer",
+            country="US",
+            status=OrganizationStatus.ACTIVE,
+            verified=True,
+            import_methods=["file_upload", "api"],
+            violations_count=0,
+            voluntary_recalls_count=0,
+            joint_recalls_count=0,
+        )
+        session.add(organization_to_db(default_org))
+        await session.commit()
+        print(f"Seeded local development organization: {seed_id} ({default_org.name})")
     except Exception as e:
         print(f"Error ensuring default organization: {e}")
-        # Don't raise - this is optional initialization
+        await session.rollback()
+        # Don't raise - optional initialization
 
 
 async def get_organizations(
@@ -1455,9 +1462,19 @@ async def delete_organization(organization_id: str) -> bool:
 async def get_current_user_organization() -> Optional[Organization]:
     """Get the current user's organization (placeholder - needs auth integration)."""
     # TODO: Get from auth context/session
-    # For now, return the first/most recent organization (single-tenant mode)
+    # Local SQLite + DEBUG: prefer the stable seeded org
     try:
         async with AsyncSessionLocal() as session:
+            if settings.DEBUG and "sqlite" in settings.get_database_url():
+                result = await session.execute(
+                    select(OrganizationDB).where(
+                        OrganizationDB.organization_id == settings.LOCAL_SEED_ORGANIZATION_ID
+                    )
+                )
+                db_org = result.scalar_one_or_none()
+                if db_org:
+                    return db_to_organization(db_org)
+
             result = await session.execute(
                 select(OrganizationDB).order_by(OrganizationDB.created_at.desc()).limit(1)
             )
