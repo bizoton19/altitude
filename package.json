@@ -11,6 +11,7 @@
     "backend": "cd backend && ./run.sh",
     "backend:cloudsql": "cd backend && ./run_cloud_sql.sh",
     "backend:postgres": "cd backend && ./run_postgres_local.sh",
+    "dev:stack": "bash scripts/dev-local-stack.sh",
     "postinstall": "cp node_modules/@uswds/uswds/dist/css/uswds.min.css public/uswds.min.css 2>/dev/null || true"
   },
   "dependencies": {

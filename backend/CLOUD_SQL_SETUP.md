@@ -1,6 +1,8 @@
 # Google Cloud SQL Setup Guide
 
-Use **Google Cloud SQL (PostgreSQL)** for the API database. The app builds the connection string from `CLOUD_SQL_`* variables in `backend/.env` (see `[app/config.py](app/config.py)`).
+Use **Google Cloud SQL (PostgreSQL)** for the API database. The app builds the connection string from `CLOUD_SQL_*` variables in `backend/.env` (see [`app/config.py`](app/config.py)).
+
+**Local UI + API together:** from the repo root run `pnpm run dev:stack` (starts backend then Vite; uses SQLite unless `backend/.env` configures Cloud SQL).
 
 **Without** those variables, the default is **SQLite** (`./altitude.db`) via `DATABASE_URL` — fine for quick local work, not for matching production.
 
