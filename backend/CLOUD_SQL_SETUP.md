@@ -1,6 +1,6 @@
 # Google Cloud SQL Setup Guide
 
-Use **Google Cloud SQL (PostgreSQL)** for the API database. The app builds the connection string from `CLOUD_SQL_*` variables in `backend/.env` (see [`app/config.py`](app/config.py)).
+Use **Google Cloud SQL (PostgreSQL)** for the API database. The app builds the connection string from `CLOUD_SQL_`* variables in `backend/.env` (see `[app/config.py](app/config.py)`).
 
 **Without** those variables, the default is **SQLite** (`./altitude.db`) via `DATABASE_URL` — fine for quick local work, not for matching production.
 
@@ -57,11 +57,11 @@ pnpm run backend:cloudsql
 
 This checks that `CLOUD_SQL_INSTANCE`, `CLOUD_SQL_USER`, and `CLOUD_SQL_PASSWORD` are set, then runs the API the same way as `./run.sh` but makes the intent explicit.
 
-**Note:** Do not set `DATABASE_URL` to SQLite in `.env` if you want Postgres — either remove `DATABASE_URL` or rely on Cloud SQL: when the three `CLOUD_SQL_*` values above are present, [`app/config.py`](app/config.py) overrides `DATABASE_URL` to the Postgres URL.
+**Note:** Do not set `DATABASE_URL` to SQLite in `.env` if you want Postgres — either remove `DATABASE_URL` or rely on Cloud SQL: when the three `CLOUD_SQL_*` values above are present, `[app/config.py](app/config.py)` overrides `DATABASE_URL` to the Postgres URL.
 
 ## Connection details (reference)
 
-- **Instance connection name**: `YOUR_PROJECT_ID:YOUR_REGION:altitudedb1` (instance ID **`altitudedb1`** is the Postgres instance name in GCP).
+- **Instance connection name**: `YOUR_PROJECT_ID:YOUR_REGION:altitudedb1` (instance ID `**altitudedb1`** is the Postgres instance name in GCP).
 - **Database**: create `altitude` in Cloud SQL if needed, and set `CLOUD_SQL_DATABASE=altitude`.
 - **Credentials**: only in `.env` or your secret manager — never commit them.
 
@@ -75,6 +75,7 @@ cd backend
 ```
 
 This script will:
+
 - Create/update your `.env` file with Cloud SQL configuration
 - Install the `asyncpg` driver if needed
 
@@ -91,7 +92,7 @@ CLOUD_SQL_PASSWORD=your_password_here
 CLOUD_SQL_USE_UNIX_SOCKET=true
 ```
 
-2. **Install dependencies**:
+1. **Install dependencies**:
 
 ```bash
 pip install asyncpg>=0.29.0
@@ -108,6 +109,7 @@ CLOUD_SQL_USE_UNIX_SOCKET=true
 ```
 
 **Requirements:**
+
 - Service account with Cloud SQL Client role
 - Cloud SQL Proxy installed (if not using built-in connector)
 
@@ -116,25 +118,22 @@ CLOUD_SQL_USE_UNIX_SOCKET=true
 When running locally, you can use Cloud SQL Proxy or direct IP connection:
 
 1. **Install Cloud SQL Proxy**:
-   ```bash
+  ```bash
    # macOS
    brew install cloud-sql-proxy
-   
+
    # Or download from: https://cloud.google.com/sql/docs/postgres/sql-proxy
-   ```
-
+  ```
 2. **Start the proxy**:
-   ```bash
+  ```bash
    cloud_sql_proxy -instances=YOUR_PROJECT_ID:YOUR_REGION:altitudedb1=tcp:5432
-   ```
-
+  ```
 3. **Update `.env`**:
-   ```env
+  ```env
    CLOUD_SQL_USE_UNIX_SOCKET=false
    # Or use direct DATABASE_URL:
    DATABASE_URL=postgresql+asyncpg://username:password@localhost:5432/altitude
-   ```
-   
+  ```
    **⚠️ Important**: Never commit `.env` files with real credentials. Use `.env.example` for documentation.
 
 ## Testing the Connection
@@ -147,27 +146,35 @@ python test_db_connection.py
 ```
 
 This will:
+
 - Test the database connection
 - Create all database tables (schema)
 - Initialize seed data (default marketplaces and agent config)
 
 ## Database Schema
 
-The application will automatically create the following tables on first startup:
+The ORM models live in [`app/db/models.py`](app/db/models.py). On first startup, SQLAlchemy creates tables that match those models.
 
-- `violations` - Main violation/recall records
-- `violation_products` - Products associated with violations
-- `violation_hazards` - Hazards identified
-- `violation_remedies` - Remediation actions
-- `violation_images` - Product images
-- `marketplaces` - Marketplace configurations
-- `marketplace_listings` - Found listings
-- `investigations` - Investigation records
-- `investigation_listings` - Links between investigations and listings
-- `import_history` - Import tracking
-- `agent_config` - Agent configuration
-- `search_tasks` - Search task tracking
-- `organizations` - Organization records
+**Banned / recall data** uses the **product ban** naming (the older “violation” terminology was renamed in the app; table names below are what the code creates today):
+
+- `product_bans` — Main banned product / recall records
+- `product_ban_products` — Products linked to a product ban
+- `product_ban_hazards` — Hazards
+- `product_ban_remedies` — Remedies
+- `product_ban_images` — Images
+
+**Other tables:**
+
+- `marketplaces` — Marketplace configurations
+- `marketplace_listings` — Found listings (can reference a `product_ban_id`)
+- `investigations` — Investigation records
+- `investigation_listings` — Links between investigations and listings
+- `import_history` — Import tracking
+- `agent_config` — Agent configuration
+- `search_tasks` — Search task tracking
+- `organizations` — Organization records
+
+If you see old docs or migrations mentioning `violations` / `violation_*` tables, treat those as legacy; the current schema centers on **`product_bans`** and related `product_ban_*` tables.
 
 ## Seed Data
 
@@ -224,7 +231,7 @@ On first startup, the application automatically seeds:
 
 ## Alternative: local Postgres in Docker (not Cloud SQL)
 
-For offline development without GCP, you can use [`docker-compose.yml`](../docker-compose.yml) and [`run_postgres_local.sh`](run_postgres_local.sh) — see that script and `pnpm run backend:postgres`. That path uses `DATABASE_URL` and clears `CLOUD_SQL_*` so the app does not use Cloud SQL.
+For offline development without GCP, you can use `[docker-compose.yml](../docker-compose.yml)` and `[run_postgres_local.sh](run_postgres_local.sh)` — see that script and `pnpm run backend:postgres`. That path uses `DATABASE_URL` and clears `CLOUD_SQL_`* so the app does not use Cloud SQL.
 
 ## Additional Resources
 
