@@ -4,7 +4,9 @@ Use **Google Cloud SQL (PostgreSQL)** for the API database. The app builds the c
 
 **Local UI + API together:** from the repo root run `pnpm run dev:stack` (starts backend then Vite; uses SQLite unless `backend/.env` configures Cloud SQL).
 
-**Without** those variables, the default is **SQLite** (`./altitude.db`) via `DATABASE_URL` — fine for quick local work, not for matching production.
+**Without** those variables, the default is **SQLite** (`./altitude.db` under `backend/`) via `DATABASE_URL` — this is the normal **local dev** setup.
+
+To switch **back** from Cloud SQL to SQLite: remove or comment out `CLOUD_SQL_INSTANCE`, `CLOUD_SQL_USER`, and `CLOUD_SQL_PASSWORD` in `backend/.env`, set `DATABASE_URL=sqlite+aiosqlite:///./altitude.db`, and restart with `./run.sh` or `pnpm run backend`. See [`.env.example`](.env.example).
 
 ## Run the API with Google Cloud SQL
 
