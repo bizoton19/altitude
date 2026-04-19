@@ -10,6 +10,29 @@ This guide explains how to configure Altitude to use Google Cloud SQL (PostgreSQ
 - **Username**: `your_username`
 - **Password**: `your_password_here` (set in `.env` file, not in this file)
 
+## Local PostgreSQL (Docker, not SQLite)
+
+From the **repository root**, start Postgres (matches [`docker-compose.yml`](../docker-compose.yml): user `altitude`, database `altitude`, port `5432`):
+
+```bash
+docker compose up -d postgres
+```
+
+Then run the API against Postgres (clears Cloud SQL env overrides so `DATABASE_URL` wins):
+
+```bash
+cd backend
+./run_postgres_local.sh
+```
+
+Or from the repo root: `pnpm run backend:postgres`
+
+Override the URL if needed:
+
+```bash
+DATABASE_URL=postgresql+asyncpg://user:pass@127.0.0.1:5432/altitude ./run_postgres_local.sh
+```
+
 ## Quick Setup
 
 ### Option 1: Using the Setup Script (Recommended)

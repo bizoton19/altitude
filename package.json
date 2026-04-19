@@ -9,6 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "backend": "cd backend && ./run.sh",
+    "backend:postgres": "cd backend && ./run_postgres_local.sh",
     "postinstall": "cp node_modules/@uswds/uswds/dist/css/uswds.min.css public/uswds.min.css 2>/dev/null || true"
   },
   "dependencies": {
