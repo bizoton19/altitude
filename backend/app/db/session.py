@@ -7,15 +7,43 @@ from sqlalchemy.orm import declarative_base
 from app.config import settings
 import logging
 import os
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 logger = logging.getLogger(__name__)
 
+def _normalize_database_url(raw_url: str) -> tuple[str, dict]:
+    """
+    Normalize env-provided database URL for SQLAlchemy async engine.
+
+    Accepts postgres URLs like `postgresql://...` and converts to
+    `postgresql+asyncpg://...`. Also maps `sslmode=require` to asyncpg connect args.
+    """
+    connect_args = {}
+    database_url = raw_url
+
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
+    elif database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+    if "postgresql+asyncpg://" in database_url:
+        parsed = urlparse(database_url)
+        query = dict(parse_qsl(parsed.query, keep_blank_values=True))
+        sslmode = query.pop("sslmode", None)
+        if sslmode == "require":
+            connect_args["ssl"] = "require"
+        database_url = urlunparse(parsed._replace(query=urlencode(query)))
+
+    return database_url, connect_args
+
+
 # Create async engine with larger connection pool for concurrent imports
-# Get the database URL (may be built from Cloud SQL settings)
-database_url = settings.get_database_url()
+# Get and normalize database URL (may be built from Cloud SQL settings)
+raw_database_url = settings.get_database_url()
+database_url, normalized_connect_args = _normalize_database_url(raw_database_url)
 
 # PostgreSQL connection args
-connect_args = {}
+connect_args = dict(normalized_connect_args)
 if "sqlite" in database_url:
     # SQLite-specific connection args
     connect_args = {"check_same_thread": False}
@@ -24,9 +52,7 @@ elif "postgresql" in database_url:
     # For Cloud SQL with public IP, SSL is required
     if settings.CLOUD_SQL_HOST and not settings.CLOUD_SQL_USE_UNIX_SOCKET:
         # Cloud SQL requires SSL for public IP connections
-        connect_args = {
-            "ssl": "require"  # Require SSL for Cloud SQL public IP connections
-        }
+        connect_args["ssl"] = "require"  # Require SSL for Cloud SQL public IP connections
     else:
         # For Unix socket connections, SSL not needed
         connect_args = {}
